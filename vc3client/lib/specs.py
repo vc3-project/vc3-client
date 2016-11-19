@@ -8,7 +8,7 @@ class Specs(object):
     def add(self):
         pass
 
-    def del(self):
+    def delete(self):
         pass 
 
     def list(self):
