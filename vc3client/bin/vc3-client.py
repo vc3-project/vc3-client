@@ -1,10 +1,10 @@
 #!/usr/bin/env python 
 
-from vc3client.accounts import Accounts
-from vc3client.clusters import Clusters
-from vc3client.resources import  Resources
-from vc3client.specs import Specs
-from vc3client.users import Users
+from vc3client.lib.accounts import Accounts
+from vc3client.lib.clusters import Clusters
+from vc3client.lib.resources import  Resources
+from vc3client.lib.specs import Specs
+from vc3client.lib.users import Users
 
 import argparse
 
