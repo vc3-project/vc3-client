@@ -1,6 +1,6 @@
 #!/usr/bin/env python   
 
-class Accounts(object):
+class AccountsMgr(object):
 
     def __init__(self):
         pass
@@ -15,4 +15,10 @@ class Accounts(object):
         pass
 
     def get(self):
+        pass
+
+
+class Account(object):
+
+    def __init__(self):
         pass

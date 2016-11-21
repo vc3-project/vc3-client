@@ -1,6 +1,6 @@
 #!/usr/bin/env python   
 
-class Users(object):
+class UsersMgr(object):
 
     def __init__(self):
         pass
@@ -15,4 +15,10 @@ class Users(object):
         pass
 
     def get(self):
+        pass
+
+
+class User(object):
+
+    def __init__(self):
         pass

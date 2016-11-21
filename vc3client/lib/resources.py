@@ -1,6 +1,6 @@
 #!/usr/bin/env python   
 
-class Resources(object):
+class ResourcesMgr(object):
 
     def __init__(self):
         pass
@@ -15,4 +15,10 @@ class Resources(object):
         pass
 
     def get(self):
+        pass
+
+
+class Resource(object):
+
+    def __init__(self):
         pass

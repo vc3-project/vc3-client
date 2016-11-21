@@ -1,6 +1,6 @@
 #!/usr/bin/env python   
 
-class Clusters(object):
+class ClustersMgr(object):
 
     def __init__(self):
         pass
@@ -15,4 +15,10 @@ class Clusters(object):
         pass
 
     def get(self):
+        pass
+
+
+class Cluster(object):
+
+    def __init__(self):
         pass

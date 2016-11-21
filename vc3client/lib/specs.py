@@ -1,6 +1,6 @@
 #!/usr/bin/env python   
 
-class Specs(object):
+class SpecsMgr(object):
 
     def __init__(self):
         pass
@@ -15,4 +15,10 @@ class Specs(object):
         pass
 
     def get(self):
+        pass
+
+
+class Spec(object):
+
+    def __init__(self):
         pass
