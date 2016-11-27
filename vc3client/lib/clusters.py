@@ -1,5 +1,8 @@
 #!/usr/bin/env python   
 
+
+from plugin import PluginManager
+
 class ClustersMgr(object):
 
     def __init__(self):
@@ -17,8 +20,6 @@ class ClustersMgr(object):
     def get(self):
         pass
 
-
-class Cluster(object):
-
-    def __init__(self):
-        pass
+    def _getplugin(self):
+        pluginmgr = PluginManager(self)
+        plugin = pluginmgr.getplugin(......)

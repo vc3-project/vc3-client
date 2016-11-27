@@ -74,6 +74,7 @@ setup(
     packages=['vc3client',
               'vc3client.bin',
               'vc3client.lib',
+              'vc3client.plugins',
              ],
 
     

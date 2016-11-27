@@ -1,5 +1,8 @@
 #!/usr/bin/env python   
 
+
+from plugin import PluginManager
+
 class SpecsMgr(object):
 
     def __init__(self):
@@ -17,8 +20,6 @@ class SpecsMgr(object):
     def get(self):
         pass
 
-
-class Spec(object):
-
-    def __init__(self):
-        pass
+    def _getplugin(self):
+        pluginmgr = PluginManager(self)
+        plugin = pluginmgr.getplugin(......)
