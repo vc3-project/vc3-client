@@ -22,4 +22,4 @@ class UsersMgr(object):
 
     def _getplugin(self):
         pluginmgr = PluginManager(self)
-        plugin = pluginmgr.getplugin(......)
+        #plugin = pluginmgr.getplugin(......)
