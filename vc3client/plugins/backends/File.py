@@ -1,7 +1,6 @@
 #!/usr/bin/env python   
 
-
-class AccountPlugin(object):
+class File(object):
 
     def __init__(self):
         pass

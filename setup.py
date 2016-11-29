@@ -21,14 +21,7 @@ from distutils.command.install_data import install_data as install_data_org
 # ===========================================================
 
 
-# etc files are handled by setup.cfg
-etc_files = ['etc/accounts.conf',
-             'etc/clusters.conf',
-             'etc/resources.conf',
-             'etc/specs.conf',
-             'etc/users.conf',
-            ]
-
+etc_files = ['etc/backends.conf']
 
 sbin_scripts = ['sbin/vc3-client',
                ]
@@ -82,11 +75,7 @@ setup(
               'vc3client.bin',
               'vc3client.lib',
               'vc3client.plugins',
-              'vc3client.plugins.accounts',
-              'vc3client.plugins.clusters',
-              'vc3client.plugins.resources',
-              'vc3client.plugins.specs',
-              'vc3client.plugins.users',
+              'vc3client.plugins.backends',
              ],
 
     
