@@ -20,6 +20,8 @@ class UsersMgr(object):
     def get(self):
         pass
 
-    def _getplugin(self):
-        pluginmgr = PluginManager(self)
-        #plugin = pluginmgr.getplugin(......)
+
+class User(object):
+
+    def __init__(self):
+        pass

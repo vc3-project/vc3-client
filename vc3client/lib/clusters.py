@@ -20,6 +20,8 @@ class ClustersMgr(object):
     def get(self):
         pass
 
-    def _getplugin(self):
-        pluginmgr = PluginManager(self)
-        #plugin = pluginmgr.getplugin(......)
+
+class Cluster(object):
+
+    def __init__(self):
+        pass

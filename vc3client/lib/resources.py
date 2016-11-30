@@ -20,6 +20,8 @@ class ResourcesMgr(object):
     def get(self):
         pass
 
-    def _getplugin(self):
-        pluginmgr = PluginManager(self)
-        #plugin = pluginmgr.getplugin(......)
+
+class Resource(object):
+
+    def __init__(self):
+        pass
