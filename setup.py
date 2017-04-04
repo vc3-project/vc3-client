@@ -4,6 +4,7 @@
 #
 #
 
+#from vc3 import client
 release_version='0.9.1'
 
 import commands
@@ -15,26 +16,18 @@ from distutils.core import setup
 from distutils.command.install import install as install_org
 from distutils.command.install_data import install_data as install_data_org
 
+etc_files = ['etc/vc3-client.conf']
 
-# ===========================================================
-#                D A T A     F I L E S 
-# ===========================================================
+scripts = ['scripts/vc3-client',]
 
-
-etc_files = ['etc/backends.conf']
-
-sbin_scripts = ['sbin/vc3-client',
+rpm_data_files=[('/usr/bin', scripts),
+                ('/etc/vc3', etc_files),
                ]
 
-# -----------------------------------------------------------
-
-rpm_data_files=[('/usr/sbin', sbin_scripts),
-                ('/etc/vc3client', etc_files),
-               ]
-
-
-
-# -----------------------------------------------------------
+home_data_files=[
+                 #('etc', libexec_files),
+                 ('etc', etc_files),
+                ]
 
 def choose_data_files():
     rpminstall = True
@@ -71,13 +64,8 @@ setup(
     maintainer='VC3 team',
     maintainer_email='vc3-project@googlegroups.com',
     url='http://virtualclusters.org/',
-    packages=['vc3client',
-              'vc3client.bin',
-              'vc3client.lib',
-              'vc3client.plugins',
-              'vc3client.plugins.backends',
-             ],
-
+    packages=['vc3'],
+    scripts = scripts,
     
     data_files = choose_data_files()
 )

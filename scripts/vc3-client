@@ -2,7 +2,7 @@
 #
 # Thin python library executable
 #
-EXEPKG=vc3client/bin
+EXEPKG=vc3
 EXEBIN=vc3-client.py
 
 ########## Do not edit below this line #############
