@@ -22,21 +22,28 @@ class VC3ClientAPI(object):
         self.ic = infoclient.InfoClient(self.config)
         self.log = logging.getLogger() 
 
-
-    def createUser(self, 
+    def createUser(self,   
                    name,
                    first,
                    last,
                    email,
-                   institution):
+                   institution):           
         '''
          
         '''
-        self.log.debug("Creating user: %s ")
+        u = User( name, first, last, email, institution)
+        self.log.debug("Creating user: %s " % u)
+        
+        
+    def updateUser(self, name, ):
+        '''
+        
+        '''
 
-    
     def listUsers(self):
-        out = self.ic.getdocument('users')
+        doc = self.ic.getdocument('users')
+        
+
         print(out)
        
     def updateUser(self):
@@ -66,5 +73,11 @@ class VC3ClientAPI(object):
     def listClusters(self):
         pass
     
+    
+class EntityExistsException(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
     
 

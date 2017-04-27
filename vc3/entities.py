@@ -3,11 +3,41 @@
 class User(object):
     '''
     Represents a VC3 user account. 
-    
-    
-    
+{
+    "user" : {
+        "johnrhover": {
+        "first" : "John",
+        "last"  : "Hover",
+        "email" : "jhover@bnl.gov",
+        "institution" : "Brookhaven National Laboratory",
+        },
+}
+
+
+
     '''
-    pass
+    def __init__(self, 
+                   name,
+                   first,
+                   last,
+                   email,
+                   institution):
+        self.name = name
+        self.first = first
+        self.last = last
+        self.email = email
+        self.institution = institution
+        
+    def __repr__(self):
+        s =  "User(name=%s, first=%s, last=%s, email=%s, institution=%s " % (self.name,
+            self.first,
+            self.last,
+            self.email,
+            self.institution)
+        return s
+    
+        
+          
 
 class Project(object):
     '''
