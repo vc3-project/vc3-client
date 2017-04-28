@@ -3,7 +3,7 @@
 # Thin python library executable
 #
 EXEPKG=vc3
-EXEBIN=vc3-client.py
+EXEBIN=client.py
 
 ########## Do not edit below this line #############
 PYVER=`python -V 2>&1 | awk '{ print $2}' | awk -F '.' '{ print $1"."$2 }' `

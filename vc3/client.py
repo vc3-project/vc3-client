@@ -119,6 +119,7 @@ class VC3ClientCLI(object):
         self.parseopts()
         self.setuplogging()
 
+
     def parseopts(self):
         parser = argparse.ArgumentParser()
         parser.add_argument('-c', '--config', 
@@ -161,7 +162,6 @@ class VC3ClientCLI(object):
                                      default='unknown')     
 
         self.results= parser.parse_args()
-
 
 
     def setuplogging(self):
