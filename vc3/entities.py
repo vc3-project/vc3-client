@@ -33,6 +33,8 @@ class User(object):
     '''
     Represents a VC3 user account.
     As policy, name, email, and institution must be set.  
+
+JSON representation:
 {
     "user" : {
         "johnrhover": {
@@ -58,7 +60,7 @@ class User(object):
         :param str last: User's last name
         :param str email: User's email address
         :param str institution: User's intitutional affiliation or employer
-        :return: User  A valid User object
+        :return: User:  A valid User object
        
         :rtype: User
         '''  
