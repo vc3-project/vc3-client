@@ -232,6 +232,9 @@ class VC3ClientCLI(object):
             
         elif ns.subcommand == 'user-list' and ns.username is None:
             out = capi.listUsers()
+            #
+            # Testing various output formats
+            #
             for u in out['user'].keys():
                 s = "{ '%s' : %s }" % (u, out['user'][u] )
                 nd = {}
