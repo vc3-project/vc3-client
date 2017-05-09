@@ -9,8 +9,11 @@ __email__ = "jhover@bnl.gov"
 __status__ = "Production"
 
 import argparse
+import ast
+import json
 import logging
 import os
+import yaml
 
 from ConfigParser import ConfigParser
 
@@ -18,6 +21,7 @@ from entities import User, Project, Resource, Allocation, Request, Cluster, Appl
 from vc3 import infoclient
 
 class VC3ClientAPI(object):
+    
     def __init__(self, config):
         self.config = config
         self.ic = infoclient.InfoClient(self.config)
@@ -64,15 +68,19 @@ class VC3ClientAPI(object):
         '''
         
         '''
+        pass
+    
 
     def listUsers(self):
-        doc = self.ic.getdocument('users')
-        
+        docobj = self.ic.getdocumentobject('user')
+        return docobj
 
-        print(out)
 
     def getUser(self, username):
-        pass
+        docobj = self.ic.getdocumentobject('user')
+        for u in docobj['user'].keys():
+            if u == username:
+                print(u)
 
     
     def createProject(self):
@@ -91,6 +99,10 @@ class VC3ClientAPI(object):
     def ListResources(self):
         pass
     
+    def defineAllocation(self):
+        pass
+    
+    
     def createAllocation(self):
         pass
 
@@ -101,6 +113,15 @@ class VC3ClientAPI(object):
         pass
     
     def listClusters(self):
+        pass
+
+    def defineRequest(self):
+        pass
+    
+    def createRequest(self):
+        pass
+
+    def listRequests(self):
         pass
     
     
@@ -133,6 +154,7 @@ class VC3ClientCLI(object):
                             dest='debug', 
                             help='debug logging')        
         
+        
         # Init sub-command
         subparsers = parser.add_subparsers( dest="subcommand")
 
@@ -160,6 +182,18 @@ class VC3ClientCLI(object):
                                      action="store", 
                                      dest="institution", 
                                      default='unknown')     
+        
+        parser_userlist = subparsers.add_parser('user-list', 
+                                                help='list vc3 user(s)')
+        
+        parser_userlist.add_argument('--username', 
+                                     action="store")
+
+        
+
+
+
+
 
         self.results= parser.parse_args()
 
@@ -188,7 +222,6 @@ class VC3ClientCLI(object):
         capi = VC3ClientAPI(cp)
         
         if ns.subcommand == 'user-create':
-            
             u = capi.defineUser( ns.username,
                              ns.firstname,
                              ns.lastname,
@@ -197,6 +230,32 @@ class VC3ClientCLI(object):
             self.log.debug("User is %s" % u)
             capi.createUser(u)
             
+        elif ns.subcommand == 'user-list' and ns.username is None:
+            out = capi.listUsers()
+            for u in out['user'].keys():
+                s = "{ '%s' : %s }" % (u, out['user'][u] )
+                nd = {}
+                nd[u] = out['user'][u]
+                uo = User.objectFromDict(nd)
+                js = json.dumps(s)
+                ys = yaml.safe_load(js)
+                a = ast.literal_eval(js) 
+                self.log.debug("dict= %s " % s)
+                self.log.debug("obj= %s " % uo)
+                self.log.debug("json = %s" % js)
+                self.log.debug("yaml = %s" % ys)
+                self.log.debug("ast = %s" % a)
+                print(uo)
+            #print(out)
+            #print("ns.username = %s " % ns.username)
+        
+        elif ns.subcommand == 'user-list' and ns.username is not None:
+            out = capi.listUsers()
+            for u in out['user'].keys():
+                if u == ns.username:
+                    s = "{ '%s' : %s }" % (u, out['user'][u] )
+                    print(s)
+        
         else:
             self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)
             
@@ -204,7 +263,3 @@ class VC3ClientCLI(object):
 if __name__ == '__main__':
     vc3cli = VC3ClientCLI()
     vc3cli.invoke()    
-
-
-
-

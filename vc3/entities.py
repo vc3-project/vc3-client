@@ -26,8 +26,8 @@ __status__ = "Production"
 
 
 '''
-
 import logging
+
 
 class User(object):
     '''
@@ -72,9 +72,10 @@ JSON representation:
         self.institution = institution
         self.doc_attributes = ["first",'last','email','institution']
         self.log.debug("User object created: %s" % self)
+
         
     def __repr__(self):
-        s =  "User(name=%s, first=%s, last=%s, email=%s, institution=%s " % (self.name,
+        s =  "User(name=%s, first=%s, last=%s, email=%s, institution=%s)" % (self.name,
             self.first,
             self.last,
             self.email,
@@ -83,7 +84,7 @@ JSON representation:
 
     def makeDictObject(self):
         '''
-        Converts Python object to attribute dictionary suitable for addition to existing dict 
+        Converts this Python object to attribute dictionary suitable for addition to existing dict 
         intended to be converted back to JSON. Uses <obj>.name as key:
         
         '''
@@ -104,8 +105,24 @@ JSON representation:
         self.log.debug("Dict obj: %s" % du)
         infoclient.storedocumentobject(du, key='user')
                 
+    
+    @staticmethod
+    def objectFromDict(dict):
+        '''
+        Returns a User object from dictionary. 
+        {'vc3jhover': {u'last': u'Last', u'email': u'Email', u'institution': u'BNL', u'first': u'First'}}
+        -> User
         
-          
+        '''
+        name = dict.keys()[0]
+        d = dict[name]
+        uo = User(name, 
+                   d['first'],
+                   d['last'],
+                   d['email'],
+                   d['institution'])
+        return uo
+
 
 class Project(object):
     '''
