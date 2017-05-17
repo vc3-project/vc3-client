@@ -28,6 +28,8 @@ class VC3ClientAPI(object):
         self.log = logging.getLogger() 
 
 
+    # User methods
+
     def defineUser(self,   
                    name,
                    first,
@@ -47,23 +49,20 @@ class VC3ClientAPI(object):
        :rtype: User        
         '''
         u = User( name, first, last, email, institution)
-        self.log.debug("Creating user: %s " % u)
+        self.log.debug("Creating user object: %s " % u)
         return u
     
         
-    def createUser(self, user, infoclient=None):
+    def createUser(self, user):
         '''
         Stores the provided user in the infoservice. 
         
         :param User u:  User to add. 
         :return: None
         '''
-        if infoclient is None:
-            infoclient = self.ic
-        user.store(infoclient)
+        user.store(self.ic)
         
-                
-        
+                       
     def updateUser(self, u ):
         '''
         
@@ -72,27 +71,102 @@ class VC3ClientAPI(object):
     
 
     def listUsers(self):
-        docobj = self.ic.getdocumentobject('user')
-        return docobj
+        '''
+        Returns list of all valid users as a list of User objects. 
 
+        :return: return description
+        :rtype: List of User objects. 
+        
+        '''
+        docobj = self.ic.getdocumentobject('user')
+        ulist = []
+        for u in docobj['user'].keys():
+                s = "{ '%s' : %s }" % (u, docobj['user'][u] )
+                nd = {}
+                nd[u] = docobj['user'][u]
+                uo = User.objectFromDict(nd)
+                ulist.append(uo)
+                js = json.dumps(s)
+                ys = yaml.safe_load(js)
+                a = ast.literal_eval(js) 
+                #self.log.debug("dict= %s " % s)
+                #self.log.debug("obj= %s " % uo)
+                #self.log.debug("json = %s" % js)
+                #self.log.debug("yaml = %s" % ys)
+                #self.log.debug("ast = %s" % a)
+                #print(uo)
+        
+        return ulist
 
     def getUser(self, username):
-        docobj = self.ic.getdocumentobject('user')
-        for u in docobj['user'].keys():
-            if u == username:
-                print(u)
-
+        ulist = self.listUsers()
+        for u in ulist:
+            if u.name == username:
+                return u
     
-    def createProject(self):
-        pass
+    # Project methods
+    
+    def defineProject(self, name, owner, members):
+        '''
+        Defines a new Project object for usage elsewhere in the API. 
+              
+        :param str name: The unique VC3 name of this project
+        :param str owner:  The VC3 user name of the owner of this project
+        :param List last:  List of VC3 user names of members of this project.  
+        :return: Project  A valid Project object
+        :rtype: Project        
+        '''
+        p = Project( name, owner, members = None)
+        self.log.debug("Creating project object: %s " % p)
+        return p
+    
+    
+    def createProject(self, project):
+        '''
+        Stores the provided project in the infoservice. 
+        
+        :param Project project:  Project to add. 
+        :return: None
+        '''
+        project.store(self.ic)
+    
     
     def updateProject(self):
         pass
     
-    def showProject(self):
+    def listProjects(self):
+        docobj = self.ic.getdocumentobject('project')
+        plist = []
+        for p in docobj['project'].keys():
+                s = "{ '%s' : %s }" % (p, docobj['project'][p] )
+                nd = {}
+                nd[p] = docobj['project'][p]
+                po = Project.objectFromDict(nd)
+                plist.append(po)
+                js = json.dumps(s)
+                ys = yaml.safe_load(js)
+                a = ast.literal_eval(js) 
+                #self.log.debug("dict= %s " % s)
+                #self.log.debug("obj= %s " % uo)
+                #self.log.debug("json = %s" % js)
+                #self.log.debug("yaml = %s" % ys)
+                #self.log.debug("ast = %s" % a)
+                #print(uo)
+        
+        return plist
+    
+    
+    def getProject(self, projectname):
+        ulist = self.listProjects()
+        for p in plist:
+            if p.name == projectname:
+                return p
+    
+        # Resource methods    
+    def defineResource(self):
         pass
     
-        
+    
     def createResource(self):
         pass
     
@@ -153,7 +227,11 @@ class VC3ClientCLI(object):
                             action="store_true", 
                             dest='debug', 
                             help='debug logging')        
-        
+
+        parser.add_argument('-v', '--verbose', 
+                            action="store_true", 
+                            dest='verbose', 
+                            help='verbose/info logging')            
         
         # Init sub-command
         subparsers = parser.add_subparsers( dest="subcommand")
@@ -189,13 +267,36 @@ class VC3ClientCLI(object):
         parser_userlist.add_argument('--username', 
                                      action="store")
 
+        parser_projectcreate = subparsers.add_parser('project-create', 
+                                                help='create new vc3 project')
+        
+        parser_projectcreate.add_argument('projectname', 
+                                     action="store")
+
+        parser_projectcreate.add_argument('--owner', 
+                                     action="store", 
+                                     dest="owner", 
+                                     default='unknown')
+
+        parser_projectcreate.add_argument('--members', 
+                                     action="store", 
+                                     dest="members", 
+                                     default='unknown')
+
+        parser_projectlist = subparsers.add_parser('project-list', 
+                                                help='list vc3 project(s)')
+
+        parser_projectlist.add_argument('--projectname', 
+                                     action="store")
+
+        
         
 
 
 
 
-
         self.results= parser.parse_args()
+
 
 
     def setuplogging(self):
@@ -210,6 +311,8 @@ class VC3ClientCLI(object):
         self.log.setLevel(logging.WARN)
         if self.results.debug:
             self.log.setLevel(logging.DEBUG)
+        if self.results.verbose:
+            self.log.setLevel(logging.INFO)
         self.log.info('Logging initialized.')
 
 
@@ -231,33 +334,31 @@ class VC3ClientCLI(object):
             capi.createUser(u)
             
         elif ns.subcommand == 'user-list' and ns.username is None:
-            out = capi.listUsers()
-            #
-            # Testing various output formats
-            #
-            for u in out['user'].keys():
-                s = "{ '%s' : %s }" % (u, out['user'][u] )
-                nd = {}
-                nd[u] = out['user'][u]
-                uo = User.objectFromDict(nd)
-                js = json.dumps(s)
-                ys = yaml.safe_load(js)
-                a = ast.literal_eval(js) 
-                self.log.debug("dict= %s " % s)
-                self.log.debug("obj= %s " % uo)
-                self.log.debug("json = %s" % js)
-                self.log.debug("yaml = %s" % ys)
-                self.log.debug("ast = %s" % a)
-                print(uo)
-            #print(out)
-            #print("ns.username = %s " % ns.username)
+            ulist = capi.listUsers()
+            for u in ulist:
+                print(u)
         
         elif ns.subcommand == 'user-list' and ns.username is not None:
-            out = capi.listUsers()
-            for u in out['user'].keys():
-                if u == ns.username:
-                    s = "{ '%s' : %s }" % (u, out['user'][u] )
-                    print(s)
+            uo = capi.getUser(ns.username)
+            print(uo)
+        
+        elif ns.subcommand == 'project-create':
+            p = capi.defineProject( ns.projectname,
+                                    ns.owner,
+                                    ns.members)
+            self.log.debug("Project is %s" % p)
+            capi.createUser(p)    
+            
+            
+        elif ns.subcommand == 'project-list' and ns.projectname is None:
+            plist = capi.listProjects()
+            for p in plist:
+                print(p)
+        
+        elif ns.subcommand == 'project-list' and ns.projectname is not None:
+            po = capi.getProject(ns.projectname)
+            print(po)
+
         
         else:
             self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)

@@ -24,12 +24,41 @@ __status__ = "Production"
     + Allocation
         Users can add their own Allocations on a given Resource. 
 
-
 '''
 import logging
 
+class VC3Entity(object):
+    '''
+    Template for VC3 information entities. Common functions. 
+    
+    '''
+    def __repr__(self):
+        s = "%s(" % self.__class__.__name__
+        for a in self.vc3attributes:
+            s+="%s=%s " % (a, getattr(self, a, None)) 
+        s += ")"
+        #s =  "User(name=%s, first=%s, last=%s, email=%s, institution=%s)" % (self.name,
+        #    self.first,
+        #    self.last,
+        #    self.email,
+        #    self.institution)
+        return s    
 
-class User(object):
+    def makeDictObject(self):
+        '''
+        Converts this Python object to attribute dictionary suitable for addition to existing dict 
+        intended to be converted back to JSON. Uses <obj>.name as key:
+        
+        '''
+        d = {}
+        d[self.name] = {}
+        for attrname in self.vc3attributes:
+            d[self.name][attrname] = getattr(self, attrname)
+        self.log.debug("Returning dict: %s" % d)
+        return d    
+
+
+class User(VC3Entity):
     '''
     Represents a VC3 user account.
     As policy, name, email, and institution must be set.  
@@ -38,11 +67,12 @@ JSON representation:
 {
     "user" : {
         "johnrhover": {
-        "first" : "John",
-        "last"  : "Hover",
-        "email" : "jhover@bnl.gov",
-        "institution" : "Brookhaven National Laboratory",
+            "first" : "John",
+            "last"  : "Hover",
+            "email" : "jhover@bnl.gov",
+            "institution" : "Brookhaven National Laboratory",
         },
+    }
 }
 
     '''
@@ -70,41 +100,10 @@ JSON representation:
         self.last = last
         self.email = email
         self.institution = institution
-        self.doc_attributes = ["first",'last','email','institution']
+        self.vc3attributes = ['name','first','last','email','institution']
         self.log.debug("User object created: %s" % self)
 
         
-    def __repr__(self):
-        s =  "User(name=%s, first=%s, last=%s, email=%s, institution=%s)" % (self.name,
-            self.first,
-            self.last,
-            self.email,
-            self.institution)
-        return s
-
-    def makeDictObject(self):
-        '''
-        Converts this Python object to attribute dictionary suitable for addition to existing dict 
-        intended to be converted back to JSON. Uses <obj>.name as key:
-        
-        '''
-        d = {}
-        d[self.name] = {}
-        for attrname in self.doc_attributes:
-            d[self.name][attrname] = getattr(self, attrname)
-        self.log.debug("Returning dict: %s" % d)
-        return d
-        
-        
-    def store(self, infoclient):
-        '''
-        Stores this user in the provided infoclient info tree. 
-        '''
-        users = infoclient.getdocumentobject(key='user')
-        du = self.makeDictObject()
-        self.log.debug("Dict obj: %s" % du)
-        infoclient.storedocumentobject(du, key='user')
-                
     
     @staticmethod
     def objectFromDict(dict):
@@ -124,36 +123,146 @@ JSON representation:
         return uo
 
 
-class Project(object):
+    def store(self, infoclient):
+        '''
+        Stores this user in the provided infoclient info tree. 
+        '''
+        users = infoclient.getdocumentobject(key='user')
+        du = self.makeDictObject()
+        self.log.debug("Dict obj: %s" % du)
+        infoclient.storedocumentobject(du, key='user')
+                
+
+class Project(VC3Entity):
     '''
     Represents a VC3 Project.
     
-    
     '''
+    def __init__(self, 
+                   name,
+                   owner,
+                   members):
+        '''
+        Defines a new Project object for usage elsewhere in the API. 
+              
+        :param str name: The unique VC3 name of this project
+        :param str first: User's first name
 
+        :return: User:  A valid Project objext. 
+       
+        :rtype: Project
+        '''  
+        self.log = logging.getLogger()
+        self.name = name
+        self.owner = owner
+        self.members = members
+        self.vc3attributes = ['name','owner','members']
+        self.log.debug("Project object created: %s" % self)
 
+    def store(self, infoclient):
+        '''
+        Stores this user in the provided infoclient info tree. 
+        '''
+        users = infoclient.getdocumentobject(key='project')
+        dp = self.makeDictObject()
+        self.log.debug("Dict obj: %s" % dp)
+        infoclient.storedocumentobject(dp, key='project')
+    
+    
+    @staticmethod
+    def objectFromDict(dict):
+        '''
+        Returns a Project object from dictionary. 
+        {'vc3jhover': {u'last': u'Last', u'email': u'Email', u'institution': u'BNL', u'first': u'First'}}
+        -> User
+        '''
+        name = dict.keys()[0]
+        d = dict[name]
+        po = Project(name, 
+                   d['owner'],
+                   d['members'])
+        return po
+    
 
 
 class Resource(object):
     '''
     Represents a VC3 target resource. 
     
-    
+    "resource" : {
+            "uchicago_rcc": {
+                "accesstype" : "remote-batch",
+                "accessmode" : "MFA" # ssh, gsissh, 
+                "submithost" : <hostname>,
+                "submitport" : <port>,
+                "type": "<batch-type>",
+                "version": "14.11.11",
+                },
+            }
+        
     '''
+    def __init__(self,
+                 name,
+                 accesstype,   # grid, batch, cloud
+                 accessmethod, # ssh, gsissh
+                 accessflavor, # condor-ce, slurm, sge, ec2, nova, gce
+                 gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud               
+                 mfa = False
+                 ):
+        pass
+
+
+
+
+
+
 
 class Allocation(object):
     '''
     Represents the access granted a VC3 User and a VC3 target Resource.
     Defined by (resource, vc3user, unix_account) triple.   
     
-    May or may not contain sub-Allocations. 
+    May or may not contain sub-Allocations.
     
+    (Top-level) Allocation names are in the form <vc3resourcename>.<vc3username>
+    
+    "sdcc-ic.johnrhover" : {
+        "username": "jhover",
+            "security-token" : { 
+            "type" : "ssh-keypair",
+            "ssh-type" : "ssh-rsa",
+            "ssh-pubkey" : "AAAAB3NzaC1...",
+            "ssh-privkey" : "XXXXXXXXXXXX...",
+            },    
+        },
+        "amazon-ec2.johnrhover" : {
+            "accountname" : "racf-cloud@rcf.rhic.bnl.gov",
+            "security-token" :  {
+                "type" : "cloud-tokens",
+                "accesskey" : "AAAAB3NzaC1...",
+                "privatekey" : "XXXXXXXXXXXX...",
+                }
+            }
+        },
+        "bnl-cluster1.johnrhover" : {
+            "username": "jhover",
+            "security-token" : {
+                "type" : "ssh-keypair",
+                "ssh-type" : "ssh-rsa",
+                "ssh-pubkey" : "AAAAB3NzaC1...",
+                "ssh-privkey" : "XXXXXXXXXXXX...",
+                }
+            }
+        }
     '''
+    
+    
 
 
 class Request(object):
     '''
     Represents and contains all information relevant to a concrete virtual cluster. 
+    Contains sub-elements that reflect information from other Entities. 
     
     
     '''
