@@ -37,11 +37,6 @@ class VC3Entity(object):
         for a in self.vc3attributes:
             s+="%s=%s " % (a, getattr(self, a, None)) 
         s += ")"
-        #s =  "User(name=%s, first=%s, last=%s, email=%s, institution=%s)" % (self.name,
-        #    self.first,
-        #    self.last,
-        #    self.email,
-        #    self.institution)
         return s    
 
     def makeDictObject(self):
