@@ -21,6 +21,15 @@ from entities import User, Project, Resource, Allocation, Request, Cluster, Appl
 from vc3 import infoclient
 
 class VC3ClientAPI(object):
+    '''
+    Client application programming interface. 
+    -- Oriented toward exposing only valid operations to external
+    user. 
+    -- Direct manipulations of stored information in the infoservice is only done by Entity objects, not
+    client user.
+        
+    -- Store method takes infoclient arg in order to allow multiple infoservice instances in the future. 
+    '''
     
     def __init__(self, config):
         self.config = config
@@ -80,22 +89,24 @@ class VC3ClientAPI(object):
         '''
         docobj = self.ic.getdocumentobject('user')
         ulist = []
-        for u in docobj['user'].keys():
-                s = "{ '%s' : %s }" % (u, docobj['user'][u] )
-                nd = {}
-                nd[u] = docobj['user'][u]
-                uo = User.objectFromDict(nd)
-                ulist.append(uo)
-                js = json.dumps(s)
-                ys = yaml.safe_load(js)
-                a = ast.literal_eval(js) 
-                #self.log.debug("dict= %s " % s)
-                #self.log.debug("obj= %s " % uo)
-                #self.log.debug("json = %s" % js)
-                #self.log.debug("yaml = %s" % ys)
-                #self.log.debug("ast = %s" % a)
-                #print(uo)
-        
+        try:
+            for u in docobj['user'].keys():
+                    s = "{ '%s' : %s }" % (u, docobj['user'][u] )
+                    nd = {}
+                    nd[u] = docobj['user'][u]
+                    uo = User.objectFromDict(nd)
+                    ulist.append(uo)
+                    js = json.dumps(s)
+                    ys = yaml.safe_load(js)
+                    a = ast.literal_eval(js) 
+                    #self.log.debug("dict= %s " % s)
+                    #self.log.debug("obj= %s " % uo)
+                    #self.log.debug("json = %s" % js)
+                    #self.log.debug("yaml = %s" % ys)
+                    #self.log.debug("ast = %s" % a)
+                    #print(uo)
+        except KeyError:
+            pass
         return ulist
 
     def getUser(self, username):
@@ -112,7 +123,7 @@ class VC3ClientAPI(object):
               
         :param str name: The unique VC3 name of this project
         :param str owner:  The VC3 user name of the owner of this project
-        :param List last:  List of VC3 user names of members of this project.  
+        :param List str:  List of VC3 user names of members of this project.  
         :return: Project  A valid Project object
         :rtype: Project        
         '''
@@ -137,21 +148,24 @@ class VC3ClientAPI(object):
     def listProjects(self):
         docobj = self.ic.getdocumentobject('project')
         plist = []
-        for p in docobj['project'].keys():
-                s = "{ '%s' : %s }" % (p, docobj['project'][p] )
-                nd = {}
-                nd[p] = docobj['project'][p]
-                po = Project.objectFromDict(nd)
-                plist.append(po)
-                js = json.dumps(s)
-                ys = yaml.safe_load(js)
-                a = ast.literal_eval(js) 
-                #self.log.debug("dict= %s " % s)
-                #self.log.debug("obj= %s " % uo)
-                #self.log.debug("json = %s" % js)
-                #self.log.debug("yaml = %s" % ys)
-                #self.log.debug("ast = %s" % a)
-                #print(uo)
+        try:
+            for p in docobj['project'].keys():
+                    s = "{ '%s' : %s }" % (p, docobj['project'][p] )
+                    nd = {}
+                    nd[p] = docobj['project'][p]
+                    po = Project.objectFromDict(nd)
+                    plist.append(po)
+                    js = json.dumps(s)
+                    ys = yaml.safe_load(js)
+                    a = ast.literal_eval(js) 
+                    #self.log.debug("dict= %s " % s)
+                    #self.log.debug("obj= %s " % uo)
+                    #self.log.debug("json = %s" % js)
+                    #self.log.debug("yaml = %s" % ys)
+                    #self.log.debug("ast = %s" % a)
+                    #print(uo)
+        except KeyError:
+            pass
         
         return plist
     
@@ -162,16 +176,50 @@ class VC3ClientAPI(object):
             if p.name == projectname:
                 return p
     
+        
         # Resource methods    
     def defineResource(self):
-        pass
+        '''
+        Defines a new Resource object for usage elsewhere in the API. 
+              
+        :param str name: The unique VC3 name of this resource
+        :param str owner:  The VC3 user name of the owner of this project
+        :param str accesstype,    # grid, batch, cloud
+        :param str accessmethod,  # ssh, gsissh
+        :param str accessflavor,  # condor-ce, slurm, sge, ec2, nova, gce
+        :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud               
+        :param Boolean mfa        # Does site need head-node factory?
+        :param Dict attributemap: # Arbitrary attribute dictionary.      
+        :return: Resource          A valid Project object
+        :rtype: Resource        
+        
+        
+        '''
+        r = Resource( name, owner, attributemap )
+        self.log.debug("Creating Resource object: %s " % r)
+        return r
     
     
-    def createResource(self):
-        pass
+    def createResource(self, resource):
+        resource.store(self.ic)
     
     def ListResources(self):
-        pass
+        docobj = self.ic.getdocumentobject('resource')
+        rlist = []
+        try:
+            for p in docobj['resource'].keys():
+                    s = "{ '%s' : %s }" % (p, docobj['resource'][p] )
+                    nd = {}
+                    nd[p] = docobj['project'][p]
+                    po = Project.objectFromDict(nd)
+                    rlist.append(po)
+                    js = json.dumps(s)
+                    ys = yaml.safe_load(js)
+                    a = ast.literal_eval(js) 
+        except KeyError:
+            pass
+       
+        return rlist
     
     def defineAllocation(self):
         pass
@@ -181,6 +229,9 @@ class VC3ClientAPI(object):
         pass
 
     def listAllocations(self):
+        pass
+    
+    def defineCluster(self):
         pass
     
     def createCluster(self):
@@ -289,7 +340,21 @@ class VC3ClientCLI(object):
         parser_projectlist.add_argument('--projectname', 
                                      action="store")
 
+        parser_resourcecreate = subparsers.add_parser('resource-create', 
+                                                help='create new vc3 resource')
         
+        parser_resourcecreate.add_argument('resourcename', 
+                                     action="store")
+
+        parser_resourcecreate.add_argument('--owner', 
+                                     action="store", 
+                                     dest="owner", 
+                                     default='unknown')
+
+        parser_resourcecreate.add_argument('--members', 
+                                     action="store", 
+                                     dest="members", 
+                                     default='unknown')
         
 
 
@@ -324,6 +389,7 @@ class VC3ClientCLI(object):
 
         capi = VC3ClientAPI(cp)
         
+        # User commands
         if ns.subcommand == 'user-create':
             u = capi.defineUser( ns.username,
                              ns.firstname,
@@ -342,13 +408,13 @@ class VC3ClientCLI(object):
             uo = capi.getUser(ns.username)
             print(uo)
         
+        # Project commands
         elif ns.subcommand == 'project-create':
             p = capi.defineProject( ns.projectname,
                                     ns.owner,
                                     ns.members)
             self.log.debug("Project is %s" % p)
             capi.createUser(p)    
-            
             
         elif ns.subcommand == 'project-list' and ns.projectname is None:
             plist = capi.listProjects()
@@ -359,6 +425,22 @@ class VC3ClientCLI(object):
             po = capi.getProject(ns.projectname)
             print(po)
 
+        # Resource commands
+        elif ns.subcommand == 'resource-create':
+            p = capi.defineProject( ns.resourcename,
+                                    ns.owner,
+                                    ns.members)
+            self.log.debug("Project is %s" % p)
+            capi.createUser(p)    
+            
+        elif ns.subcommand == 'resource-list' and ns.resourcename is None:
+            plist = capi.listProjects()
+            for p in plist:
+                print(p)
+        
+        elif ns.subcommand == 'resource-list' and ns.resourcename is not None:
+            po = capi.getProject(ns.resourcename)
+            print(po)
         
         else:
             self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)

@@ -198,13 +198,23 @@ class Resource(object):
     '''
     def __init__(self,
                  name,
+                 owner,
                  accesstype,   # grid, batch, cloud
                  accessmethod, # ssh, gsissh
                  accessflavor, # condor-ce, slurm, sge, ec2, nova, gce
                  gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud               
-                 mfa = False
+                 mfa = False,
+                 attributemap={}, # Dictionary of other key=value pairs defining resource properties. 
                  ):
-        pass
+        self.log = logging.getLogger()
+        self.name = name
+        self.owner = owner
+        self.accesstype = accesstype
+        self.accessmethod = accessmethod
+        self.accessflavor = accessflavor
+        self.gridresource = gridresource
+        self.attributemap = attributemap
+        self.log.debug("Project object created: %s" % self)
 
 
 
@@ -286,6 +296,9 @@ class Application(object):
     and dependencies to instantiate it. 
     
     '''
+
+
+
 
 
 def runtest():
