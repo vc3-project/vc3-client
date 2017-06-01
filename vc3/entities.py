@@ -222,6 +222,7 @@ class Allocation(object):
     (Top-level) Allocation names are in the form <vc3resourcename>.<vc3username>
     
     "sdcc-ic.johnrhover" : {
+        "acl" : "rw:vc3adminjhover, r:vc3jhover",
         "username": "jhover",
             "security-token" : { 
             "type" : "ssh-keypair",
