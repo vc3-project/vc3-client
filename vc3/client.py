@@ -271,7 +271,7 @@ class VC3ClientCLI(object):
         parser.add_argument('-c', '--config', 
                             action="store", 
                             dest='configpath', 
-                            default='~/etc/vc3client.conf', 
+                            default='~/vc3-services/etc/vc3-client.conf', 
                             help='configuration file path.')
         
         parser.add_argument('-d', '--debug', 
