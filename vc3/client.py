@@ -381,7 +381,7 @@ class VC3ClientCLI(object):
         self.log.info('Logging initialized.')
 
 
-    def invoke(self):
+    def run(self):
         cp = ConfigParser()
         ns = self.results
         self.log.info("Config is %s" % ns.configpath)
@@ -448,4 +448,4 @@ class VC3ClientCLI(object):
 
 if __name__ == '__main__':
     vc3cli = VC3ClientCLI()
-    vc3cli.invoke()    
+    vc3cli.run()    
