@@ -184,15 +184,14 @@ class VC3ClientAPI(object):
               
         :param str name: The unique VC3 name of this resource
         :param str owner:  The VC3 user name of the owner of this project
-        :param str accesstype,    # grid, batch, cloud
-        :param str accessmethod,  # ssh, gsissh
-        :param str accessflavor,  # condor-ce, slurm, sge, ec2, nova, gce
-        :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud               
+        :param str resourcetype,  # grid remote-batch local-batch cloud
+        :param str accessmethod,  # ssh, gsissh,  
+        :param str accessflavor,  # htcondor-ce, slurm, sge, ec2, nova, gce
+        :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud  | HTCondorCE hostname             
         :param Boolean mfa        # Does site need head-node factory?
         :param Dict attributemap: # Arbitrary attribute dictionary.      
         :return: Resource          A valid Project object
         :rtype: Resource        
-        
         
         '''
         r = Resource( name, owner, attributemap )
@@ -356,6 +355,36 @@ class VC3ClientCLI(object):
                                      dest="members", 
                                      default='unknown')
         
+        parser_resourcelist = subparsers.add_parser('resource-list', 
+                                                help='list vc3 resource(s)')
+
+        parser_resourcelist.add_argument('--projectname', 
+                                     action="store")
+
+
+        parser_allocationcreate = subparsers.add_parser('allocation-create', 
+                                                help='create new vc3 allocation')
+        
+        parser_allocationcreate.add_argument('allocationname', 
+                                     action="store")
+
+        parser_allocationcreate.add_argument('--owner', 
+                                     action="store", 
+                                     dest="owner", 
+                                     default='unknown')
+
+        parser_allocationcreate.add_argument('--members', 
+                                     action="store", 
+                                     dest="members", 
+                                     default='unknown')
+        
+        parser_allocationlist = subparsers.add_parser('allocation-list', 
+                                                help='list vc3 allocation(s)')
+
+        parser_allocationlist.add_argument('--projectname', 
+                                     action="store")
+
+
 
 
 
@@ -441,6 +470,24 @@ class VC3ClientCLI(object):
         elif ns.subcommand == 'resource-list' and ns.resourcename is not None:
             po = capi.getProject(ns.resourcename)
             print(po)
+        
+        # Allocation commands
+        elif ns.subcommand == 'allocation-create':
+            p = capi.defineProject( ns.allocationname,
+                                    ns.owner,
+                                    ns.members)
+            self.log.debug("Project is %s" % p)
+            capi.createUser(p)    
+            
+        elif ns.subcommand == 'allocation-list' and ns.allocationname is None:
+            plist = capi.listProjects()
+            for p in plist:
+                print(p)
+        
+        elif ns.subcommand == 'allocation-list' and ns.allocationname is not None:
+            po = capi.getProject(ns.allocationname)
+            print(po)
+        
         
         else:
             self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)

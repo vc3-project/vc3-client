@@ -186,7 +186,7 @@ class Resource(object):
     
     "resource" : {
             "uchicago_rcc": {
-                "accesstype" : "remote-batch",
+                "resourcetype" : "remote-batch",  # grid remote-batch local-batch cloud
                 "accessmode" : "MFA" # ssh, gsissh, 
                 "submithost" : <hostname>,
                 "submitport" : <port>,
@@ -199,17 +199,17 @@ class Resource(object):
     def __init__(self,
                  name,
                  owner,
-                 accesstype,   # grid, batch, cloud
+                 resourcetype,   # grid, batch, cloud
                  accessmethod, # ssh, gsissh
                  accessflavor, # condor-ce, slurm, sge, ec2, nova, gce
-                 gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud               
+                 gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCodnor CE hostname[:port]              
                  mfa = False,
                  attributemap={}, # Dictionary of other key=value pairs defining resource properties. 
                  ):
         self.log = logging.getLogger()
         self.name = name
         self.owner = owner
-        self.accesstype = accesstype
+        self.resourcetype = accesstype
         self.accessmethod = accessmethod
         self.accessflavor = accessflavor
         self.gridresource = gridresource
