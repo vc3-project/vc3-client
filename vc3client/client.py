@@ -23,12 +23,20 @@ from vc3infoservice import infoclient
 class VC3ClientAPI(object):
     '''
     Client application programming interface. 
+    
+    -- DefineX() methods return object. CreateX() stores it to infoservice. The two steps will allow 
+    some manipulation of the object by the client, or calling user. 
+    
     -- Oriented toward exposing only valid operations to external
-    user. 
+    user (portal, resource tool, or admin CLI client). 
+    
     -- Direct manipulations of stored information in the infoservice is only done by Entity objects, not
     client user.
         
-    -- Store method takes infoclient arg in order to allow multiple infoservice instances in the future. 
+    -- Store method (inside of createX methods) takes infoclient arg in order to allow multiple infoservice instances in the future. 
+    
+    
+    
     '''
     
     def __init__(self, config):
@@ -72,7 +80,7 @@ class VC3ClientAPI(object):
         user.store(self.ic)
         
                        
-    def updateUser(self, u ):
+    def updateUser(self, user ):
         '''
         
         '''
@@ -178,7 +186,14 @@ class VC3ClientAPI(object):
     
         
         # Resource methods    
-    def defineResource(self):
+    def defineResource(self, name, 
+                             owner, 
+                             resourctype, 
+                             accessmethod, 
+                             accessflavor, 
+                             gridresource, 
+                             mfa=False, 
+                             attributemap=None):
         '''
         Defines a new Resource object for usage elsewhere in the API. 
               
@@ -230,16 +245,25 @@ class VC3ClientAPI(object):
     def listAllocations(self):
         pass
     
-    def defineCluster(self):
+    def addAllocationToProject(self, allocation, projectname ):
+        pass
+        
+    def defineCluster(self, name):
         pass
     
-    def createCluster(self):
+    def createCluster(self, cluster):
         pass
     
     def listClusters(self):
         pass
 
-    def defineRequest(self):
+
+    def defineRequest(self, name, ):
+        '''
+        
+        :return Request
+        
+        '''
         pass
     
     def createRequest(self):
@@ -247,6 +271,25 @@ class VC3ClientAPI(object):
 
     def listRequests(self):
         pass
+
+    # User-triggered action calls
+
+    def saveRequestAsBlueprint(self, requestid, label):
+        pass
+    
+    def listBlueprints(self, project):
+        '''
+        Lists blueprints that this project contains.
+        '''
+        pass
+
+    def getBlueprint(self, name):
+        '''
+        :return Request
+        '''
+ 
+
+
     
     
 class EntityExistsException(Exception):

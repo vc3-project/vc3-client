@@ -281,33 +281,83 @@ class Request(object):
     
     '''
 
-
-class Cluster(object):
-    '''
-    Represents a useful collection of computing nodes as used by an Application.
-    
-    '''
-
-
-
 class Policy(object):
     '''
     Describes the desired resource utilization policy when a Request 
     includes multiple Allocations. 
     
     '''
+    
+    def __init__(self, name, pluginname, attributemap=None):
+        ''' 
+        “static-balanced” : {
+                "pluginname" : "StaticBalanced",
+            },
+ 
+        "weighted-balanced” : {
+                "pluginname" : "WeightedBalanced",
+                "weightmap" : "sdcc-ic.johnrhover,.80,bnl-cluster1.johnrhover,.20"
+            },
+         
+        “ordered-fill” : {
+                "pluginname" : "OrderedFill",
+                "fillorder: "sdcc-ic.johnrhover, bnl-cluster1.johnrhover,amazon-ec2.johnrhover" 
+        }
+        
+        '''
 
 
-class Application(object):
+class Cluster(object):
     '''
-    Represents a supported VC3 middleware application and all relevant configuration
+    Represents a supported VC3 middleware cluster application layout and all relevant configuration
     and dependencies to instantiate it. 
+
+    e.g. htcondor-managed-cm-schedd
+         htcondor-managed-cm-ext-schedd
+         workqueue-managed-catalog
+         workqueue-ext-catalog
+         ?
+    
+        “htcondor-managed-cm-schedd” : {
+            “headnode1” : {
+                “node_number” : “1”,
+                “node_cores_minimum” : “4”,
+                “node_memory_mb” : “4000”,
+                “node_storage_minimum_mb” : “50000”,
+                “app_type” : “htcondor”,
+                “app_role” : “head-node”,
+                “app_port” : “9618”
+                “app_password” : “XXXXXXX”,
+            },
+            “workers1” : {
+                “app_depends” : “headnode1”,
+                “node_number” : “10”,
+                “node_cores_minimum” : “8”,
+                “node_memory_mb” : “4000”,
+                “node_storage_minimum_mb” : “20000”,
+                “app_type” : “htcondor”,
+                “app_role” : “execute”,
+                “app_host” : “${HEADNODE1}.hostname”,
+                “app_port” : “9618”
+                “app_password” : “XXXXXXX”,
+            },
+        }
+    '''
+
+    def __init__(self, name, ):
+        pass
+    
+    def addNodeset(self, name, number, cores, memory_mb, storage_mb, app_type, app_role, attributemap=None):
+        pass
+
+
+
+
+class Environment(object):
+    '''
+    Represents the node/job-level environment needed to run a given user task. 
     
     '''
-
-
-
-
 
 
 
