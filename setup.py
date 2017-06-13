@@ -64,7 +64,7 @@ setup(
     maintainer='VC3 team',
     maintainer_email='vc3-project@googlegroups.com',
     url='http://virtualclusters.org/',
-    packages=['vc3'],
+    packages=['vc3client'],
     scripts = scripts,
     
     data_files = choose_data_files()
