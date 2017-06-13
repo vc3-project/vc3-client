@@ -18,7 +18,7 @@ import yaml
 from ConfigParser import ConfigParser
 
 from entities import User, Project, Resource, Allocation, Request, Cluster, Application
-from vc3 import infoclient
+from vc3infoservice import infoclient
 
 class VC3ClientAPI(object):
     '''
