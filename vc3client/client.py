@@ -8,16 +8,13 @@ __maintainer__ = "John Hover"
 __email__ = "jhover@bnl.gov"
 __status__ = "Production"
 
-import argparse
 import ast
 import json
 import logging
 import os
 import yaml
 
-from ConfigParser import ConfigParser
-
-from entities import User, Project, Resource, Allocation, Request, Cluster, Application
+from entities import User, Project, Resource, Allocation, Request, Cluster, Environment
 from vc3infoservice import infoclient
 
 class VC3ClientAPI(object):
@@ -33,10 +30,8 @@ class VC3ClientAPI(object):
     -- Direct manipulations of stored information in the infoservice is only done by Entity objects, not
     client user.
         
-    -- Store method (inside of createX methods) takes infoclient arg in order to allow multiple infoservice instances in the future. 
-    
-    
-    
+    -- Store method (inside of storeX methods) takes infoclient arg in order to allow multiple infoservice instances in the future. 
+        
     '''
     
     def __init__(self, config):
@@ -70,7 +65,7 @@ class VC3ClientAPI(object):
         return u
     
         
-    def createUser(self, user):
+    def storeUser(self, user):
         '''
         Stores the provided user in the infoservice. 
         
@@ -140,18 +135,38 @@ class VC3ClientAPI(object):
         return p
     
     
-    def createProject(self, project):
+    def storeProject(self, project):
         '''
         Stores the provided project in the infoservice. 
         
         :param Project project:  Project to add. 
         :return: None
         '''
+        self.log.debug("Storing project %s" % project)
         project.store(self.ic)
+        self.log.debug("Done.")
     
     
     def updateProject(self):
         pass
+    
+    def addUserToProject(self, project, user):
+        '''
+        :param str project
+        :param str user
+        
+        
+        '''
+        self.log.debug("Looking up user %s project %s " % (user, project))
+        pdocobj = self.ic.getdocumentobject('project')
+        udocobj = self.ic.getdocumentobject('user')
+        # confirm user exists...
+        pd = pdocobj['project'][project]
+        po = Project.objectFromDict(pd)
+        self.log.debug("Adding user %s to project object %s " % (user, po))
+        po.addUser(user)
+        self.storeProject(po)        
+
     
     def listProjects(self):
         docobj = self.ic.getdocumentobject('project')
@@ -179,7 +194,7 @@ class VC3ClientAPI(object):
     
     
     def getProject(self, projectname):
-        ulist = self.listProjects()
+        plist = self.listProjects()
         for p in plist:
             if p.name == projectname:
                 return p
@@ -214,7 +229,7 @@ class VC3ClientAPI(object):
         return r
     
     
-    def createResource(self, resource):
+    def storeResource(self, resource):
         resource.store(self.ic)
     
     def ListResources(self):
@@ -235,12 +250,18 @@ class VC3ClientAPI(object):
        
         return rlist
     
-    def defineAllocation(self):
+    def defineAllocation(self, user, resource, type, attributemap=None):
+        '''
+          
+               
+        
+        '''
         pass
     
     
-    def createAllocation(self):
-        pass
+    def storeAllocation(self, allocation):
+        allocation.store(self.ic)
+        
 
     def listAllocations(self):
         pass
@@ -248,17 +269,17 @@ class VC3ClientAPI(object):
     def addAllocationToProject(self, allocation, projectname ):
         pass
         
-    def defineCluster(self, name):
+    def defineCluster(self, name, ):
         pass
     
-    def createCluster(self, cluster):
+    def storeCluster(self, cluster):
         pass
     
     def listClusters(self):
         pass
 
 
-    def defineRequest(self, name, ):
+    def defineRequest(self, name, cluster, environment, allocations, policy ):
         '''
         
         :return Request
@@ -266,7 +287,7 @@ class VC3ClientAPI(object):
         '''
         pass
     
-    def createRequest(self):
+    def storeRequest(self):
         pass
 
     def listRequests(self):
@@ -299,243 +320,3 @@ class EntityExistsException(Exception):
         return repr(self.value)
 
 
-class VC3ClientCLI(object):
-    '''
-    
-    '''
-    def __init__(self):
-        self.parseopts()
-        self.setuplogging()
-
-
-    def parseopts(self):
-        parser = argparse.ArgumentParser()
-        parser.add_argument('-c', '--config', 
-                            action="store", 
-                            dest='configpath', 
-                            default='~/vc3-services/etc/vc3-client.conf', 
-                            help='configuration file path.')
-        
-        parser.add_argument('-d', '--debug', 
-                            action="store_true", 
-                            dest='debug', 
-                            help='debug logging')        
-
-        parser.add_argument('-v', '--verbose', 
-                            action="store_true", 
-                            dest='verbose', 
-                            help='verbose/info logging')            
-        
-        # Init sub-command
-        subparsers = parser.add_subparsers( dest="subcommand")
-
-        parser_usercreate = subparsers.add_parser('user-create', 
-                                                help='create new vc3 user')
-        parser_usercreate.add_argument('username', 
-                                     action="store")
-        
-        parser_usercreate.add_argument('--firstname', 
-                                     action="store", 
-                                     dest="firstname", 
-                                     default='unknown')
-
-        parser_usercreate.add_argument('--lastname', 
-                                     action="store", 
-                                     dest="lastname", 
-                                     default='unknown')
-
-        parser_usercreate.add_argument('--email', 
-                                     action="store", 
-                                     dest="email", 
-                                     default='unknown')
-
-        parser_usercreate.add_argument('--institution', 
-                                     action="store", 
-                                     dest="institution", 
-                                     default='unknown')     
-        
-        parser_userlist = subparsers.add_parser('user-list', 
-                                                help='list vc3 user(s)')
-        
-        parser_userlist.add_argument('--username', 
-                                     action="store")
-
-        parser_projectcreate = subparsers.add_parser('project-create', 
-                                                help='create new vc3 project')
-        
-        parser_projectcreate.add_argument('projectname', 
-                                     action="store")
-
-        parser_projectcreate.add_argument('--owner', 
-                                     action="store", 
-                                     dest="owner", 
-                                     default='unknown')
-
-        parser_projectcreate.add_argument('--members', 
-                                     action="store", 
-                                     dest="members", 
-                                     default='unknown')
-
-        parser_projectlist = subparsers.add_parser('project-list', 
-                                                help='list vc3 project(s)')
-
-        parser_projectlist.add_argument('--projectname', 
-                                     action="store")
-
-        parser_resourcecreate = subparsers.add_parser('resource-create', 
-                                                help='create new vc3 resource')
-        
-        parser_resourcecreate.add_argument('resourcename', 
-                                     action="store")
-
-        parser_resourcecreate.add_argument('--owner', 
-                                     action="store", 
-                                     dest="owner", 
-                                     default='unknown')
-
-        parser_resourcecreate.add_argument('--members', 
-                                     action="store", 
-                                     dest="members", 
-                                     default='unknown')
-        
-        parser_resourcelist = subparsers.add_parser('resource-list', 
-                                                help='list vc3 resource(s)')
-
-        parser_resourcelist.add_argument('--projectname', 
-                                     action="store")
-
-
-        parser_allocationcreate = subparsers.add_parser('allocation-create', 
-                                                help='create new vc3 allocation')
-        
-        parser_allocationcreate.add_argument('allocationname', 
-                                     action="store")
-
-        parser_allocationcreate.add_argument('--owner', 
-                                     action="store", 
-                                     dest="owner", 
-                                     default='unknown')
-
-        parser_allocationcreate.add_argument('--members', 
-                                     action="store", 
-                                     dest="members", 
-                                     default='unknown')
-        
-        parser_allocationlist = subparsers.add_parser('allocation-list', 
-                                                help='list vc3 allocation(s)')
-
-        parser_allocationlist.add_argument('--projectname', 
-                                     action="store")
-
-
-
-
-
-
-        self.results= parser.parse_args()
-
-
-
-    def setuplogging(self):
-        self.log = logging.getLogger()
-        FORMAT='%(asctime)s (UTC) [ %(levelname)s ] %(name)s %(filename)s:%(lineno)d %(funcName)s(): %(message)s'
-        formatter = logging.Formatter(FORMAT)
-        #formatter.converter = time.gmtime  # to convert timestamps to UTC
-        logStream = logging.StreamHandler()
-        logStream.setFormatter(formatter)
-        self.log.addHandler(logStream)
-    
-        self.log.setLevel(logging.WARN)
-        if self.results.debug:
-            self.log.setLevel(logging.DEBUG)
-        if self.results.verbose:
-            self.log.setLevel(logging.INFO)
-        self.log.info('Logging initialized.')
-
-
-    def run(self):
-        cp = ConfigParser()
-        ns = self.results
-        self.log.info("Config is %s" % ns.configpath)
-        cp.read(os.path.expanduser(ns.configpath))
-
-        capi = VC3ClientAPI(cp)
-        
-        # User commands
-        if ns.subcommand == 'user-create':
-            u = capi.defineUser( ns.username,
-                             ns.firstname,
-                             ns.lastname,
-                             ns.email,
-                             ns.institution)
-            self.log.debug("User is %s" % u)
-            capi.createUser(u)
-            
-        elif ns.subcommand == 'user-list' and ns.username is None:
-            ulist = capi.listUsers()
-            for u in ulist:
-                print(u)
-        
-        elif ns.subcommand == 'user-list' and ns.username is not None:
-            uo = capi.getUser(ns.username)
-            print(uo)
-        
-        # Project commands
-        elif ns.subcommand == 'project-create':
-            p = capi.defineProject( ns.projectname,
-                                    ns.owner,
-                                    ns.members)
-            self.log.debug("Project is %s" % p)
-            capi.createUser(p)    
-            
-        elif ns.subcommand == 'project-list' and ns.projectname is None:
-            plist = capi.listProjects()
-            for p in plist:
-                print(p)
-        
-        elif ns.subcommand == 'project-list' and ns.projectname is not None:
-            po = capi.getProject(ns.projectname)
-            print(po)
-
-        # Resource commands
-        elif ns.subcommand == 'resource-create':
-            p = capi.defineProject( ns.resourcename,
-                                    ns.owner,
-                                    ns.members)
-            self.log.debug("Project is %s" % p)
-            capi.createUser(p)    
-            
-        elif ns.subcommand == 'resource-list' and ns.resourcename is None:
-            plist = capi.listProjects()
-            for p in plist:
-                print(p)
-        
-        elif ns.subcommand == 'resource-list' and ns.resourcename is not None:
-            po = capi.getProject(ns.resourcename)
-            print(po)
-        
-        # Allocation commands
-        elif ns.subcommand == 'allocation-create':
-            p = capi.defineProject( ns.allocationname,
-                                    ns.owner,
-                                    ns.members)
-            self.log.debug("Project is %s" % p)
-            capi.createUser(p)    
-            
-        elif ns.subcommand == 'allocation-list' and ns.allocationname is None:
-            plist = capi.listProjects()
-            for p in plist:
-                print(p)
-        
-        elif ns.subcommand == 'allocation-list' and ns.allocationname is not None:
-            po = capi.getProject(ns.allocationname)
-            print(po)
-        
-        
-        else:
-            self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)
-            
-
-if __name__ == '__main__':
-    vc3cli = VC3ClientCLI()
-    vc3cli.run()    
