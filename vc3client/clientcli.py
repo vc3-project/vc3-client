@@ -108,13 +108,16 @@ class VC3ClientCLI(object):
         parser_projectlist = subparsers.add_parser('project-list', 
                                                 help='list all vc3 project(s)')
 
-        parser_projectlist.add_argument('projectname', 
+        parser_projectlist.add_argument('--project', 
                                      action="store",
-                                     help='list details of specified project')
+                                     dest='projectname',
+                                     required=False, 
+                                     help='list details of specified project',
+                                     default=None)
 
 
         parser_resourcecreate = subparsers.add_parser('resource-create', 
-                                                help='store new vc3 resource')
+                                                help='create new vc3 resource')
         
         parser_resourcecreate.add_argument('--name',
                                            dest = 'resourcename', 
@@ -135,35 +138,41 @@ class VC3ClientCLI(object):
 
         parser_resourcecreate.add_argument('--type', 
                                      action="store", 
-                                     dest="type", 
+                                     dest="type",
+                                     help="grid|remote-batch|local-batch|cloud", 
                                      )
 
         parser_resourcecreate.add_argument('--accessmethod', 
                                      action="store", 
-                                     dest="accessmethod", 
+                                     dest="accessmethod",
+                                     help="ce|ssh|gsissh|local", 
                                      )
 
         parser_resourcecreate.add_argument('--accessflavor', 
                                      action="store", 
-                                     dest="accessflavor", 
+                                     dest="accessflavor",
+                                     help="condor-ce|slurm|sge|ec2|nova|gce",  
                                      )
 
         parser_resourcecreate.add_argument('--mfa', 
                                      action="store_true", 
                                      dest="mfa",
+                                     help="requires multi-factor/OTP authentication",
                                      default=False, 
                                      )        
-        
-                        
+                                        
         parser_resourcelist = subparsers.add_parser('resource-list', 
                                                 help='list vc3 resource(s)')
 
-        parser_resourcelist.add_argument('--projectname', 
-                                     action="store")
-
+        parser_resourcelist.add_argument('--resource',
+                                         dest='resourcename', 
+                                         action="store",
+                                         required=False, 
+                                         help='list details of specified resource',
+                                         default=None)
 
         parser_allocationcreate = subparsers.add_parser('allocation-create', 
-                                                help='store new vc3 allocation')
+                                                help='create new vc3 allocation')
         
         parser_allocationcreate.add_argument('allocationname', 
                                      action="store")
@@ -173,10 +182,16 @@ class VC3ClientCLI(object):
                                      dest="owner", 
                                      default='unknown')
 
-        parser_allocationcreate.add_argument('--members', 
+        parser_allocationcreate.add_argument('--resource', 
                                      action="store", 
                                      dest="members", 
                                      default='unknown')
+        
+        
+        
+        
+        
+        
         
         parser_allocationlist = subparsers.add_parser('allocation-list', 
                                                 help='list vc3 allocation(s)')

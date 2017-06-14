@@ -15,7 +15,10 @@ vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf project-create --
 echo vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf project-adduser jhoverproject angus
 vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf project-adduser jhoverproject angus
 
-echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list jhoverproject
-vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list jhoverproject
+echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list
+vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list
+
+echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list --project jhoverproject
+vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list --project jhoverproject
 
 
