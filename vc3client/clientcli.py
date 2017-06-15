@@ -108,7 +108,7 @@ class VC3ClientCLI(object):
         parser_projectlist = subparsers.add_parser('project-list', 
                                                 help='list all vc3 project(s)')
 
-        parser_projectlist.add_argument('--project', 
+        parser_projectlist.add_argument('--projectname', 
                                      action="store",
                                      dest='projectname',
                                      required=False, 
@@ -119,26 +119,17 @@ class VC3ClientCLI(object):
         parser_resourcecreate = subparsers.add_parser('resource-create', 
                                                 help='create new vc3 resource')
         
-        parser_resourcecreate.add_argument('--name',
-                                           dest = 'resourcename', 
+        parser_resourcecreate.add_argument('resourcename',
                                            action="store")
-        '''
-
-                             accessmethod, 
-                             accessflavor, 
-                             gridresource, 
-                             mfa=False, 
-                             attributemap=None
-        '''
 
         parser_resourcecreate.add_argument('--owner', 
                                      action="store", 
                                      dest="owner", 
                                     )
 
-        parser_resourcecreate.add_argument('--type', 
+        parser_resourcecreate.add_argument('--accesstype', 
                                      action="store", 
-                                     dest="type",
+                                     dest="accesstype",
                                      help="grid|remote-batch|local-batch|cloud", 
                                      )
 
@@ -161,6 +152,7 @@ class VC3ClientCLI(object):
                                      default=False, 
                                      )        
                                         
+                                        
         parser_resourcelist = subparsers.add_parser('resource-list', 
                                                 help='list vc3 resource(s)')
 
@@ -170,6 +162,7 @@ class VC3ClientCLI(object):
                                          required=False, 
                                          help='list details of specified resource',
                                          default=None)
+
 
         parser_allocationcreate = subparsers.add_parser('allocation-create', 
                                                 help='create new vc3 allocation')
@@ -184,20 +177,19 @@ class VC3ClientCLI(object):
 
         parser_allocationcreate.add_argument('--resource', 
                                      action="store", 
-                                     dest="members", 
+                                     dest="resource", 
                                      default='unknown')
-        
-        
-        
-        
         
         
         
         parser_allocationlist = subparsers.add_parser('allocation-list', 
                                                 help='list vc3 allocation(s)')
 
-        parser_allocationlist.add_argument('--projectname', 
-                                     action="store")
+        parser_allocationlist.add_argument('--allocationname', 
+                                         action="store",
+                                         required=False, 
+                                         help='list details of specified allocation',
+                                         default=None)
 
 
 
@@ -276,20 +268,24 @@ class VC3ClientCLI(object):
             
         # Resource commands
         elif ns.subcommand == 'resource-create':
-            r = capi.defineProject( ns.resourcename,
-                                    ns.owner,
+            r = capi.defineResource( ns.resourcename,
+                                     ns.owner,
+                                     ns.accesstype,
+                                     ns.accessmethod,
+                                     ns.accessflavor,
+                                     ns.mfa
                                     )
-            self.log.debug("Project is %s" % p)
-            capi.storeUser(p)    
+            self.log.debug("Resource is %s" % r)
+            capi.storeResource(r)    
             
         elif ns.subcommand == 'resource-list' and ns.resourcename is None:
-            plist = capi.listProjects()
-            for p in plist:
-                print(p)
+            rlist = capi.listResources()
+            for r in rlist:
+                print(r)
         
         elif ns.subcommand == 'resource-list' and ns.resourcename is not None:
-            po = capi.getProject(ns.resourcename)
-            print(po)
+            ro = capi.getResource(ns.resourcename)
+            print(ro)
         
         
         # Allocation commands

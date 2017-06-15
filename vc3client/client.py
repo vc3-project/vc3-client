@@ -39,9 +39,9 @@ class VC3ClientAPI(object):
         self.ic = infoclient.InfoClient(self.config)
         self.log = logging.getLogger() 
 
-
-    # User methods
-
+    ################################################################################
+    #                           User-related calls
+    ################################################################################
     def defineUser(self,   
                    name,
                    first,
@@ -73,14 +73,7 @@ class VC3ClientAPI(object):
         :return: None
         '''
         user.store(self.ic)
-        
-                       
-    def updateUser(self, user ):
-        '''
-        
-        '''
-        pass
-    
+          
 
     def listUsers(self):
         '''
@@ -118,8 +111,9 @@ class VC3ClientAPI(object):
             if u.name == username:
                 return u
     
-    # Project methods
-    
+    ################################################################################
+    #                           Project-related calls
+    ################################################################################  
     def defineProject(self, name, owner, members):
         '''
         Defines a new Project object for usage elsewhere in the API. 
@@ -146,9 +140,6 @@ class VC3ClientAPI(object):
         project.store(self.ic)
         self.log.debug("Done.")
     
-    
-    def updateProject(self):
-        pass
     
     def addUserToProject(self, project, user):
         '''
@@ -200,10 +191,12 @@ class VC3ClientAPI(object):
                 return p
     
         
-        # Resource methods    
+    ################################################################################
+    #                           Resource-related calls
+    ################################################################################    
     def defineResource(self, name, 
                              owner, 
-                             resourctype, 
+                             accesstype, 
                              accessmethod, 
                              accessflavor, 
                              gridresource, 
@@ -224,7 +217,7 @@ class VC3ClientAPI(object):
         :rtype: Resource        
         
         '''
-        r = Resource( name, owner, attributemap )
+        r = Resource( name, owner, accesstype, accessmethod, accessflavor, gridresource, mfa , attributemap )
         self.log.debug("Creating Resource object: %s " % r)
         return r
     
@@ -232,16 +225,16 @@ class VC3ClientAPI(object):
     def storeResource(self, resource):
         resource.store(self.ic)
     
-    def ListResources(self):
+    def listResources(self):
         docobj = self.ic.getdocumentobject('resource')
         rlist = []
         try:
-            for p in docobj['resource'].keys():
-                    s = "{ '%s' : %s }" % (p, docobj['resource'][p] )
+            for r in docobj['resource'].keys():
+                    s = "{ '%s' : %s }" % (r, docobj['resource'][r] )
                     nd = {}
-                    nd[p] = docobj['project'][p]
-                    po = Project.objectFromDict(nd)
-                    rlist.append(po)
+                    nd[r] = docobj['resource'][r]
+                    ro = Resource.objectFromDict(nd)
+                    rlist.append(ro)
                     js = json.dumps(s)
                     ys = yaml.safe_load(js)
                     a = ast.literal_eval(js) 
@@ -250,6 +243,15 @@ class VC3ClientAPI(object):
        
         return rlist
     
+    def getResource(self, resourcename):
+        rlist = self.listResources()
+        for r in rlist:
+            if r.name == resourcename:
+                return r
+
+    ################################################################################
+    #                           Allocation-related calls
+    ################################################################################ 
     def defineAllocation(self, user, resource, type, attributemap=None):
         '''
           

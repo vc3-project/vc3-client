@@ -21,4 +21,16 @@ vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf projec
 echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list --project jhoverproject
 vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list --project jhoverproject
 
+echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm sdcc-ic
+vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm sdcc-ic
+
+echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-list
+vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-list
+
+echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-list --resource sdcc-ic
+vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-list --resource sdcc-ic
+
+echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf allocation-list
+vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf allocation-list
+
 

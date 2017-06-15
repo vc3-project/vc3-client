@@ -35,7 +35,7 @@ class VC3Entity(object):
     '''
     def __repr__(self):
         s = "%s(" % self.__class__.__name__
-        for a in self.vc3attributes:
+        for a in self.__class__.vc3attributes:
             s+="%s=%s " % (a, getattr(self, a, None)) 
         s += ")"
         return s    
@@ -53,6 +53,26 @@ class VC3Entity(object):
         self.log.debug("Returning dict: %s" % d)
         return d    
 
+    @classmethod
+    def objectFromDict(cls, dict):
+        '''
+        Returns an initialized Entity object from dictionary. 
+        Input: Dict:
+        { <name> : 
+            {
+                "name" : "<name>",
+                "att1" : "<val1>"  
+            }
+        }
+        '''
+        name = dict.keys()[0]
+        d = dict[name]
+        args = {}
+        for key in cls.vc3attributes:
+            args[key] = d[key]
+        eo = cls(**args)
+        return eo
+    
 
 class User(VC3Entity):
     '''
@@ -70,8 +90,13 @@ JSON representation:
         },
     }
 }
-
     '''
+    vc3attributes = ['name',
+                     'first',
+                     'last',
+                     'email',
+                     'institution'] 
+    
     def __init__(self, 
                    name,
                    first,
@@ -86,37 +111,16 @@ JSON representation:
         :param str last: User's last name
         :param str email: User's email address
         :param str institution: User's intitutional affiliation or employer
-        :return: User:  A valid User object
-       
+        :return: User:  A valid User object      
         :rtype: User
-        '''  
+        '''
         self.log = logging.getLogger()
         self.name = name
         self.first = first
         self.last = last
         self.email = email
         self.institution = institution
-        self.vc3attributes = ['name','first','last','email','institution']
         self.log.debug("User object created: %s" % self)
-
-        
-    
-    @staticmethod
-    def objectFromDict(dict):
-        '''
-        Returns a User object from dictionary. 
-        {'vc3jhover': {u'last': u'Last', u'email': u'Email', u'institution': u'BNL', u'first': u'First'}}
-        -> User
-        
-        '''
-        name = dict.keys()[0]
-        d = dict[name]
-        uo = User(name, 
-                   d['first'],
-                   d['last'],
-                   d['email'],
-                   d['institution'])
-        return uo
 
 
     def store(self, infoclient):
@@ -132,19 +136,27 @@ JSON representation:
 class Project(VC3Entity):
     '''
     Represents a VC3 Project.
-    
     '''
+    
+    vc3attributes = ['name',
+                     'owner',
+                     'members', 
+                     'allocations',
+                     'blueprints']
+    
+    
     def __init__(self, 
                    name,
                    owner,
-                   members):
+                   members,
+                   allocations=None, 
+                   blueprints=None):
         '''
         Defines a new Project object for usage elsewhere in the API. 
               
         :param str name: The unique VC3 name of this project
         :param str owner: VC3 username of project owner. 
         :param 
-
         :return: User:  A valid Project objext. 
        
         :rtype: Project
@@ -158,8 +170,8 @@ class Project(VC3Entity):
             for m in members:
                 if m not in self.members:
                     self.members.append(m)
-        self.allocations = None
-        self.vc3attributes = ['name','owner','members', 'allocations']
+        self.allocations = allocations
+        self.blueprints = blueprints
         self.log.debug("Project object created: %s" % self)
 
     def addUser(self, user):
@@ -181,24 +193,10 @@ class Project(VC3Entity):
         self.log.debug("Dict obj: %s" % dp)
         infoclient.storedocumentobject(dp, key='project')
     
-    
-    @staticmethod
-    def objectFromDict(dict):
-        '''
-        Returns a Project object from dictionary. 
-        {'vc3jhover': {u'last': u'Last', u'email': u'Email', u'institution': u'BNL', u'first': u'First'}}
-        -> User
-        '''
-        name = dict.keys()[0]
-        d = dict[name]
-        po = Project(name, 
-                   d['owner'],
-                   d['members'])
-        return po
-    
+   
 
 
-class Resource(object):
+class Resource(VC3Entity):
     '''
     Represents a VC3 target resource. 
     
@@ -214,14 +212,23 @@ class Resource(object):
             }
     
     intrinsic time limits/preemption flag to distinguish platforms we could run static components on. 
-    network access is also critical for this.
-    
-        
+    network access is also critical for this.    
     '''
+   
+    vc3attributes = ['name',
+                     'owner',
+                     'accesstype', 
+                     'accessmethod',
+                     'accessflavor',
+                     'gridresource',
+                     'attributemap']
+    
+    
+    
     def __init__(self,
                  name,
                  owner,
-                 resourcetype,   # grid, batch, cloud
+                 accesstype,   # grid, batch, cloud
                  accessmethod, # ssh, gsissh
                  accessflavor, # condor-ce, slurm, sge, ec2, nova, gce
                  gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCodnor CE hostname[:port]              
@@ -231,20 +238,24 @@ class Resource(object):
         self.log = logging.getLogger()
         self.name = name
         self.owner = owner
-        self.resourcetype = accesstype
+        self.accesstype = accesstype
         self.accessmethod = accessmethod
         self.accessflavor = accessflavor
         self.gridresource = gridresource
         self.attributemap = attributemap
         self.log.debug("Project object created: %s" % self)
 
+    def store(self, infoclient):
+        '''
+        Stores this project in the provided infoclient info tree. 
+        '''
+        resources = infoclient.getdocumentobject(key='resource')
+        dr = self.makeDictObject()
+        self.log.debug("Dict obj: %s" % dr)
+        infoclient.storedocumentobject(dr, key='resource')
 
 
-
-
-
-
-class Allocation(object):
+class Allocation(VC3Entity):
     '''
     Represents the access granted a VC3 User and a VC3 target Resource.
     Defined by (resource, vc3user, unix_account) triple.   
@@ -287,28 +298,31 @@ class Allocation(object):
             }
         }
     '''
+    vc3attributes = ['name',
+                     'user',
+                     'resource',
+                     'type',
+                    ]   
+
     
-    def __init__(self, user, resource, type, attributemap=None ):
+    def __init__(self, owner, resource, type):
         '''
-        :param str user:          vc3username of owner of allocation
+        :param str owner:         vc3username of owner of allocation
         :param str resource:      vc3 resource name 
-        :param str type:          what sort of allocation (unlimited, limited, quota
+        :param str type:          what sort of allocation (unlimited, limited, quota)
         :param Dict attributemap: Python Dict of other attributes
                 
         '''
-        
-        
+
         self.name = "%s.%s" % (resource, user)
+
         self.user = user
         self.resource = resource
         self.type = type  # quota | unlimited 
-        if attributemap is not None:
-            for at in attributemap.keys():
-                setattr(self, at, attributemap[at])
         
 
 
-class Request(object):
+class Request(VC3Entity):
     '''
     Represents and contains all information relevant to a concrete virtual cluster. 
     Contains sub-elements that reflect information from other Entities. 
@@ -319,10 +333,10 @@ class Request(object):
     "johnrhover-req00001" : {
         "cluster" : "clustername",
         "environment" : {
-                    <environment json>
+                    <Environment json>
                 },
         "allocations" : {
-                    <allocations>
+                    <Allocations>
                     },
         "policy" :  {
                 <policy>
@@ -330,22 +344,20 @@ class Request(object):
         "expiration" : "2017-07-07:1730", 
     }
     
-    
-    
-    
+
     }
     
     
     '''
 
-class Policy(object):
+class Policy(VC3Entity):
     '''
     Describes the desired resource utilization policy when a Request 
     includes multiple Allocations. 
     
     '''
     
-    def __init__(self, name, pluginname, attributemap=None):
+    def __init__(self, name, pluginname):
         ''' 
         "static-balanced" : {
                 "pluginname" : "StaticBalanced",
@@ -364,7 +376,7 @@ class Policy(object):
         '''
 
 
-class Cluster(object):
+class Cluster(VC3Entity):
     '''
     Represents a supported VC3 middleware cluster application, node layout, and all relevant configuration
     and dependencies to instantiate it. It is focussed on building the virtual *cluster* not the task/job 
@@ -411,13 +423,13 @@ class Cluster(object):
         '''
         self.name = name
     
-    def addNodeset(self, name, number, cores, memory_mb, storage_mb, app_type, app_role, attributemap=None):
+    def addNodeset(self, name, number, cores, memory_mb, storage_mb, app_type, app_role):
         pass
 
 
 
 
-class Environment(object):
+class Environment(VC3Entity):
     '''
     Represents the node/job-level environment needed to run a given user task. 
     Consists of task requirements like job runtime, disk space, cpucount, gpu
@@ -425,24 +437,28 @@ class Environment(object):
     
     '''
 
-    def __init__(self, name, owner,  packagelist=None, attributemap=None ):
+    def __init__(self, name, owner,  packagelist=None, envmap=None ):
         '''
         Defines a new Environment object. 
               
         :param str name: The unique VC3 label for this environment.
         :param str owner:
         :param List str packagelist:
-        :param Dict str attributemap: 
+        :param Dict str envmap: 
         
         :return: User:  A valid Environment object
         :rtype: Environment
         '''  
         self.log = logging.getLogger()
+        self.vc3attributes = ['name',
+                             'owner',
+                             'packagelist',
+                             'envmap',
+                             ]
         self.name = name
         self.owner = owner
-        if attributemap is not None:
-            for at in attributemap.keys():
-                setattr(self, at, attributemap[at])
+        self.packagelist = packagelist
+        self.envmap = envmap
         
 
 
