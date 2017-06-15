@@ -83,6 +83,7 @@ JSON representation:
 {
     "user" : {
         "johnrhover": {
+            "name"  : "johnrhover",
             "first" : "John",
             "last"  : "Hover",
             "email" : "jhover@bnl.gov",

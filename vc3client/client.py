@@ -300,6 +300,7 @@ class VC3ClientAPI(object):
     def saveRequestAsBlueprint(self, requestid, label):
         pass
     
+     
     def listBlueprints(self, project):
         '''
         Lists blueprints that this project contains.
