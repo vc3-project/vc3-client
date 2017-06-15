@@ -296,10 +296,10 @@ class VC3ClientCLI(object):
                                        
                                        )
             self.log.debug("Allocation is %s" % a)
-            capi.storeUser(p)    
+            capi.storeAllocation(a)    
             
         elif ns.subcommand == 'allocation-list' and ns.allocationname is None:
-            plist = capi.listProjects()
+            alist = capi.listAllocations()
             for p in plist:
                 print(p)
         

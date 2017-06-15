@@ -302,6 +302,14 @@ class Allocation(VC3Entity):
                      'user',
                      'resource',
                      'type',
+                     'quantity',
+                     'units',
+                     'username',
+                     'sshprivkey',
+                     'sshpubkey',
+                     'sslcert',
+                     'sslkey',
+                     ''
                     ]   
 
     

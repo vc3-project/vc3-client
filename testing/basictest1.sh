@@ -1,36 +1,41 @@
 #!/bin/bash
 DEBUG='-d'
-echo vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL jhover
-vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL jhover
-echo vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
-vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
-echo vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL adminjhover
-vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL adminjhover
+CLIENT=vc3client/clientcli.py
+CONFIG=~/git/vc3-client/etc/vc3-client.conf
 
-echo vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf user-list
-vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf user-list
+echo $CLIENT -c $CONFIG user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL jhover
+$CLIENT -c $CONFIG user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL jhover
+echo $CLIENT -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
+$CLIENT -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
+echo $CLIENT -c $CONFIG user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL adminjhover
+$CLIENT -c $CONFIG user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL adminjhover
 
-echo vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf project-create --owner jhover --members jhover  jhoverproject
-vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf project-create --owner jhover --members jhover  jhoverproject
-echo vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf project-adduser jhoverproject angus
-vc3client/clientcli.py -c ~/git/vc3-client/etc/vc3-client.conf project-adduser jhoverproject angus
+echo $CLIENT -c $CONFIG user-list
+$CLIENT -c $CONFIG user-list
 
-echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list
-vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list
+echo $CLIENT -c $CONFIG project-create --owner jhover --members jhover  jhoverproject
+$CLIENT -c $CONFIG project-create --owner jhover --members jhover  jhoverproject
+echo $CLIENT -c $CONFIG project-adduser jhoverproject angus
+$CLIENT -c $CONFIG project-adduser jhoverproject angus
 
-echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list --project jhoverproject
-vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf project-list --project jhoverproject
+echo $CLIENT -c $CONFIG project-list
+$CLIENT -c $CONFIG project-list
 
-echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm sdcc-ic
-vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm sdcc-ic
+echo $CLIENT -c $CONFIG project-list --project jhoverproject
+$CLIENT -c $CONFIG project-list --project jhoverproject
 
-echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-list
-vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-list
+echo $CLIENT -c $CONFIG resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm sdcc-ic
+$CLIENT -c $CONFIG resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm sdcc-ic
 
-echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-list --resource sdcc-ic
-vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf resource-list --resource sdcc-ic
+echo $CLIENT -c $CONFIG resource-list
+$CLIENT -c $CONFIG resource-list
 
-echo vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf allocation-list
-vc3client/clientcli.py -c /home/jhover/git/vc3-client/etc/vc3-client.conf allocation-list
+echo $CLIENT -c $CONFIG resource-list --resource sdcc-ic
+$CLIENT -c $CONFIG resource-list --resource sdcc-ic
+
+#$CLIENT -c $CONFIG allocation-create 
+
+#echo $CLIENT -c $CONFIG allocation-list
+#$CLIENT -c $CONFIG allocation-list
 
 
