@@ -39,6 +39,8 @@ class VC3ClientAPI(object):
         self.ic = infoclient.InfoClient(self.config)
         self.log = logging.getLogger() 
 
+
+
     ################################################################################
     #                           User-related calls
     ################################################################################
@@ -271,6 +273,9 @@ class VC3ClientAPI(object):
     def addAllocationToProject(self, allocation, projectname ):
         pass
         
+    ################################################################################
+    #                        Cluster-related calls
+    ################################################################################ 
     def defineCluster(self, name, ):
         pass
     
@@ -281,6 +286,9 @@ class VC3ClientAPI(object):
         pass
 
 
+    ################################################################################
+    #                        Request-related calls
+    ################################################################################ 
     def defineRequest(self, name, cluster, environment, allocations, policy ):
         '''
         
@@ -295,12 +303,9 @@ class VC3ClientAPI(object):
     def listRequests(self):
         pass
 
-    # User-triggered action calls
-
     def saveRequestAsBlueprint(self, requestid, label):
         pass
     
-     
     def listBlueprints(self, project):
         '''
         Lists blueprints that this project contains.
@@ -312,7 +317,31 @@ class VC3ClientAPI(object):
         :return Request
         '''
  
+    
+    ################################################################################
+    #                        Infrastructural calls
+    ################################################################################ 
+    def getQueuesConf(self, requestname):
+        '''
+        
+        '''
+        pass
 
+    def requestPairingSetup(self):
+        '''
+        Create a request in the VC3 category to create a pairing setup. 
+        '''
+        pass
+    
+    def getPairingInfo(self, pairingcode):
+        '''
+        One-time only call
+        
+        Returns tuple of (pubsslkey, privsslkey) 
+        '''
+        
+    
+    
 
     
     

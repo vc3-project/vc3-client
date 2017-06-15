@@ -358,6 +358,11 @@ class Request(VC3Entity):
     
     
     '''
+    
+    
+    def getQueuesConf(self):
+        pass
+    
 
 class Policy(VC3Entity):
     '''
