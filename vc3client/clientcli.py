@@ -183,13 +183,17 @@ class VC3ClientCLI(object):
         parser_allocationcreate.add_argument('--owner', 
                                      action="store", 
                                      dest="owner", 
-                                     default='unknown')
+                                     )
 
         parser_allocationcreate.add_argument('--resource', 
                                      action="store", 
                                      dest="resource", 
-                                     default='unknown')
-        
+                                     )
+
+        parser_allocationcreate.add_argument('--accountname', 
+                                     action="store", 
+                                     dest="accountname", 
+                                     )        
         
     
         
@@ -307,19 +311,19 @@ class VC3ClientCLI(object):
             a = capi.defineAllocation( ns.allocationname,
                                        ns.owner,
                                        ns.resource,
-                                       
+                                       ns.accountname
                                        )
             self.log.debug("Allocation is %s" % a)
             capi.storeAllocation(a)    
             
         elif ns.subcommand == 'allocation-list' and ns.allocationname is None:
             alist = capi.listAllocations()
-            for p in plist:
-                print(p)
+            for a in alist:
+                print(a)
         
         elif ns.subcommand == 'allocation-list' and ns.allocationname is not None:
-            po = capi.getProject(ns.allocationname)
-            print(po)
+            ao = capi.getAllocation(ns.allocationname)
+            print(ao)
         
         
         else:

@@ -17,6 +17,16 @@ import yaml
 from entities import User, Project, Resource, Allocation, Request, Cluster, Environment
 from vc3infoservice import infoclient
 
+class MissingDependencyException(Exception):
+    '''
+    To be thrown when an API call includes a reference to an entity that doesn't exist. 
+    '''
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
+
 class VC3ClientAPI(object):
     '''
     Client application programming interface. 
@@ -271,13 +281,13 @@ class VC3ClientAPI(object):
     #                           Allocation-related calls
     ################################################################################ 
     def defineAllocation(self, name,
-                               user, 
+                               owner, 
                                resource, 
                                accountname):
         '''
           
         '''
-        ao = Allocation(name, state='new', acl=None, user=user, resource=resource, accountname=accountname)
+        ao = Allocation(name, state='new', acl=None, owner=owner, resource=resource, accountname=accountname)
         self.log.debug("Creating Allocation object: %s " % ao)
         return ao
     
@@ -286,7 +296,21 @@ class VC3ClientAPI(object):
         
 
     def listAllocations(self):
-        pass
+        docobj = self.ic.getdocumentobject('allocation')
+        alist = []
+        try:
+            for a in docobj['allocation'].keys():
+                    s = "{ '%s' : %s }" % (a, docobj['allocation'][a] )
+                    nd = {}
+                    nd[a] = docobj['allocation'][a]
+                    ao = Allocation.objectFromDict(nd)
+                    alist.append(ao)
+                    js = json.dumps(s)
+                    ys = yaml.safe_load(js)
+                    a = ast.literal_eval(js) 
+        except KeyError:
+            pass
+        return alist
     
     def addAllocationToProject(self, allocation, projectname ):
         pass

@@ -332,7 +332,7 @@ class Allocation(VC3Entity):
     vc3attributes = ['name',
                      'state',
                      'acl',
-                     'user',
+                     'owner',
                      'resource',
                      'type',
                      'accountname',
@@ -357,19 +357,29 @@ class Allocation(VC3Entity):
         :param str type:          what sort of allocation (unlimited, limited, quota)
                 
         '''
-
+        self.log = logging.getLogger()
         self.name = name
         self.state = state
         self.acl = acl
-        self.user = user
+        self.owner = owner
         self.resource = resource
-        self.username = accountname     # unix username, or cloud tenant, 
+        self.accountname = accountname     # unix username, or cloud tenant, 
         self.type = type           # quota | unlimited | limited 
         self.quantity = quantity   # 
         self.units = units         #
         self.sectype = sectype
         self.pubtoken = pubtoken
         self.privtoken = privtoken
+
+    def store(self, infoclient):
+        '''
+        Stores this Allocation in the provided infoclient info tree. 
+        '''
+        resources = infoclient.getdocumentobject(key='allocation')
+        da = self.makeDictObject()
+        self.log.debug("Dict obj: %s" % da)
+        infoclient.storedocumentobject(da, key='allocation')
+
 
 
 class Policy(VC3Entity):
