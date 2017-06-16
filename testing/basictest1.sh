@@ -1,6 +1,6 @@
 #!/bin/bash
 DEBUG='-d'
-CLIENT=vc3client/clientcli.py
+CLIENT=~/git/vc3-client/vc3client/clientcli.py
 CONFIG=~/git/vc3-client/etc/vc3-client.conf
 
 echo $CLIENT -c $CONFIG user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL jhover
@@ -24,7 +24,7 @@ $CLIENT -c $CONFIG project-list
 echo $CLIENT -c $CONFIG project-list --project jhoverproject
 $CLIENT -c $CONFIG project-list --project jhoverproject
 
-echo $CLIENT -c $CONFIG resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm sdcc-ic
+echo $CLIENT -c $CONFIG resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm   sdcc-ic
 $CLIENT -c $CONFIG resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm sdcc-ic
 
 echo $CLIENT -c $CONFIG resource-list

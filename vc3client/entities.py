@@ -222,7 +222,7 @@ class Resource(VC3Entity):
                      'accessmethod',
                      'accessflavor',
                      'gridresource',
-                     'attributemap']
+                     ]
     
     
     
@@ -234,7 +234,6 @@ class Resource(VC3Entity):
                  accessflavor, # condor-ce, slurm, sge, ec2, nova, gce
                  gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCodnor CE hostname[:port]              
                  mfa = False,
-                 attributemap={}, # Dictionary of other key=value pairs defining resource properties. 
                  ):
         self.log = logging.getLogger()
         self.name = name
@@ -243,7 +242,6 @@ class Resource(VC3Entity):
         self.accessmethod = accessmethod
         self.accessflavor = accessflavor
         self.gridresource = gridresource
-        self.attributemap = attributemap
         self.log.debug("Project object created: %s" % self)
 
     def store(self, infoclient):
@@ -319,7 +317,6 @@ class Allocation(VC3Entity):
         :param str owner:         vc3username of owner of allocation
         :param str resource:      vc3 resource name 
         :param str type:          what sort of allocation (unlimited, limited, quota)
-        :param Dict attributemap: Python Dict of other attributes
                 
         '''
 

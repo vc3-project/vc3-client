@@ -202,8 +202,7 @@ class VC3ClientAPI(object):
                              accessmethod, 
                              accessflavor, 
                              gridresource, 
-                             mfa=False, 
-                             attributemap=None):
+                             mfa=False):
         '''
         Defines a new Resource object for usage elsewhere in the API. 
               
@@ -213,13 +212,12 @@ class VC3ClientAPI(object):
         :param str accessmethod,  # ssh, gsissh,  
         :param str accessflavor,  # htcondor-ce, slurm, sge, ec2, nova, gce
         :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud  | HTCondorCE hostname             
-        :param Boolean mfa        # Does site need head-node factory?
-        :param Dict attributemap: # Arbitrary attribute dictionary.      
+        :param Boolean mfa        # Does site need head-node factory?     
         :return: Resource          A valid Project object
         :rtype: Resource        
         
         '''
-        r = Resource( name, owner, accesstype, accessmethod, accessflavor, gridresource, mfa , attributemap )
+        r = Resource( name, owner, accesstype, accessmethod, accessflavor, gridresource, mfa )
         self.log.debug("Creating Resource object: %s " % r)
         return r
     
@@ -254,7 +252,7 @@ class VC3ClientAPI(object):
     ################################################################################
     #                           Allocation-related calls
     ################################################################################ 
-    def defineAllocation(self, user, resource, type, attributemap=None):
+    def defineAllocation(self, user, resource, type):
         '''
           
                
