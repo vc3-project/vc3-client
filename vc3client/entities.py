@@ -53,6 +53,17 @@ class VC3Entity(object):
         self.log.debug("Returning dict: %s" % d)
         return d    
 
+    def setState(self, newstate):
+        self.log.debug("%s object name=%s %s ->%s" % (self.__class__.__name__, self.name, self.state, newstate) )
+        self.state = newstate
+    
+    def addAcl(self, aclstring):
+        pass    
+
+    def removeAcl(self, aclstring):
+        pass
+
+
     @classmethod
     def objectFromDict(cls, dict):
         '''
@@ -93,13 +104,17 @@ JSON representation:
 }
     '''
     vc3attributes = ['name',
+                     'state',
+                     'acl',
                      'first',
                      'last',
                      'email',
                      'institution'] 
     
-    def __init__(self, 
+    def __init__(self,
                    name,
+                   state,
+                   acl,
                    first,
                    last,
                    email,
@@ -116,6 +131,8 @@ JSON representation:
         :rtype: User
         '''
         self.log = logging.getLogger()
+        self.state = state
+        self.acl = acl
         self.name = name
         self.first = first
         self.last = last
@@ -140,6 +157,8 @@ class Project(VC3Entity):
     '''
     
     vc3attributes = ['name',
+                     'state',
+                     'acl',
                      'owner',
                      'members', 
                      'allocations',
@@ -148,8 +167,10 @@ class Project(VC3Entity):
     
     def __init__(self, 
                    name,
+                   state,
+                   acl,
                    owner,
-                   members,
+                   members,   # list
                    allocations=None, 
                    blueprints=None):
         '''
@@ -164,13 +185,18 @@ class Project(VC3Entity):
         '''  
         self.log = logging.getLogger()
         self.name = name
+        self.state = state
+        self.acl = acl
         self.owner = owner
         self.members = []
-        self.members.append(owner)
-        if members is not None:
-            for m in members:
-                if m not in self.members:
-                    self.members.append(m)
+        for m in members:
+            if m not in self.members:
+                self.members.append(m)
+        #self.members.append(owner)
+        #if members is not None:
+        #    for m in members:
+        #        if m not in self.members:
+        #            self.members.append(m)
         self.allocations = allocations
         self.blueprints = blueprints
         self.log.debug("Project object created: %s" % self)
@@ -217,6 +243,8 @@ class Resource(VC3Entity):
     '''
    
     vc3attributes = ['name',
+                     'state',
+                     'acl',
                      'owner',
                      'accesstype', 
                      'accessmethod',
@@ -228,6 +256,8 @@ class Resource(VC3Entity):
     
     def __init__(self,
                  name,
+                 state,
+                 acl,
                  owner,
                  accesstype,   # grid, batch, cloud
                  accessmethod, # ssh, gsissh
@@ -236,6 +266,8 @@ class Resource(VC3Entity):
                  mfa = False,
                  ):
         self.log = logging.getLogger()
+        self.state = state
+        self.acl = acl
         self.name = name
         self.owner = owner
         self.accesstype = accesstype
@@ -298,21 +330,27 @@ class Allocation(VC3Entity):
         }
     '''
     vc3attributes = ['name',
+                     'state',
+                     'acl',
                      'user',
                      'resource',
                      'type',
+                     'accountname',
                      'quantity',
                      'units',
-                     'username',
-                     'sshprivkey',
-                     'sshpubkey',
-                     'sslcert',
-                     'sslkey',
-                     ''
+                     'sectype',     # ssh-rsa, ssh-dsa, pki, x509
+                     'pubtoken',    # ssh pubkey, cloud access key
+                     'privtoken',   # ssh privkey, cloud secret key, VOMS proxy
                     ]   
-
     
-    def __init__(self, owner, resource, type):
+    def __init__(self, name, state, acl, owner, resource, accountname, 
+                 type='unlimited', 
+                 quantity=None, 
+                 units=None,
+                 sectype=None,
+                 pubtoken=None,
+                 privtoken=None, 
+                  ):
         '''
         :param str owner:         vc3username of owner of allocation
         :param str resource:      vc3 resource name 
@@ -320,46 +358,19 @@ class Allocation(VC3Entity):
                 
         '''
 
-        self.name = "%s.%s" % (resource, user)
-
+        self.name = name
+        self.state = state
+        self.acl = acl
         self.user = user
         self.resource = resource
-        self.type = type  # quota | unlimited 
-        
+        self.username = accountname     # unix username, or cloud tenant, 
+        self.type = type           # quota | unlimited | limited 
+        self.quantity = quantity   # 
+        self.units = units         #
+        self.sectype = sectype
+        self.pubtoken = pubtoken
+        self.privtoken = privtoken
 
-
-class Request(VC3Entity):
-    '''
-    Represents and contains all information relevant to a concrete virtual cluster. 
-    Contains sub-elements that reflect information from other Entities. 
-    expiration:  Date or None   Time at which cluster should unconditionally do teardown if 
-                                not actively terminated. 
-    
-    
-    "johnrhover-req00001" : {
-        "cluster" : "clustername",
-        "environment" : {
-                    <Environment json>
-                },
-        "allocations" : {
-                    <Allocations>
-                    },
-        "policy" :  {
-                <policy>
-            }
-        "expiration" : "2017-07-07:1730", 
-    }
-    
-
-    }
-    
-    
-    '''
-    
-    
-    def getQueuesConf(self):
-        pass
-    
 
 class Policy(VC3Entity):
     '''
@@ -438,8 +449,6 @@ class Cluster(VC3Entity):
         pass
 
 
-
-
 class Environment(VC3Entity):
     '''
     Represents the node/job-level environment needed to run a given user task. 
@@ -462,15 +471,54 @@ class Environment(VC3Entity):
         '''  
         self.log = logging.getLogger()
         self.vc3attributes = ['name',
-                             'owner',
-                             'packagelist',
-                             'envmap',
+                              'state',
+                              'acl',
+                              'owner',
+                              'packagelist',
+                              'envmap',
                              ]
         self.name = name
         self.owner = owner
         self.packagelist = packagelist
         self.envmap = envmap
         
+
+
+
+
+class Request(VC3Entity):
+    '''
+    Represents and contains all information relevant to a concrete virtual cluster. 
+    Contains sub-elements that reflect information from other Entities. 
+    expiration:  Date or None   Time at which cluster should unconditionally do teardown if 
+                                not actively terminated. 
+    
+    
+    "johnrhover-req00001" : {
+        "cluster" : "clustername",
+        "environment" : {
+                    <Environment json>
+                },
+        "allocations" : {
+                    <Allocations>
+                    },
+        "policy" :  {
+                <policy>
+            }
+        "expiration" : "2017-07-07:1730", 
+    }
+    
+
+    }
+    
+    
+    '''
+    
+    
+    def getQueuesConf(self):
+        pass
+    
+
 
 
 def runtest():

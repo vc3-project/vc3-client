@@ -11,6 +11,8 @@ __status__ = "Production"
 import argparse
 import logging
 import os
+import sys
+import traceback
 
 from ConfigParser import ConfigParser
 from client import VC3ClientAPI
@@ -42,6 +44,7 @@ class VC3ClientCLI(object):
                             help='verbose/info logging')            
         
         # Init sub-command
+        ########################### User ##########################################
         subparsers = parser.add_subparsers( dest="subcommand")
 
         parser_usercreate = subparsers.add_parser('user-create', 
@@ -75,7 +78,7 @@ class VC3ClientCLI(object):
         parser_userlist.add_argument('--username', 
                                      action="store")
 
-
+        ########################### Project ##########################################
         parser_projectcreate = subparsers.add_parser('project-create', 
                                                 help='create new vc3 project')
         
@@ -90,7 +93,7 @@ class VC3ClientCLI(object):
         parser_projectcreate.add_argument('--members', 
                                      action="store", 
                                      dest="members", 
-                                     default='unknown',
+                                     default=None,
                                      help='comma-separated list of vc3users'
                                      )
 
@@ -115,7 +118,7 @@ class VC3ClientCLI(object):
                                      help='list details of specified project',
                                      default=None)
 
-
+        ########################### Resource ##########################################
         parser_resourcecreate = subparsers.add_parser('resource-create', 
                                                 help='create new vc3 resource')
         
@@ -145,6 +148,13 @@ class VC3ClientCLI(object):
                                      help="condor-ce|slurm|sge|ec2|nova|gce",  
                                      )
 
+        parser_resourcecreate.add_argument('--gridresource', 
+                                     action="store", 
+                                     dest="gridresource",
+                                     help="e.g. http://cldext02.usatlas.bnl.gov:8773/services/Cloud, corigrid.nersc.gov/jobmanager-slurm ",  
+                                     default=None
+                                     )
+
         parser_resourcecreate.add_argument('--mfa', 
                                      action="store_true", 
                                      dest="mfa",
@@ -163,7 +173,7 @@ class VC3ClientCLI(object):
                                          help='list details of specified resource',
                                          default=None)
 
-
+        ########################### Allocation  ##########################################
         parser_allocationcreate = subparsers.add_parser('allocation-create', 
                                                 help='create new vc3 allocation')
         
@@ -181,6 +191,7 @@ class VC3ClientCLI(object):
                                      default='unknown')
         
         
+    
         
         parser_allocationlist = subparsers.add_parser('allocation-list', 
                                                 help='list vc3 allocation(s)')
@@ -228,10 +239,10 @@ class VC3ClientCLI(object):
         # User commands
         if ns.subcommand == 'user-create':
             u = capi.defineUser( ns.username,
-                             ns.firstname,
-                             ns.lastname,
-                             ns.email,
-                             ns.institution)
+                                 ns.firstname,
+                                 ns.lastname,
+                                 ns.email,
+                                 ns.institution)
             self.log.debug("User is %s" % u)
             capi.storeUser(u)
             
@@ -246,9 +257,12 @@ class VC3ClientCLI(object):
         
         # Project commands
         elif ns.subcommand == 'project-create':
+            if ns.members is not None:
+                memberslist = ns.members.split(',')
+                
             p = capi.defineProject( ns.projectname,
                                     ns.owner,
-                                    ns.members)
+                                    memberslist )
             self.log.debug("Project is %s" % p)
             capi.storeUser(p)    
             
@@ -273,8 +287,8 @@ class VC3ClientCLI(object):
                                      ns.accesstype,
                                      ns.accessmethod,
                                      ns.accessflavor,
-                                     ns.mfa
-                                    )
+                                     ns.gridresource,
+                                     ns.mfa )
             self.log.debug("Resource is %s" % r)
             capi.storeResource(r)    
             
@@ -314,4 +328,8 @@ class VC3ClientCLI(object):
 
 if __name__ == '__main__':
     vc3cli = VC3ClientCLI()
-    vc3cli.run()    
+    try:
+        vc3cli.run()
+    except Exception, e:
+            print(traceback.format_exc(None))
+            sys.exit(1) 

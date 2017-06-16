@@ -62,7 +62,13 @@ class VC3ClientAPI(object):
        
        :rtype: User        
         '''
-        u = User( name, first, last, email, institution)
+        u = User( name=name, 
+                  state='new', 
+                  acl=None, 
+                  first=first, 
+                  last=last, 
+                  email=email, 
+                  institution=institution)
         self.log.debug("Creating user object: %s " % u)
         return u
     
@@ -126,7 +132,11 @@ class VC3ClientAPI(object):
         :return: Project  A valid Project object
         :rtype: Project        
         '''
-        p = Project( name, owner, members = None)
+        p = Project( name=name, 
+                     state='new', 
+                     acl=None, 
+                     owner=owner, 
+                     members=members)
         self.log.debug("Creating project object: %s " % p)
         return p
     
@@ -202,7 +212,7 @@ class VC3ClientAPI(object):
                              accessmethod, 
                              accessflavor, 
                              gridresource, 
-                             mfa=False):
+                             mfa):
         '''
         Defines a new Resource object for usage elsewhere in the API. 
               
@@ -217,7 +227,15 @@ class VC3ClientAPI(object):
         :rtype: Resource        
         
         '''
-        r = Resource( name, owner, accesstype, accessmethod, accessflavor, gridresource, mfa )
+        r = Resource( name, 
+                      state='new', 
+                      acl=None, 
+                      owner=owner, 
+                      accesstype=accesstype, 
+                      accessmethod=accessmethod, 
+                      accessflavor=accessflavor, 
+                      gridresource=gridresource, 
+                      mfa=mfa )
         self.log.debug("Creating Resource object: %s " % r)
         return r
     
@@ -252,14 +270,16 @@ class VC3ClientAPI(object):
     ################################################################################
     #                           Allocation-related calls
     ################################################################################ 
-    def defineAllocation(self, user, resource, type):
+    def defineAllocation(self, name,
+                               user, 
+                               resource, 
+                               accountname):
         '''
           
-               
-        
         '''
-        pass
-    
+        ao = Allocation(name, state='new', acl=None, user=user, resource=resource, accountname=accountname)
+        self.log.debug("Creating Allocation object: %s " % ao)
+        return ao
     
     def storeAllocation(self, allocation):
         allocation.store(self.ic)
@@ -274,7 +294,7 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Cluster-related calls
     ################################################################################ 
-    def defineCluster(self, name, ):
+    def defineCluster(self, name, state, acl ):
         pass
     
     def storeCluster(self, cluster):
@@ -287,7 +307,7 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Request-related calls
     ################################################################################ 
-    def defineRequest(self, name, cluster, environment, allocations, policy ):
+    def defineRequest(self, name, state, acl, cluster, environment, allocations, policy ):
         '''
         
         :return Request

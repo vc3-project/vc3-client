@@ -33,9 +33,10 @@ $CLIENT -c $CONFIG resource-list
 echo $CLIENT -c $CONFIG resource-list --resource sdcc-ic
 $CLIENT -c $CONFIG resource-list --resource sdcc-ic
 
-#$CLIENT -c $CONFIG allocation-create 
+echo $CLIENT -c $CONFIG allocation-create --owner jhover --resource sdcc-ic jhover.sdcc-ic
+$CLIENT -c $CONFIG allocation-create --owner jhover --resource sdcc-ic jhover.sdcc-ic
 
-#echo $CLIENT -c $CONFIG allocation-list
-#$CLIENT -c $CONFIG allocation-list
+echo $CLIENT -c $CONFIG allocation-list
+$CLIENT -c $CONFIG allocation-list
 
 
