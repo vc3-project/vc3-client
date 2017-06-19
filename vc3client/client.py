@@ -388,22 +388,24 @@ class VC3ClientAPI(object):
         '''
         pass
 
-    def requestPairingSetup(self):
+    def requestPairingSetup(self, principal, pairingcode):
         '''
-        Create a request in the VC3 category to create a pairing setup. 
+        Create a request in the VC3 category to create a pairing setup protected by the supplied pairingcode.
+        Master will see request, generate keypair, and place in infoservice w/ code. 
+         
         '''
         pass
     
     def getPairingInfo(self, pairingcode):
         '''
-        One-time only call
-        
-        Returns tuple of (pubsslkey, privsslkey) 
+        One-time only successful call. 
+        Can be called unsuccessfully (i.e. during wait for request satisfaction) without harm. 
+        Returns tuple of (pubsslkey, privsslkey)
+         
         '''
-        
-    
-    
+        pass
 
+    
     
     
 class EntityExistsException(Exception):

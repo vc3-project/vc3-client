@@ -12,7 +12,6 @@ import logging
 
 from vc3infoservice.core import InfoEntity
    
-
 class User(InfoEntity):
     '''
     Represents a VC3 instance user account.
@@ -462,8 +461,17 @@ class Request(InfoEntity):
     def getQueuesConf(self):
         pass
     
-    
-    
+
+class Pairing(InfoEntity):    
+    infokey = 'vc3'
+    infoattributes = ['name',
+                     'state',
+                     'acl',
+                     'cn',   # common name for pair.  
+                     
+                     ]
+    def __init__(self, name, state, acl, cn, pairingcode):
+        pass
 
 
 
