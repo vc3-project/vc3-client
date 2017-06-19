@@ -1,5 +1,4 @@
 #!/bin/env python
-
 __author__ = "John Hover"
 __copyright__ = "2017 John Hover"
 __credits__ = []
@@ -9,107 +8,37 @@ __maintainer__ = "John Hover"
 __email__ = "jhover@bnl.gov"
 __status__ = "Production"
 
-'''
-
-    + User
-    Users always get a default Project, containing them as owner and member. 
-    Users may add other users to projects they own.   
-    User creates one or more Projects
-    
-    Projects contain users as members.
-    
-    + Resources     
-       Admin users can define new Resources
-       
-    + Allocation
-        Users can add their own Allocations on a given Resource. 
-
-'''
 import logging
 
+from vc3infoservice.core import InfoEntity
+   
 
-class VC3Entity(object):
+class User(InfoEntity):
     '''
-    Template for VC3 information entities. Common functions. 
-    
-    '''
-    def __repr__(self):
-        s = "%s(" % self.__class__.__name__
-        for a in self.__class__.vc3attributes:
-            s+="%s=%s " % (a, getattr(self, a, None)) 
-        s += ")"
-        return s    
-
-    def makeDictObject(self):
-        '''
-        Converts this Python object to attribute dictionary suitable for addition to existing dict 
-        intended to be converted back to JSON. Uses <obj>.name as key:
-        
-        '''
-        d = {}
-        d[self.name] = {}
-        for attrname in self.vc3attributes:
-            d[self.name][attrname] = getattr(self, attrname)
-        self.log.debug("Returning dict: %s" % d)
-        return d    
-
-    def setState(self, newstate):
-        self.log.debug("%s object name=%s %s ->%s" % (self.__class__.__name__, self.name, self.state, newstate) )
-        self.state = newstate
-    
-    def addAcl(self, aclstring):
-        pass    
-
-    def removeAcl(self, aclstring):
-        pass
-
-
-    @classmethod
-    def objectFromDict(cls, dict):
-        '''
-        Returns an initialized Entity object from dictionary. 
-        Input: Dict:
-        { <name> : 
-            {
-                "name" : "<name>",
-                "att1" : "<val1>"  
-            }
-        }
-        '''
-        name = dict.keys()[0]
-        d = dict[name]
-        args = {}
-        for key in cls.vc3attributes:
-            args[key] = d[key]
-        eo = cls(**args)
-        return eo
-    
-
-class User(VC3Entity):
-    '''
-    Represents a VC3 user account.
+    Represents a VC3 instance user account.
     As policy, name, email, and institution must be set.  
 
-JSON representation:
-{
-    "user" : {
-        "johnrhover": {
-            "name"  : "johnrhover",
-            "first" : "John",
-            "last"  : "Hover",
-            "email" : "jhover@bnl.gov",
-            "institution" : "Brookhaven National Laboratory",
-        },
+    JSON representation:
+    {
+        "user" : {
+            "johnrhover": {
+                "name"  : "johnrhover",
+                "first" : "John",
+                "last"  : "Hover",
+                "email" : "jhover@bnl.gov",
+                "institution" : "Brookhaven National Laboratory",
+            },
+        }
     }
-}
     '''
-    vc3attributes = ['name',
+    infoattributes = ['name',
                      'state',
                      'acl',
                      'first',
                      'last',
                      'email',
                      'institution'] 
+    infokey = 'user'
     
     def __init__(self,
                    name,
@@ -140,23 +69,14 @@ JSON representation:
         self.institution = institution
         self.log.debug("User object created: %s" % self)
 
+               
 
-    def store(self, infoclient):
-        '''
-        Stores this user in the provided infoclient info tree. 
-        '''
-        users = infoclient.getdocumentobject(key='user')
-        du = self.makeDictObject()
-        self.log.debug("Dict obj: %s" % du)
-        infoclient.storedocumentobject(du, key='user')
-                
-
-class Project(VC3Entity):
+class Project(InfoEntity):
     '''
     Represents a VC3 Project.
     '''
-    
-    vc3attributes = ['name',
+    infokey = 'project'
+    infoattributes = ['name',
                      'state',
                      'acl',
                      'owner',
@@ -211,19 +131,8 @@ class Project(VC3Entity):
         self.log.debug("Members now %s" % self.members)
         
 
-    def store(self, infoclient):
-        '''
-        Stores this project in the provided infoclient info tree. 
-        '''
-        projects = infoclient.getdocumentobject(key='project')
-        dp = self.makeDictObject()
-        self.log.debug("Dict obj: %s" % dp)
-        infoclient.storedocumentobject(dp, key='project')
-    
-   
 
-
-class Resource(VC3Entity):
+class Resource(InfoEntity):
     '''
     Represents a VC3 target resource. 
     
@@ -241,8 +150,8 @@ class Resource(VC3Entity):
     intrinsic time limits/preemption flag to distinguish platforms we could run static components on. 
     network access is also critical for this.    
     '''
-   
-    vc3attributes = ['name',
+    infokey = 'resource'
+    infoattributes = ['name',
                      'state',
                      'acl',
                      'owner',
@@ -276,17 +185,8 @@ class Resource(VC3Entity):
         self.gridresource = gridresource
         self.log.debug("Project object created: %s" % self)
 
-    def store(self, infoclient):
-        '''
-        Stores this project in the provided infoclient info tree. 
-        '''
-        resources = infoclient.getdocumentobject(key='resource')
-        dr = self.makeDictObject()
-        self.log.debug("Dict obj: %s" % dr)
-        infoclient.storedocumentobject(dr, key='resource')
 
-
-class Allocation(VC3Entity):
+class Allocation(InfoEntity):
     '''
     Represents the access granted a VC3 User and a VC3 target Resource.
     Defined by (resource, vc3user, unix_account) triple.   
@@ -329,7 +229,8 @@ class Allocation(VC3Entity):
             }
         }
     '''
-    vc3attributes = ['name',
+    infokey = 'allocation'
+    infoattributes = ['name',
                      'state',
                      'acl',
                      'owner',
@@ -371,25 +272,21 @@ class Allocation(VC3Entity):
         self.pubtoken = pubtoken
         self.privtoken = privtoken
 
-    def store(self, infoclient):
-        '''
-        Stores this Allocation in the provided infoclient info tree. 
-        '''
-        resources = infoclient.getdocumentobject(key='allocation')
-        da = self.makeDictObject()
-        self.log.debug("Dict obj: %s" % da)
-        infoclient.storedocumentobject(da, key='allocation')
 
-
-
-class Policy(VC3Entity):
+class Policy(InfoEntity):
     '''
     Describes the desired resource utilization policy when a Request 
     includes multiple Allocations. 
     
     '''
+    infokey = 'policy'
+    infoattributes = ['name',
+                     'state',
+                     'acl',
+                      'pluginname'
+                      ]
     
-    def __init__(self, name, pluginname):
+    def __init__(self, name, owner, acl, pluginname):
         ''' 
         "static-balanced" : {
                 "pluginname" : "StaticBalanced",
@@ -406,9 +303,14 @@ class Policy(VC3Entity):
         }
         
         '''
+        self.name = name
+        self.owner = owner
+        self.acl = acl
+        self.pluginname = pluginname
+        
+        
 
-
-class Cluster(VC3Entity):
+class Cluster(InfoEntity):
     '''
     Represents a supported VC3 middleware cluster application, node layout, and all relevant configuration
     and dependencies to instantiate it. It is focussed on building the virtual *cluster* not the task/job 
@@ -421,8 +323,38 @@ class Cluster(VC3Entity):
          workqueue-managed-catalog
          workqueue-ext-catalog
          ?
+   
+        }
+    '''
+    infokey = 'cluster'
+    infoattributes = [ 'name',
+                        'state',
+                        'acl',
+                        'nodesets',
+                        'environments',
+                      ]
+
+    def __init__(self, name, state, acl ):
+        '''
+        :param str name:   Label for this cluster definition. 
+        
+        '''
+        self.name = name
     
-        "htcondor-managed-cm-schedd" : {
+    def addNodeset(self, ):
+        pass
+
+    def removeNodeset(self, nodesetname):
+        pass
+
+
+class Nodeset(InfoEntity):
+    '''
+    
+    Represents a set of equivalently provisioned nodes that are part of a Cluster definition. 
+    
+    
+        "nodes" : {
             "headnode1" : {
                 "node_number" : "1",
                 "node_memory_mb" : "4000",
@@ -447,25 +379,32 @@ class Cluster(VC3Entity):
             },
         }
     '''
-
-    def __init__(self, name, ):
-        '''
-        :param str name:   Label for this cluster definition. 
-        
-        '''
-        self.name = name
+    infokey = 'nodes'
+    infoattributes = ['name',
+                     'state',
+                     'acl',
+                     ]
     
-    def addNodeset(self, name, number, cores, memory_mb, storage_mb, app_type, app_role):
+    def __init__(self, name, state, acl, number, cores, memory_mb, storage_mb, app_type, app_role):
         pass
 
 
-class Environment(VC3Entity):
+class Environment(InfoEntity):
     '''
     Represents the node/job-level environment needed to run a given user task. 
     Consists of task requirements like job runtime, disk space, cpucount, gpu
     Consists of job requirements like application software, network access, http cache, CVMFS, etc. 
     
     '''
+    infokey = 'environment'
+    infoattributes = ['name',
+                     'state',
+                     'acl',
+                     'owner',
+                     'packagelist',
+                     'envmap',
+                     ]
+
 
     def __init__(self, name, owner,  packagelist=None, envmap=None ):
         '''
@@ -480,23 +419,14 @@ class Environment(VC3Entity):
         :rtype: Environment
         '''  
         self.log = logging.getLogger()
-        self.vc3attributes = ['name',
-                              'state',
-                              'acl',
-                              'owner',
-                              'packagelist',
-                              'envmap',
-                             ]
+
         self.name = name
         self.owner = owner
         self.packagelist = packagelist
         self.envmap = envmap
         
 
-
-
-
-class Request(VC3Entity):
+class Request(InfoEntity):
     '''
     Represents and contains all information relevant to a concrete virtual cluster. 
     Contains sub-elements that reflect information from other Entities. 
@@ -504,29 +434,35 @@ class Request(VC3Entity):
                                 not actively terminated. 
     
     
-    "johnrhover-req00001" : {
-        "cluster" : "clustername",
-        "environment" : {
-                    <Environment json>
-                },
-        "allocations" : {
-                    <Allocations>
+        "johnrhover-req00001" : {
+            "cluster" : "clustername",
+            "environment" : {
+                        <Environment json>
                     },
-        "policy" :  {
-                <policy>
-            }
-        "expiration" : "2017-07-07:1730", 
-    }
-    
-
-    }
-    
-    
+            "allocations" : {
+                        <Allocations>
+                        },
+            "policy" :  {
+                    <policy>
+                }
+            "expiration" : "2017-07-07:1730", 
+        }
+        
     '''
+    infokey = 'request'
+    infoattributes = ['name',
+                     'state',
+                     'acl',
+                     ]
     
-    
+    def __init__(self, name, state, acl
+                 ):
+        pass
+
     def getQueuesConf(self):
         pass
+    
+    
     
 
 

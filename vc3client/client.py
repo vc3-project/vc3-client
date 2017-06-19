@@ -314,6 +314,9 @@ class VC3ClientAPI(object):
     
     def addAllocationToProject(self, allocation, projectname ):
         pass
+    
+    def removeAllocationFromProject(self, allocation, projectname):
+        pass
         
     ################################################################################
     #                        Cluster-related calls
@@ -325,6 +328,22 @@ class VC3ClientAPI(object):
         pass
     
     def listClusters(self):
+        pass
+
+    def listCluster(self, clustername):
+        pass
+
+    def defineNodeset(self, name, state, acl):
+        pass
+    
+    def storeNodeset(self, nodeset):
+        pass
+    
+
+    def addNodesToCluster(self, nodesetname, clustername):
+        pass
+    
+    def removeNodesFromCluster(self, nodesetname):
         pass
 
 
