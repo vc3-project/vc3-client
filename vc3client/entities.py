@@ -435,6 +435,7 @@ class Request(InfoEntity):
     
         "johnrhover-req00001" : {
             "cluster" : "clustername",
+            "expiration" : "2017-07-07:1730", 
             "environment" : {
                         <Environment json>
                     },
@@ -444,7 +445,7 @@ class Request(InfoEntity):
             "policy" :  {
                     <policy>
                 }
-            "expiration" : "2017-07-07:1730", 
+
         }
         
     '''
@@ -462,16 +463,6 @@ class Request(InfoEntity):
         pass
     
 
-class Pairing(InfoEntity):    
-    infokey = 'vc3'
-    infoattributes = ['name',
-                     'state',
-                     'acl',
-                     'cn',   # common name for pair.  
-                     
-                     ]
-    def __init__(self, name, state, acl, cn, pairingcode):
-        pass
 
 
 
