@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 __author__ = "John Hover"
 __copyright__ = "2017 John Hover"
 __credits__ = []
