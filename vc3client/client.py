@@ -18,9 +18,6 @@ from entities import User, Project, Resource, Allocation, Request, Cluster, Envi
 from vc3infoservice import infoclient
 from vc3infoservice.infoclient import  InfoMissingPairingException, InfoConnectionFailure
 
-
-
-
 class VC3ClientAPI(object):
     '''
     Client application programming interface. 
