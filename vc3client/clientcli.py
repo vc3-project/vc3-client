@@ -390,10 +390,7 @@ class VC3ClientCLI(object):
                     print("")
                     print(key)
             except InfoMissingPairingException:
-                print("Invalid pairing code or not satisfied yet. Try in 30 seconds.") 
-                
-        
-                
+                print("Invalid pairing code or not satisfied yet. Try in 30 seconds.")   
         else:
             self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)
             
