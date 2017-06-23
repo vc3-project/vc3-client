@@ -16,6 +16,7 @@ import traceback
 
 from ConfigParser import ConfigParser
 from client import VC3ClientAPI
+from vc3infoservice.infoclient import  InfoMissingPairingException, InfoConnectionFailure
 
 class VC3ClientCLI(object):
     '''
@@ -207,10 +208,36 @@ class VC3ClientCLI(object):
                                          default=None)
 
 
+        ########################### Pairing  ##########################################
+        parser_pairingcreate = subparsers.add_parser('pairing-create', 
+                                                help='create new pairing request')
+        
+        parser_pairingcreate.add_argument('commonname',
+                                           action="store",
+                                           help='SSL Subject Common Name (CN); a vc3 username or hostname'            
+                                           )
 
-
-
-
+        parser_pairingretrieve = subparsers.add_parser('pairing-retrieve', 
+                                                help='Get cert and key for a pairing request')
+        
+        parser_pairingretrieve.add_argument('pairingcode',
+                                           action="store",
+                                           help="unique pairing code from original request")       
+        
+        parser_pairingretrieve.add_argument('--certfile', 
+                                     action="store", 
+                                     dest="certfile", 
+                                     help="path/filename to write SSL certificate",
+                                     default=None
+                                     ) 
+        
+        parser_pairingretrieve.add_argument('--keyfile', 
+                                     action="store", 
+                                     dest="keyfile", 
+                                     help="path/filename to write SSL key",
+                                     default=None
+                                     )        
+               
         self.results= parser.parse_args()
 
 
@@ -326,6 +353,47 @@ class VC3ClientCLI(object):
             print(ao)
         
         
+        
+        
+        
+        
+        
+        # Pairing commands
+        elif ns.subcommand == 'pairing-create':
+            code = capi.requestPairing(ns.commonname)
+            print(code)        
+        
+        elif ns.subcommand == 'pairing-retrieve':
+            try:
+                (cert, key) = capi.getPairing(ns.pairingcode)
+                if ns.certfile is not None and ns.keyfile is not None:
+                    certpath = os.expanduser(ns.certfile)
+                    keypath = os.expanduser(ns.keyfile)
+                    cf = open(certpath, 'w')
+                    cf.write(cert)
+                    cf.close()
+                    
+                    # Necessary to avoid security issues with world or group writable key file. 
+                    if os.path.isfile(keypath):
+                        os.remove(keypath)
+                        original_umask = os.umask(0o177)  # 0o777 ^ 0o600
+                    try:
+                        kf = os.fdopen(os.open(keypath, os.O_WRONLY | os.O_CREAT, 0o600), 'w')
+                    finally:
+                        os.umask(original_umask)
+                    kf.write(key)
+                    kf.close()                
+                    
+                else:
+                    # print cert, key to stdout  
+                    print(cert)
+                    print("")
+                    print(key)
+            except InfoMissingPairingException:
+                print("Invalid pairing code or not satisfied yet. Try in 30 seconds.") 
+                
+        
+                
         else:
             self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)
             

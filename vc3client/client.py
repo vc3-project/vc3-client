@@ -16,15 +16,9 @@ import yaml
 
 from entities import User, Project, Resource, Allocation, Request, Cluster, Environment
 from vc3infoservice import infoclient
+from vc3infoservice.infoclient import  InfoMissingPairingException, InfoConnectionFailure
 
-class MissingDependencyException(Exception):
-    '''
-    To be thrown when an API call includes a reference to an entity that doesn't exist. 
-    '''
-    def __init__(self, value):
-        self.value = value
-    def __str__(self):
-        return repr(self.value)
+
 
 
 class VC3ClientAPI(object):
@@ -388,25 +382,26 @@ class VC3ClientAPI(object):
         '''
         pass
 
-    def requestPairingSetup(self, principal, pairingcode):
+    def requestPairing(self, commonname):
         '''
         Create a request in the VC3 category to create a pairing setup protected by the supplied pairingcode.
         Master will see request, generate keypair, and place in infoservice w/ code. 
          
         '''
-        pass
+        code = self.ic.requestPairing(commonname)
+        return code
+        
     
-    def getPairingInfo(self, pairingcode):
+    def getPairing(self, pairingcode):
         '''
         One-time only successful call. 
         Can be called unsuccessfully (i.e. during wait for request satisfaction) without harm. 
         Returns tuple of (pubsslkey, privsslkey)
          
         '''
-        pass
-
-    
-    
+        (cert, key) = self.ic.getPairing(pairingcode)
+        return (cert, key)
+        
     
 class EntityExistsException(Exception):
     def __init__(self, value):
@@ -414,4 +409,12 @@ class EntityExistsException(Exception):
     def __str__(self):
         return repr(self.value)
 
+class MissingDependencyException(Exception):
+    '''
+    To be thrown when an API call includes a reference to an entity that doesn't exist. 
+    '''
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
