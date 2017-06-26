@@ -376,7 +376,7 @@ class VC3ClientCLI(object):
                     # Necessary to avoid security issues with world or group writable key file. 
                     if os.path.isfile(keypath):
                         os.remove(keypath)
-                        original_umask = os.umask(0o177)  # 0o777 ^ 0o600
+                    original_umask = os.umask(0o177)  # 0o777 ^ 0o600
                     try:
                         kf = os.fdopen(os.open(keypath, os.O_WRONLY | os.O_CREAT, 0o600), 'w')
                     finally:
