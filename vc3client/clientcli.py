@@ -367,8 +367,8 @@ class VC3ClientCLI(object):
             try:
                 (cert, key) = capi.getPairing(ns.pairingcode)
                 if ns.certfile is not None and ns.keyfile is not None:
-                    certpath = os.expanduser(ns.certfile)
-                    keypath = os.expanduser(ns.keyfile)
+                    certpath = os.path.expanduser(ns.certfile)
+                    keypath = os.path.expanduser(ns.keyfile)
                     cf = open(certpath, 'w')
                     cf.write(cert)
                     cf.close()
