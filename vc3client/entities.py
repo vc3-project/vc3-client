@@ -329,16 +329,28 @@ class Cluster(InfoEntity):
     infoattributes = [ 'name',
                         'state',
                         'acl',
-                        'nodesets',
+                        'allocations',
                         'environments',
+                        'policy',
+                        'expiration',
                       ]
 
-    def __init__(self, name, state, acl ):
+    def __init__(self, name, state, acl, allocations = [], environments = [], policy = None, expiration = None):
         '''
-        :param str name:   Label for this cluster definition. 
-        
+        :param str name:          Label for this cluster definition. 
+        :param str allocations:   List of allocations that the cluster uses.
+        :param str environments:  List of environments to install on top of the cluster.
+        :param str policy:        Allocations policy for the cluster.
+        :param str expiration:    Date YYYY-MM-DD,HH:MM:SS when this cluster expires.
         '''
+        self.log = logging.getLogger()
         self.name = name
+        self.state = state
+        self.acl = acl
+        self.allocations  = allocations
+        self.environments = environments
+        self.policy       = policy
+        self.expiration   = expiration
     
     def addNodeset(self, ):
         pass

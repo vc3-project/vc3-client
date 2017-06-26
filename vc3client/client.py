@@ -312,17 +312,19 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Cluster-related calls
     ################################################################################ 
-    def defineCluster(self, name, state, acl ):
-        pass
+    def defineCluster(self, name, state, acl, allocations = [], environments = [], policy = None, expiration = None):
+        c = Cluster(name, state='new', acl=None, allocations = allocations, environments = environments, policy = policy, expiration = expiration)
+        self.log.debug("Creating Cluster object: %s " % c)
+        return c
     
     def storeCluster(self, cluster):
-        pass
+        cluster.store(self.ic)
     
     def listClusters(self):
-        pass
+        cluster.listClusters(self.ic)
 
     def listCluster(self, clustername):
-        pass
+        cluster.listCluster(self.ic, clustername)
 
     def defineNodeset(self, name, state, acl):
         pass
@@ -330,7 +332,6 @@ class VC3ClientAPI(object):
     def storeNodeset(self, nodeset):
         pass
     
-
     def addNodesToCluster(self, nodesetname, clustername):
         pass
     
