@@ -239,6 +239,40 @@ class VC3ClientCLI(object):
                 help='Policy for using the allocations'
                 )
 
+        ########################### Environment  ##########################################
+        parser_environ = subparsers.add_parser('environment-create', 
+                help='create new environment')
+
+        parser_environ.add_argument('environmentname', 
+                help='name of the environment to be created',
+                action="store")
+
+        parser_environ.add_argument('--owner',
+                action="store", 
+                dest="owner", 
+                default='unknown')
+
+        parser_environ.add_argument('--packages', 
+                action='store', 
+                dest='packages', 
+                default='',
+                help='comma separated list of packages to be installed'
+                )
+
+        parser_environ.add_argument('--files', 
+                action='store', 
+                dest='files', 
+                default='',
+                help='comma separated list of LOCAL=REMOTE file name specifications'
+                )
+
+        parser_environ.add_argument('--envmap', 
+                action='store', 
+                dest='envmap', 
+                default='',
+                help='[[[ lacks documentation ]]]'
+                )
+
         ########################### Pairing  ##########################################
         parser_pairingcreate = subparsers.add_parser('pairing-create', 
                                                 help='create new pairing request')
@@ -392,6 +426,16 @@ class VC3ClientCLI(object):
                                     ns.environments)
             self.log.debug("Cluster is %s" % c)
             capi.storeCluster(c)    
+
+        # Environment create
+        elif ns.subcommand == 'environment-create':
+            e = capi.defineEnvironment( ns.environmentname,
+                    ns.owner,
+                    ns.packages.split(','),
+                    ns.files.split(','),
+                    ns.envmap)
+            self.log.debug("Environment is %s" % e)
+            capi.storeCluster(e)
         
         
         

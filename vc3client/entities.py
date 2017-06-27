@@ -9,6 +9,7 @@ __email__ = "jhover@bnl.gov"
 __status__ = "Production"
 
 import logging
+import urllib
 
 from vc3infoservice.core import InfoEntity
    
@@ -414,28 +415,42 @@ class Environment(InfoEntity):
                      'owner',
                      'packagelist',
                      'envmap',
+                     'files'
                      ]
 
 
-    def __init__(self, name, owner,  packagelist=None, envmap=None ):
+    def __init__(self, name, state, acl, owner,  packagelist=[], filesmap=[], envmap=[] ):
         '''
         Defines a new Environment object. 
               
         :param str name: The unique VC3 label for this environment.
         :param str owner:
-        :param List str packagelist:
+        :param List str   packagelist:
+        :param List local-name=remote-name filemaps: Files to be included in the environment. (Files will be base64 encoded.)
         :param Dict str envmap: 
-        
-        :return: User:  A valid Environment object
         :rtype: Environment
         '''  
         self.log = logging.getLogger()
 
-        self.name = name
+        self.name  = name
+        self.state = state
+        self.acl   = acl
         self.owner = owner
         self.packagelist = packagelist
+        self.filesmap = filesmap
         self.envmap = envmap
-        
+
+        self.read_files()
+
+    def read_files(self):
+        self.files = {}
+
+        for names in self.filesmap:
+            (local, remote) = names.split('=')
+            
+            with open(local, 'r') as l_f:
+                all = l_f.read()
+                self.files[remote] = urllib.quote_plus(all)
 
 class Request(InfoEntity):
     '''
