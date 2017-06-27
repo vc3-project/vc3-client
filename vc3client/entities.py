@@ -46,7 +46,8 @@ class User(InfoEntity):
                    first,
                    last,
                    email,
-                   institution):
+                   institution,
+                   identity_id=None):
         '''
         Defines a new User object for usage elsewhere in the API. 
               
@@ -66,6 +67,7 @@ class User(InfoEntity):
         self.last = last
         self.email = email
         self.institution = institution
+        self.identity_id = identity_id
         self.log.debug("User object created: %s" % self)
 
                
@@ -317,12 +319,13 @@ class Cluster(InfoEntity):
     
     Cluster descriptions should be generic and shareable across Users/Projects. 
     
-    e.g. htcondor-managed-cm-schedd
+    e.g. 
+         vc3-factory-dynamic
+         htcondor-managed-cm-schedd
          htcondor-managed-cm-ext-schedd
          workqueue-managed-catalog
          workqueue-ext-catalog
          ?
-   
         }
     '''
     infokey = 'cluster'
@@ -333,12 +336,14 @@ class Cluster(InfoEntity):
                         'environments',
                       ]
 
-    def __init__(self, name, state, acl ):
+    def __init__(self, name, state, acl, nodes, ):
         '''
         :param str name:   Label for this cluster definition. 
         
         '''
         self.name = name
+        self.nodes = []
+        
     
     def addNodeset(self, ):
         pass
