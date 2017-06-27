@@ -38,3 +38,6 @@ $CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  anguspr
 
 echo $CLIENT $DEBUGS -c $CONFIG environment-create --owner angus --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" angusenv1
 $CLIENT $DEBUGS -c $CONFIG environment-create --owner angus --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" angusenv1
+
+echo $CLIENT $DEBUGS -c $CONFIG environment-list
+$CLIENT $DEBUGS -c $CONFIG environment-list

@@ -274,6 +274,21 @@ class VC3ClientCLI(object):
                 help='[[[ lacks documentation ]]]'
                 )
 
+        
+        parser_environmentlist = subparsers.add_parser('environment-list', 
+                                                help='list vc3 environment(s)')
+
+        parser_environmentlist.add_argument('--environmentname', 
+                                         action="store",
+                                         required=False, 
+                                         help='list details of specified environment',
+                                         default=None)
+        
+
+
+
+
+
         ########################### Pairing  ##########################################
         parser_pairingcreate = subparsers.add_parser('pairing-create', 
                                                 help='create new pairing request')
@@ -447,6 +462,17 @@ class VC3ClientCLI(object):
                     ns.envmap)
             self.log.debug("Environment is %s" % e)
             capi.storeEnvironment(e)
+        
+        elif ns.subcommand == 'environment-list' and ns.environmentname is None:
+            elist = capi.listEnvironments()
+            for e in elist:
+                print(e)
+        
+        elif ns.subcommand == 'environment-list' and ns.environmentname is not None:
+            eo = capi.getEnvironment(ns.environmentname)
+            print(eo)
+        
+        
         
         
         # Pairing commands

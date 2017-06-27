@@ -444,17 +444,6 @@ class Environment(InfoEntity):
         self.files = files
         self.envmap = envmap
 
-#        self.read_files()
-#
-#    def read_files(self):
-#        self.files = {}
-#
-#        for names in self.filesmap:
-#            (local, remote) = names.split('=')
-#            
-#            with open(local, 'r') as l_f:
-#                all = l_f.read()
-#                self.files[remote] = urllib.quote_plus(all)
 
 class Request(InfoEntity):
     '''

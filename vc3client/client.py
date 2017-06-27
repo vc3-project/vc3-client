@@ -360,23 +360,26 @@ class VC3ClientAPI(object):
         docobj = self.ic.getdocumentobject('environment')
         elist = []
         try:
-            for r in docobj['resource'].keys():
-                    s = "{ '%s' : %s }" % (r, docobj['resource'][r] )
+            for e in docobj['environment'].keys():
+                    s = "{ '%s' : %s }" % (e, docobj['environment'][e] )
                     nd = {}
-                    nd[r] = docobj['resource'][r]
-                    ro = Environment.objectFromDict(nd)
-                    elist.append(ro)
+                    nd[e] = docobj['environment'][e]
+                    eo = Environment.objectFromDict(nd)
+                    elist.append(eo)
                     #js = json.dumps(s)
                     #ys = yaml.safe_load(js)
                     #a = ast.literal_eval(js) 
         except KeyError:
             pass
-      
+
         return elist
 
 
     def getEnvironment(self, environmentname):
-        environment.listEnvironment(self.ic, environmentname)
+        elist = self.listEnvironments()
+        for e in elist:
+            if e.name == environmentname:
+                return e
 
     ################################################################################
     #                        Request-related calls
