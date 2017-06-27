@@ -207,6 +207,71 @@ class VC3ClientCLI(object):
                                          help='list details of specified allocation',
                                          default=None)
 
+        ########################### Cluster  ##########################################
+        parser_cluster = subparsers.add_parser('cluster-create', 
+                help='create new cluster request')
+
+        parser_cluster.add_argument('clustername', 
+                help='name of the cluster to be created',
+                action="store")
+
+        parser_cluster.add_argument('--allocations', 
+                action='store', 
+                dest='allocations', 
+                help='comma separated list of allocations to be used by the cluster',
+                )
+
+        parser_cluster.add_argument('--environments', 
+                action='store', 
+                dest='environments', 
+                help='Environment to be installed on top of the cluster'
+                )
+
+        parser_cluster.add_argument('--expiration', 
+                action='store', 
+                dest='expiration', 
+                help='Date YYYY-MM-DD,HH:MM:SS at which this request expires'
+                )
+
+        parser_cluster.add_argument('--policy', 
+                action='store', 
+                dest='policy', 
+                help='Policy for using the allocations'
+                )
+
+        ########################### Environment  ##########################################
+        parser_environ = subparsers.add_parser('environment-create', 
+                help='create new environment')
+
+        parser_environ.add_argument('environmentname', 
+                help='name of the environment to be created',
+                action="store")
+
+        parser_environ.add_argument('--owner',
+                action="store", 
+                dest="owner", 
+                default='unknown')
+
+        parser_environ.add_argument('--packages', 
+                action='store', 
+                dest='packages', 
+                default='',
+                help='comma separated list of packages to be installed'
+                )
+
+        parser_environ.add_argument('--files', 
+                action='store', 
+                dest='files', 
+                default='',
+                help='comma separated list of LOCAL=REMOTE file name specifications'
+                )
+
+        parser_environ.add_argument('--envmap', 
+                action='store', 
+                dest='envmap', 
+                default='',
+                help='[[[ lacks documentation ]]]'
+                )
 
         ########################### Pairing  ##########################################
         parser_pairingcreate = subparsers.add_parser('pairing-create', 
@@ -237,7 +302,8 @@ class VC3ClientCLI(object):
                                      help="path/filename to write SSL key",
                                      default=None
                                      )        
-               
+
+        ############################################################          
         self.results= parser.parse_args()
 
 
@@ -351,6 +417,25 @@ class VC3ClientCLI(object):
         elif ns.subcommand == 'allocation-list' and ns.allocationname is not None:
             ao = capi.getAllocation(ns.allocationname)
             print(ao)
+
+        # Cluster create
+        elif ns.subcommand == 'cluster-create':
+            c = capi.defineCluster( ns.clustername,
+                                    ns.allocations,
+                                    ns.policy,
+                                    ns.environments)
+            self.log.debug("Cluster is %s" % c)
+            capi.storeCluster(c)    
+
+        # Environment create
+        elif ns.subcommand == 'environment-create':
+            e = capi.defineEnvironment( ns.environmentname,
+                    ns.owner,
+                    ns.packages.split(','),
+                    ns.files.split(','),
+                    ns.envmap)
+            self.log.debug("Environment is %s" % e)
+            capi.storeCluster(e)
         
         
         

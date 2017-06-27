@@ -312,17 +312,19 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Cluster-related calls
     ################################################################################ 
-    def defineCluster(self, name, state, acl ):
-        pass
+    def defineCluster(self, name, allocations = [], environments = [], policy = None, expiration = None):
+        c = Cluster(name, state='new', acl=None, allocations = allocations, environments = environments, policy = policy, expiration = expiration)
+        self.log.debug("Creating Cluster object: %s " % c)
+        return c
     
     def storeCluster(self, cluster):
-        pass
+        cluster.store(self.ic)
     
     def listClusters(self):
-        pass
+        cluster.listClusters(self.ic)
 
     def listCluster(self, clustername):
-        pass
+        cluster.listCluster(self.ic, clustername)
 
     def defineNodeset(self, name, state, acl):
         pass
@@ -330,13 +332,28 @@ class VC3ClientAPI(object):
     def storeNodeset(self, nodeset):
         pass
     
-
     def addNodesToCluster(self, nodesetname, clustername):
         pass
     
     def removeNodesFromCluster(self, nodesetname):
         pass
 
+    ################################################################################
+    #                        Environment-related calls
+    ################################################################################ 
+    def defineEnvironment(self, name, owner, packagelist = [], filesmap = [], envmap = []):
+        e = Environment(name, state='new', acl=None, owner = owner, packagelist = packagelist, filesmap = filesmap, envmap = envmap)
+        self.log.debug("Creating Environment object: %s " % e)
+        return e
+    
+    def storeEnvironment(self, environment):
+        environment.store(self.ic)
+    
+    def listEnvironments(self):
+        environment.listEnvironments(self.ic)
+
+    def listEnvironment(self, environmentname):
+        environment.listEnvironment(self.ic, environmentname)
 
     ################################################################################
     #                        Request-related calls
