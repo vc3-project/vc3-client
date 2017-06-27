@@ -9,6 +9,7 @@ __email__ = "jhover@bnl.gov"
 __status__ = "Production"
 
 import argparse
+import base64
 import logging
 import os
 import sys
@@ -259,9 +260,9 @@ class VC3ClientCLI(object):
                 help='comma separated list of packages to be installed'
                 )
 
-        parser_environ.add_argument('--files', 
+        parser_environ.add_argument('--filesmap', 
                 action='store', 
-                dest='files', 
+                dest='filesmap', 
                 default='',
                 help='comma separated list of LOCAL=REMOTE file name specifications'
                 )
@@ -429,18 +430,23 @@ class VC3ClientCLI(object):
 
         # Environment create
         elif ns.subcommand == 'environment-create':
+            filemap = ns.filesmap.split(',')
+            files = {}
+            for names in filemap:
+                (local, remote) = names.split('=')
+                local = os.path.expanduser(local)
+                self.log.debug("Reading local file %s for remote %s" % (local, remote))
+                with open(local, 'r') as l_f:
+                    all = l_f.read()
+                    files[remote] = VC3ClientAPI.encode(all)
+                                
             e = capi.defineEnvironment( ns.environmentname,
                     ns.owner,
                     ns.packages.split(','),
-                    ns.files.split(','),
+                    files,
                     ns.envmap)
             self.log.debug("Environment is %s" % e)
-            capi.storeCluster(e)
-        
-        
-        
-        
-        
+            capi.storeEnvironment(e)
         
         
         # Pairing commands

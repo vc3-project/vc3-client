@@ -9,6 +9,7 @@ __email__ = "jhover@bnl.gov"
 __status__ = "Production"
 
 import ast
+import base64
 import json
 import logging
 import os
@@ -341,8 +342,14 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Environment-related calls
     ################################################################################ 
-    def defineEnvironment(self, name, owner, packagelist = [], filesmap = [], envmap = []):
-        e = Environment(name, state='new', acl=None, owner = owner, packagelist = packagelist, filesmap = filesmap, envmap = envmap)
+    def defineEnvironment(self, name, owner, packagelist = [], files={}, envmap = []):
+        e = Environment(name, 
+                        state='new', 
+                        acl=None, 
+                        owner = owner, 
+                        packagelist = packagelist, 
+                        files = files, 
+                        envmap = envmap)
         self.log.debug("Creating Environment object: %s " % e)
         return e
     
@@ -350,9 +357,25 @@ class VC3ClientAPI(object):
         environment.store(self.ic)
     
     def listEnvironments(self):
-        environment.listEnvironments(self.ic)
+        docobj = self.ic.getdocumentobject('environment')
+        elist = []
+        try:
+            for r in docobj['resource'].keys():
+                    s = "{ '%s' : %s }" % (r, docobj['resource'][r] )
+                    nd = {}
+                    nd[r] = docobj['resource'][r]
+                    ro = Environment.objectFromDict(nd)
+                    elist.append(ro)
+                    #js = json.dumps(s)
+                    #ys = yaml.safe_load(js)
+                    #a = ast.literal_eval(js) 
+        except KeyError:
+            pass
+      
+        return elist
 
-    def listEnvironment(self, environmentname):
+
+    def getEnvironment(self, environmentname):
         environment.listEnvironment(self.ic, environmentname)
 
     ################################################################################
@@ -415,6 +438,14 @@ class VC3ClientAPI(object):
         '''
         (cert, key) = self.ic.getPairing(pairingcode)
         return (cert, key)
+
+    @classmethod
+    def encode(self, string):
+        return base64.b64encode(string)
+    
+    @classmethod
+    def decode(self, string):
+        return base64.b64decode(string)
         
     
 class EntityExistsException(Exception):

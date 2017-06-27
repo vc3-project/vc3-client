@@ -41,12 +41,14 @@ $CLIENT $DEBUGS -c $CONFIG user-create --firstname John --lastname Hover --email
 echo $CLIENT $DEBUGS -c $CONFIG user-list
 $CLIENT $DEBUGS -c $CONFIG user-list
 
+echo $CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  angusproject
+$CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  angusproject
 echo $CLIENT $DEBUGS -c $CONFIG project-create --owner jhover --members jhover  jhoverproject
 $CLIENT $DEBUGS -c $CONFIG project-create --owner jhover --members jhover  jhoverproject
 echo $CLIENT $DEBUGS -c $CONFIG project-adduser jhoverproject angus
 $CLIENT $DEBUGS -c $CONFIG project-adduser jhoverproject angus
 
-echo $CLIENT $DEBUGS -c $CONFIG project-list
+echo $CLIENT $DEBUGS -c $CONFIG project-li st
 $CLIENT $DEBUGS -c $CONFIG project-list
 
 echo $CLIENT $DEBUGS -c $CONFIG project-list --project jhoverproject

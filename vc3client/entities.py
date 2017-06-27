@@ -423,14 +423,14 @@ class Environment(InfoEntity):
                      ]
 
 
-    def __init__(self, name, state, acl, owner,  packagelist=[], filesmap=[], envmap=[] ):
+    def __init__(self, name, state, acl, owner,  packagelist=[], files={}, envmap=[] ):
         '''
         Defines a new Environment object. 
               
         :param str name: The unique VC3 label for this environment.
         :param str owner:
         :param List str   packagelist:
-        :param List local-name=remote-name filemaps: Files to be included in the environment. (Files will be base64 encoded.)
+        :param List local-name=remote-name files: Files to be included in the environment. (Files will be base64 encoded.)
         :param Dict str envmap: 
         :rtype: Environment
         '''  
@@ -441,20 +441,20 @@ class Environment(InfoEntity):
         self.acl   = acl
         self.owner = owner
         self.packagelist = packagelist
-        self.filesmap = filesmap
+        self.files = files
         self.envmap = envmap
 
-        self.read_files()
-
-    def read_files(self):
-        self.files = {}
-
-        for names in self.filesmap:
-            (local, remote) = names.split('=')
-            
-            with open(local, 'r') as l_f:
-                all = l_f.read()
-                self.files[remote] = urllib.quote_plus(all)
+#        self.read_files()
+#
+#    def read_files(self):
+#        self.files = {}
+#
+#        for names in self.filesmap:
+#            (local, remote) = names.split('=')
+#            
+#            with open(local, 'r') as l_f:
+#                all = l_f.read()
+#                self.files[remote] = urllib.quote_plus(all)
 
 class Request(InfoEntity):
     '''
