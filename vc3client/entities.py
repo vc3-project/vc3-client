@@ -37,7 +37,8 @@ class User(InfoEntity):
                      'first',
                      'last',
                      'email',
-                     'institution'] 
+                     'institution',
+                     'identity_id'] 
     infokey = 'user'
     
     def __init__(self,
