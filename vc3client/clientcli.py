@@ -208,37 +208,27 @@ class VC3ClientCLI(object):
                                          help='list details of specified allocation',
                                          default=None)
 
+
+        ########################### Nodes  ##########################################
+        
+        
+        
+        
+        
         ########################### Cluster  ##########################################
         parser_cluster = subparsers.add_parser('cluster-create', 
-                help='create new cluster request')
+                help='create new cluster specification')
 
         parser_cluster.add_argument('clustername', 
                 help='name of the cluster to be created',
                 action="store")
 
-        parser_cluster.add_argument('--allocations', 
-                action='store', 
-                dest='allocations', 
-                help='comma separated list of allocations to be used by the cluster',
-                )
 
-        parser_cluster.add_argument('--environments', 
-                action='store', 
-                dest='environments', 
-                help='Environment to be installed on top of the cluster'
-                )
+        
+        
 
-        parser_cluster.add_argument('--expiration', 
-                action='store', 
-                dest='expiration', 
-                help='Date YYYY-MM-DD,HH:MM:SS at which this request expires'
-                )
 
-        parser_cluster.add_argument('--policy', 
-                action='store', 
-                dest='policy', 
-                help='Policy for using the allocations'
-                )
+
 
         ########################### Environment  ##########################################
         parser_environ = subparsers.add_parser('environment-create', 
@@ -284,10 +274,41 @@ class VC3ClientCLI(object):
                                          help='list details of specified environment',
                                          default=None)
         
+        ########################### Request  ##########################################
+        parser_request = subparsers.add_parser('request-create', 
+                help='create new request specification')
 
+        parser_request.add_argument('requestname', 
+                                    help='name of the request to be created',
+                                    action="store")
 
+        parser_request.add_argument('--expiration', 
+                action='store', 
+                dest='expiration', 
+                help='Date YYYY-MM-DD,HH:MM:SS at which this request expires',
+                default=None
+                )
 
+        
+        parser_request.add_argument('--allocations', 
+                action='store', 
+                dest='allocations', 
+                help='comma separated list of allocations to be used by the request',
+                default=None
+                )
 
+        parser_request.add_argument('--environments', 
+                action='store', 
+                dest='environments', 
+                help='Environment to be installed on top of the request',
+                default=None
+                )
+
+        parser_request.add_argument('--policy', 
+                action='store', 
+                dest='policy', 
+                help='Policy for using the allocations',
+                default='static-balanced')
 
         ########################### Pairing  ##########################################
         parser_pairingcreate = subparsers.add_parser('pairing-create', 
@@ -435,13 +456,16 @@ class VC3ClientCLI(object):
             print(ao)
 
         # Cluster create
-        elif ns.subcommand == 'cluster-create':
-            c = capi.defineCluster( ns.clustername,
+        elif ns.subcommand == 'request-create':
+            c = capi.defineCluster( ns.requestname,
                                     ns.allocations,
                                     ns.policy,
                                     ns.environments)
             self.log.debug("Cluster is %s" % c)
             capi.storeCluster(c)    
+
+        
+
 
         # Environment create
         elif ns.subcommand == 'environment-create':

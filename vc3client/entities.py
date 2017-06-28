@@ -334,29 +334,18 @@ class Cluster(InfoEntity):
     infoattributes = [ 'name',
                         'state',
                         'acl',
-                        'allocations',
-                        'environments',
-                        'policy',
-                        'expiration',
                       ]
 
-    def __init__(self, name, state, acl, allocations = [], environments = [], policy = None, expiration = None):
+    def __init__(self, name, state, acl, ):
         '''
-        :param str name:          Label for this cluster definition. 
-        :param str allocations:   List of allocations that the cluster uses.
-        :param str environments:  List of environments to install on top of the cluster.
-        :param str policy:        Allocations policy for the cluster.
-        :param str expiration:    Date YYYY-MM-DD,HH:MM:SS when this cluster expires.
+
         '''
         self.log = logging.getLogger()
         self.name = name
         self.nodes = []
         self.state = state
         self.acl = acl
-        self.allocations  = allocations
-        self.environments = environments
-        self.policy       = policy
-        self.expiration   = expiration
+
 
     def addNodeset(self, ):
         pass
@@ -454,31 +443,68 @@ class Request(InfoEntity):
                                 not actively terminated. 
     
     
-        "johnrhover-req00001" : {
-            "cluster" : "clustername",
+        "jhover-req00001" : {
+            "name" : "jhover-req00001",
             "expiration" : "2017-07-07:1730", 
             "environment" : {
                         <Environment json>
                     },
-            "allocations" : {
+            "allocation" : {
                         <Allocations>
                         },
             "policy" :  {
                     <policy>
                 }
+            "cluster" :  
+            
 
         }
+        
+        :param str name:          Label for this request. 
+        :param str allocations:   List of allocations that the request shoud utilize.
+        :param str environments:  List of environments to install on top of the cluster.
+        :param str policy:        Policy for utilizing the allocations. 
+        :param str expiration:    Date YYYY-MM-DD,HH:MM:SS when this cluster expires and should be unconditionally terminated.    
         
     '''
     infokey = 'request'
     infoattributes = ['name',
                      'state',
                      'acl',
+                     'expiration',
+                     'policy',        # contains policy label
+                     'allocations',   # contains resource descriptions
+                     'cluster',       # contains nodes descriptions
+                     'environments',  # environment(s) to instantiate on nodes.     
                      ]
     
-    def __init__(self, name, state, acl
+    def __init__(self, 
+                 name, 
+                 state, 
+                 acl, 
+                 expiration = None, 
+                 cluster=None, 
+                 policy = None, 
+                 allocations = [], 
+                 environments = [], 
+
                  ):
-        pass
+        # Common attributes
+        self.log = logging.getLogger()
+        self.name = name
+        self.state = state
+        self.acl = acl
+
+        # Request-specific attributes
+        self.expiration   = expiration
+        
+        # Composite attributes from other entities. 
+        self.cluster = cluster        
+        self.allocations  = allocations
+        self.policy       = policy
+        self.environments = environments
+        
+
 
     def getQueuesConf(self):
         pass
