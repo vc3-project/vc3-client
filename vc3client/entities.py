@@ -94,16 +94,17 @@ class Project(InfoEntity):
                    acl,
                    owner,
                    members,   # list
-                   allocations=None, 
-                   blueprints=None):
+                   allocations=None,  # list of names 
+                   blueprints=None):  # list of names
         '''
         Defines a new Project object for usage elsewhere in the API. 
               
         :param str name: The unique VC3 name of this project
         :param str owner: VC3 username of project owner. 
-        :param 
-        :return: User:  A valid Project objext. 
-       
+        :param str members: List of vc3 usernames
+        :param str allocations: List of allocation names. 
+        :param str blueprints:  List blueprint names. 
+        :return: Project:  A valid Project objext. 
         :rtype: Project
         '''  
         self.log = logging.getLogger()
@@ -198,7 +199,7 @@ class Allocation(InfoEntity):
     
     (Top-level) Allocation names are in the form <vc3username>.<vc3resourcename>.
     Sub-allocation names are in the form <vc3username>.<vc3resourcename>.<suballocationlabel>
-        
+            
     "johnrhover.sdcc-ic." : {
         "acl" : "rw:vc3adminjhover, r:vc3jhover",
         "username": "jhover",
@@ -315,9 +316,9 @@ class Policy(InfoEntity):
 
 class Cluster(InfoEntity):
     '''
-    Represents a supported VC3 middleware cluster application, node layout, and all relevant configuration
-    and dependencies to instantiate it. It is focussed on building the virtual *cluster* not the task/job 
-    Environment needed to run a particular user's domain application. 
+    Represents a supported VC3 middleware cluster application, node layout, and all relevant 
+    configuration and dependencies to instantiate it. It is focussed on building the virtual 
+    *cluster* not the task/job Environment needed to run a particular user's domain application. 
     
     Cluster descriptions should be generic and shareable across Users/Projects. 
     
@@ -334,6 +335,7 @@ class Cluster(InfoEntity):
     infoattributes = [ 'name',
                         'state',
                         'acl',
+                        'nodes',
                       ]
 
     def __init__(self, name, state, acl, ):
@@ -342,23 +344,23 @@ class Cluster(InfoEntity):
         '''
         self.log = logging.getLogger()
         self.name = name
-        self.nodes = []
+        self.nodes = [] # ordered list of nodeset labels
         self.state = state
         self.acl = acl
 
 
-    def addNodeset(self, ):
-        pass
+    def addNodeset(self, nodesetname ):
+        if nodesetname not in self.nodes:
+            self.nodes.append(nodesetname)
 
     def removeNodeset(self, nodesetname):
-        pass
+        if nodesetname in self.nodes:
+            self.nodes.remove(nodesetname)
 
 
 class Nodeset(InfoEntity):
     '''
-    
     Represents a set of equivalently provisioned nodes that are part of a Cluster definition. 
-    
     
         "nodes" : {
             "headnode1" : {
@@ -389,10 +391,44 @@ class Nodeset(InfoEntity):
     infoattributes = ['name',
                      'state',
                      'acl',
+                     'number',
+                     'cores',
+                     'memory_mb',
+                     'storage_mb',
+                     'app_type',
+                     'app_role',
+                     'app_host',
+                     'app_port',
+                     'app_sectoken',            
                      ]
     
-    def __init__(self, name, state, acl, number, cores, memory_mb, storage_mb, app_type, app_role):
-        pass
+    def __init__(self, name, 
+                       state, 
+                       acl, 
+                       number, 
+                       cores, 
+                       memory_mb, 
+                       storage_mb, 
+                       app_type, 
+                       app_role,
+                       app_host = None, 
+                       app_port = None,
+                       app_sectoken = None
+                       ):
+        self.log = logging.getLogger()
+        self.name = name
+        self.state = state
+        self.acl = acl
+        self.number = number
+        self.cores = cores
+        self.memory_mb = memory_mb
+        self.storage_mb = storage_mb
+        self.app_type = app_type
+        self.app_role = app_role
+        self.app_host = app_host
+        self.app_port = app_port
+        self.app_sectoken = app_sectoken
+
 
 
 class Environment(InfoEntity):
@@ -441,6 +477,7 @@ class Request(InfoEntity):
     Contains sub-elements that reflect information from other Entities. 
     expiration:  Date or None   Time at which cluster should unconditionally do teardown if 
                                 not actively terminated. 
+        
     
     
         "jhover-req00001" : {
@@ -455,7 +492,14 @@ class Request(InfoEntity):
             "policy" :  {
                     <policy>
                 }
-            "cluster" :  
+            "cluster" :  {
+            
+            },
+            "nodeset": {
+            
+            }
+             
+            
             
 
         }
@@ -472,10 +516,10 @@ class Request(InfoEntity):
                      'state',
                      'acl',
                      'expiration',
-                     'policy',        # contains policy label
-                     'allocations',   # contains resource descriptions
-                     'cluster',       # contains nodes descriptions
-                     'environments',  # environment(s) to instantiate on nodes.     
+                     'policy',        # name of policy to use to satisfy request
+                     'allocations',   # list of allocations to satisfy this request
+                     'cluster',       # contains cluster def, which includes nodeset descriptions
+                     'environments',  # environment(s) to instantiate on nodesets.     
                      ]
     
     def __init__(self, 
@@ -487,7 +531,6 @@ class Request(InfoEntity):
                  policy = None, 
                  allocations = [], 
                  environments = [], 
-
                  ):
         # Common attributes
         self.log = logging.getLogger()
@@ -505,29 +548,51 @@ class Request(InfoEntity):
         self.environments = environments
         
 
+class Factory(InfoEntity):
+    '''
+    Represents a VC3 factory (static or dynamic). 
+        
+    '''
+    infokey = 'factory'
+    infoattributes = ['name',
+                     'state',
+                     'acl',
+                     'owner',
+                     'authconfig',
+                     'queuesconf',
+                     ]
 
-    def getQueuesConf(self):
-        pass
-    
+
+    def __init__(self, name, state, acl, authconfig=None, queuesconfig=None ):
+        '''
+        Defines a new Factory object. 
+              
+        :param str name: The unique factory id.
+        :param str owner:
+        :param str authconfig: (base64encoded) contents of auth.conf   
+        :param str queuesconfig:  (base64encoded) contents of auth.conf
+        :rtype: Factory
+        :return: Valid Factory object.  
+        '''  
+        self.log = logging.getLogger()
+
+        self.name  = name  # i.e. factory-id
+        self.state = state
+        self.acl   = acl
+        self.owner = owner
+        self.authconfig = authconfig
+        self.queuesconfig = queuesconfig
+        
+    def getConfig(self, variety):
+        if variety == 'queuesconfig':
+            return self.queuesconfig
+        elif variety == 'authconfig':
+            return self.authconfig
 
 
-
-
-def runtest():
-    logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
-    log = logging.getLogger()
-    u = User(name='vc3jhover', 
-             first='John', 
-             last='Hover', 
-             email='jhover@bnl.gov', 
-             institution = 'BNL')
-    log.info("User made %s" % u)
-    du = u.makeDictObject()
-    log.info("Dict made %s" % du)
-    #u.store()
 
 
 if __name__ == '__main__':
-    runtest()
+    pass
     
 

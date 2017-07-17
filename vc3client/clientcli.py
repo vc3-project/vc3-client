@@ -108,6 +108,17 @@ class VC3ClientCLI(object):
         parser_projectadduser.add_argument('user', 
                                      action="store", 
                                      )
+
+        parser_projectaddallocation = subparsers.add_parser('project-addallocation', 
+                                                help='add allocation to vc3 project')
+        
+        parser_projectaddallocation.add_argument('project', 
+                                     action="store")
+
+        parser_projectaddallocation.add_argument('allocation', 
+                                     action="store", 
+                                     )
+
               
         
         parser_projectlist = subparsers.add_parser('project-list', 
@@ -413,6 +424,12 @@ class VC3ClientCLI(object):
             po = capi.getProject(ns.project)
             po.addUser(ns.user)
             capi.storeProject(po)
+        
+        elif ns.subcommand == 'project-addallocation':
+            po = capi.getProject(ns.project)
+            po.addAllocationToProject(ns.allocation)
+            capi.storeProject(po)
+        
             
         # Resource commands
         elif ns.subcommand == 'resource-create':
@@ -455,7 +472,7 @@ class VC3ClientCLI(object):
             ao = capi.getAllocation(ns.allocationname)
             print(ao)
 
-        # Cluster create
+        # Request create
         elif ns.subcommand == 'request-create':
             c = capi.defineCluster( ns.requestname,
                                     ns.allocations,

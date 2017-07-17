@@ -102,15 +102,6 @@ class VC3ClientAPI(object):
                     nd[u] = docobj['user'][u]
                     uo = User.objectFromDict(nd)
                     ulist.append(uo)
-                    js = json.dumps(s)
-                    ys = yaml.safe_load(js)
-                    a = ast.literal_eval(js) 
-                    #self.log.debug("dict= %s " % s)
-                    #self.log.debug("obj= %s " % uo)
-                    #self.log.debug("json = %s" % js)
-                    #self.log.debug("yaml = %s" % ys)
-                    #self.log.debug("ast = %s" % a)
-                    #print(uo)
         except KeyError:
             pass
         return ulist
@@ -163,11 +154,7 @@ class VC3ClientAPI(object):
         
         '''
         self.log.debug("Looking up user %s project %s " % (user, project))
-        pdocobj = self.ic.getdocumentobject('project')
-        udocobj = self.ic.getdocumentobject('user')
-        # confirm user exists...
-        pd = pdocobj['project'][project]
-        po = Project.objectFromDict(pd)
+        po = self.getProject(project)
         self.log.debug("Adding user %s to project object %s " % (user, po))
         po.addUser(user)
         self.storeProject(po)        
@@ -193,8 +180,7 @@ class VC3ClientAPI(object):
                     #self.log.debug("ast = %s" % a)
                     #print(uo)
         except KeyError:
-            pass
-        
+            pass    
         return plist
     
     
@@ -203,6 +189,20 @@ class VC3ClientAPI(object):
         for p in plist:
             if p.name == projectname:
                 return p
+    
+    def addAllocationToProject(self, allocation, projectname ):
+        po = self.getProject(projectname)
+        if allocation not in po.allocations:
+            po.allocations.append(allocation)
+        self.storeProject(po)
+        
+    
+    def removeAllocationFromProject(self, allocation, projectname):
+        po = self.getProject(projectname)
+        if allocation in po.allocations:
+            po.allocations.remove(allocation)
+        self.storeProject(po)
+
     
         
     ################################################################################
@@ -303,17 +303,30 @@ class VC3ClientAPI(object):
         except KeyError:
             pass
         return alist
-    
-    def addAllocationToProject(self, allocation, projectname ):
-        pass
-    
-    def removeAllocationFromProject(self, allocation, projectname):
-        pass
+
         
     ################################################################################
     #                        Cluster-related calls
     ################################################################################ 
-    def defineCluster(self, name, allocations = [], environments = [], policy = None, expiration = None):
+        '''
+        Defines a new Cluster (description) object for usage elsewhere in the API. 
+              
+        :param str name: The unique name of this cluster description.
+        :param str owner:  The user name of the owner of this project
+        :param str resourcetype,  # grid remote-batch local-batch cloud
+        :param str accessmethod,  # ssh, gsissh,  
+        :param str accessflavor,  # htcondor-ce, slurm, sge, ec2, nova, gce
+        :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud  | HTCondorCE hostname             
+        :param Boolean mfa        # Does site need head-node factory?     
+        :return: Resource          A valid Project object
+        :rtype: Resource        
+        
+        '''
+    def defineCluster(self, name, 
+                            allocations = [], 
+                            environments = [], 
+                            policy = None, 
+                            expiration = None):
         c = Cluster(name, state='new', acl=None, allocations = allocations, environments = environments, policy = policy, expiration = expiration)
         self.log.debug("Creating Cluster object: %s " % c)
         return c
