@@ -208,7 +208,9 @@ class VC3ClientAPI(object):
     ################################################################################
     #                           Resource-related calls
     ################################################################################    
-    def defineResource(self, name, 
+    def defineResource(self, name,
+                             state,
+                             acl, 
                              owner, 
                              accesstype, 
                              accessmethod, 
@@ -279,14 +281,18 @@ class VC3ClientAPI(object):
         '''
           
         '''
-        ao = Allocation(name, state='new', acl=None, owner=owner, resource=resource, accountname=accountname)
+        ao = Allocation(name, 
+                        state='new', 
+                        acl=None, 
+                        owner=owner, 
+                        resource=resource, 
+                        accountname=accountname)
         self.log.debug("Creating Allocation object: %s " % ao)
         return ao
     
     def storeAllocation(self, allocation):
         allocation.store(self.ic)
         
-
     def listAllocations(self):
         docobj = self.ic.getdocumentobject('allocation')
         alist = []
@@ -304,7 +310,12 @@ class VC3ClientAPI(object):
             pass
         return alist
 
-        
+    def listAllocation(self, allocationname):
+        al = self.listAllocations()
+        for a in al:
+            if a.name == allocationname:
+                return a
+            
     ################################################################################
     #                        Cluster-related calls
     ################################################################################ 
@@ -313,24 +324,20 @@ class VC3ClientAPI(object):
               
         :param str name: The unique name of this cluster description.
         :param str owner:  The user name of the owner of this project
-        :param str resourcetype,  # grid remote-batch local-batch cloud
-        :param str accessmethod,  # ssh, gsissh,  
-        :param str accessflavor,  # htcondor-ce, slurm, sge, ec2, nova, gce
-        :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud  | HTCondorCE hostname             
-        :param Boolean mfa        # Does site need head-node factory?     
-        :return: Resource          A valid Project object
-        :rtype: Resource        
+        :param [str]:   List of strings, names of nodesets in this cluster    
+        :return: Cluster          A valid Cluster object
+        :rtype: Cluster        
         
         '''
-    def defineCluster(self, name, 
-                            allocations = [], 
-                            environments = [], 
-                            policy = None, 
-                            expiration = None):
-        c = Cluster(name, state='new', acl=None, allocations = allocations, environments = environments, policy = policy, expiration = expiration)
-        self.log.debug("Creating Cluster object: %s " % c)
+    def defineCluster(self, name, owner, nodes=[] ): 
+        c = Cluster(name=name, 
+                    state='new',
+                    owner=owner,
+                    acl=None,
+                    nodes=nodes, # list of names of nodesets in this cluster definition. 
+                     )
         return c
-    
+                    
     def storeCluster(self, cluster):
         cluster.store(self.ic)
     
@@ -339,6 +346,11 @@ class VC3ClientAPI(object):
 
     def listCluster(self, clustername):
         cluster.listCluster(self.ic, clustername)
+
+    ################################################################################
+    #                        Nodeset-related calls
+    ################################################################################ 
+
 
     def defineNodeset(self, name, state, acl):
         pass
@@ -397,13 +409,20 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Request-related calls
     ################################################################################ 
-    def defineRequest(self, name, state, acl, cluster, environment, allocations, policy ):
+    def defineRequest(self, name, state, acl, cluster, environments, allocations, policy, expiration ):
         '''
         
         :return Request
         
         '''
-        pass
+        r = Request(name, state='new', acl=None, 
+                    cluster = cluster            # name of abstract cluster specification
+                    allocations = allocations,   # list of allocation names
+                    environments = environments, # list of environment names
+                    policy = policy, 
+                    expiration = expiration)
+        self.log.debug("Creating Request object: %s " % r)
+        return c
     
     def storeRequest(self):
         pass
@@ -411,7 +430,10 @@ class VC3ClientAPI(object):
     def listRequests(self):
         pass
 
-    def saveRequestAsBlueprint(self, requestid, label):
+    def saveRequestAsBlueprint(self, requestid, newlabel):
+        '''
+        Take the specified request and store it as a re-usable blueprint with new label
+        '''
         pass
     
     def listBlueprints(self, project):
@@ -429,11 +451,16 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Infrastructural calls
     ################################################################################ 
-    def getQueuesConf(self, requestname):
+    def getQueuesConf(self, requestname, factoryname):
         '''
-        
+        Get the queues.conf sections for the specified request and factory
         '''
         pass
+    
+    def getAuthConf(self, requestname, factoryname):
+        '''
+        Get the auth.conf sections for the specified request and factory
+        '''
 
     def requestPairing(self, commonname):
         '''

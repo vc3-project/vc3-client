@@ -286,11 +286,12 @@ class Policy(InfoEntity):
     infokey = 'policy'
     infoattributes = ['name',
                      'state',
+                     'owner',
                      'acl',
                       'pluginname'
                       ]
     
-    def __init__(self, name, owner, acl, pluginname):
+    def __init__(self, name, state, owner, acl, pluginname):
         ''' 
         "static-balanced" : {
                 "pluginname" : "StaticBalanced",
@@ -334,19 +335,21 @@ class Cluster(InfoEntity):
     infokey = 'cluster'
     infoattributes = [ 'name',
                         'state',
+                        'owner',
                         'acl',
                         'nodes',
                       ]
 
-    def __init__(self, name, state, acl, ):
+    def __init__(self, name, state, owner, acl, nodes ):
         '''
 
         '''
         self.log = logging.getLogger()
         self.name = name
-        self.nodes = [] # ordered list of nodeset labels
         self.state = state
+        self.owner = owner
         self.acl = acl
+        self.nodes = [] # ordered list of nodeset labels
 
 
     def addNodeset(self, nodesetname ):
@@ -390,6 +393,7 @@ class Nodeset(InfoEntity):
     infokey = 'nodes'
     infoattributes = ['name',
                      'state',
+                     'owner',
                      'acl',
                      'number',
                      'cores',
@@ -403,7 +407,8 @@ class Nodeset(InfoEntity):
                      ]
     
     def __init__(self, name, 
-                       state, 
+                       state,
+                       owner, 
                        acl, 
                        number, 
                        cores, 
@@ -418,6 +423,7 @@ class Nodeset(InfoEntity):
         self.log = logging.getLogger()
         self.name = name
         self.state = state
+        self.owner = owner
         self.acl = acl
         self.number = number
         self.cores = cores
@@ -430,7 +436,6 @@ class Nodeset(InfoEntity):
         self.app_sectoken = app_sectoken
 
 
-
 class Environment(InfoEntity):
     '''
     Represents the node/job-level environment needed to run a given user task. 
@@ -441,27 +446,27 @@ class Environment(InfoEntity):
     infokey = 'environment'
     infoattributes = ['name',
                      'state',
-                     'acl',
                      'owner',
+                     'acl',
                      'packagelist',
                      'envmap',
                      'files'
                      ]
 
 
-    def __init__(self, name, state, acl, owner,  packagelist=[], files={}, envmap=[] ):
+    def __init__(self, name, state, owner, acl,  packagelist=[], files={}, envmap=[] ):
         '''
         Defines a new Environment object. 
               
         :param str name: The unique VC3 label for this environment.
         :param str owner:
         :param List str   packagelist:
-        :param List local-name=remote-name files: Files to be included in the environment. (Files will be base64 encoded.)
+        :param List local-name=remote-name files: Files to be included in the environment. (Files will be 
+                                                base64 encoded.)
         :param Dict str envmap: 
         :rtype: Environment
         '''  
         self.log = logging.getLogger()
-
         self.name  = name
         self.state = state
         self.acl   = acl
