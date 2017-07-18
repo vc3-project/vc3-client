@@ -416,7 +416,7 @@ class VC3ClientAPI(object):
         
         '''
         r = Request(name, state='new', acl=None, 
-                    cluster = cluster            # name of abstract cluster specification
+                    cluster = cluster,           # name of abstract cluster specification
                     allocations = allocations,   # list of allocation names
                     environments = environments, # list of environment names
                     policy = policy, 
