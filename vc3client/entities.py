@@ -163,9 +163,8 @@ class Resource(InfoEntity):
                      'accessmethod',
                      'accessflavor',
                      'gridresource',
+                     'mfa'
                      ]
-    
-    
     
     def __init__(self,
                  name,
