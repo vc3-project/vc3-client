@@ -186,6 +186,7 @@ class Resource(InfoEntity):
         self.accessmethod = accessmethod
         self.accessflavor = accessflavor
         self.gridresource = gridresource
+        self.mfa = mfa
         self.log.debug("Project object created: %s" % self)
 
 
