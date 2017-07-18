@@ -404,6 +404,8 @@ class VC3ClientCLI(object):
         elif ns.subcommand == 'project-create':
             if ns.members is not None:
                 memberslist = ns.members.split(',')
+            else:
+                memberslist = []
                 
             p = capi.defineProject( ns.projectname,
                                     ns.owner,
