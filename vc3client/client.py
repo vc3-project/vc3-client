@@ -13,6 +13,7 @@ import base64
 import json
 import logging
 import os
+import sys
 import yaml
 
 from entities import User, Project, Resource, Allocation, Nodeset, Request, Cluster, Environment
@@ -40,7 +41,6 @@ class VC3ClientAPI(object):
         self.config = config
         self.ic = infoclient.InfoClient(self.config)
         self.log = logging.getLogger() 
-
 
 
     ################################################################################
@@ -78,7 +78,6 @@ class VC3ClientAPI(object):
     def storeUser(self, user):
         '''
         Stores the provided user in the infoservice. 
-        
         :param User u:  User to add. 
         :return: None
         '''
@@ -93,24 +92,10 @@ class VC3ClientAPI(object):
         :rtype: List of User objects. 
         
         '''
-        docobj = self.ic.getdocumentobject('user')
-        ulist = []
-        try:
-            for u in docobj['user'].keys():
-                    s = "{ '%s' : %s }" % (u, docobj['user'][u] )
-                    nd = {}
-                    nd[u] = docobj['user'][u]
-                    uo = User.objectFromDict(nd)
-                    ulist.append(uo)
-        except KeyError:
-            pass
-        return ulist
-
+        return self._listEntities('User')
+       
     def getUser(self, username):
-        ulist = self.listUsers()
-        for u in ulist:
-            if u.name == username:
-                return u
+        return self._getEntity('User', username)
     
     ################################################################################
     #                           Project-related calls
@@ -159,28 +144,6 @@ class VC3ClientAPI(object):
         po.addUser(user)
         self.storeProject(po)        
 
-    
-    def listProjects(self):
-        docobj = self.ic.getdocumentobject('project')
-        plist = []
-        try:
-            for p in docobj['project'].keys():
-                    s = "{ '%s' : %s }" % (p, docobj['project'][p] )
-                    nd = {}
-                    nd[p] = docobj['project'][p]
-                    po = Project.objectFromDict(nd)
-                    plist.append(po)
-        except KeyError:
-            pass    
-        return plist
-    
-    
-    def getProject(self, projectname):
-        plist = self.listProjects()
-        for p in plist:
-            if p.name == projectname:
-                return p
-    
     def addAllocationToProject(self, allocation, projectname ):
         po = self.getProject(projectname)
         if allocation not in po.allocations:
@@ -194,6 +157,11 @@ class VC3ClientAPI(object):
             po.allocations.remove(allocation)
         self.storeProject(po)
 
+    def listProjects(self):
+        return self._listEntities('Project')
+       
+    def getProject(self, projectname):
+        return self._getEntity('Project', projectname)
     
         
     ################################################################################
@@ -238,28 +206,10 @@ class VC3ClientAPI(object):
         resource.store(self.ic)
     
     def listResources(self):
-        docobj = self.ic.getdocumentobject('resource')
-        rlist = []
-        try:
-            for r in docobj['resource'].keys():
-                    s = "{ '%s' : %s }" % (r, docobj['resource'][r] )
-                    nd = {}
-                    nd[r] = docobj['resource'][r]
-                    ro = Resource.objectFromDict(nd)
-                    rlist.append(ro)
-                    js = json.dumps(s)
-                    ys = yaml.safe_load(js)
-                    a = ast.literal_eval(js) 
-        except KeyError:
-            pass
+        return self._listEntities('Resource')
        
-        return rlist
-    
     def getResource(self, resourcename):
-        rlist = self.listResources()
-        for r in rlist:
-            if r.name == resourcename:
-                return r
+        return self._getEntity('Resource', resourcename)
 
     ################################################################################
     #                           Allocation-related calls
@@ -284,27 +234,11 @@ class VC3ClientAPI(object):
         allocation.store(self.ic)
         
     def listAllocations(self):
-        docobj = self.ic.getdocumentobject('allocation')
-        alist = []
-        try:
-            for a in docobj['allocation'].keys():
-                    s = "{ '%s' : %s }" % (a, docobj['allocation'][a] )
-                    nd = {}
-                    nd[a] = docobj['allocation'][a]
-                    ao = Allocation.objectFromDict(nd)
-                    alist.append(ao)
-                    js = json.dumps(s)
-                    ys = yaml.safe_load(js)
-                    a = ast.literal_eval(js) 
-        except KeyError:
-            pass
-        return alist
+        return self._listEntities('Allocation')
+       
+    def getAllocation(self, allocationname):
+        return self._getEntity('Resource', allocationname)
 
-    def listAllocation(self, allocationname):
-        al = self.listAllocations()
-        for a in al:
-            if a.name == allocationname:
-                return a
             
     ################################################################################
     #                        Cluster-related calls
@@ -336,16 +270,15 @@ class VC3ClientAPI(object):
         cluster.store(self.ic)
     
     def listClusters(self):
-        cluster.listClusters(self.ic)
-
-    def listCluster(self, clustername):
-        cluster.listCluster(self.ic, clustername)
+        return self._listEntities('Cluster')
+       
+    def getCluster(self, clustername):
+        return self._getEntity('Cluster', clustername)
+    
 
     ################################################################################
     #                        Nodeset-related calls
     ################################################################################ 
-
-
     def defineNodeset(self, name, owner, node_number, app_type, app_role):
         ns = Nodeset( name=name, 
                       state='new',
@@ -365,42 +298,27 @@ class VC3ClientAPI(object):
                        )
         self.log.debug("Created Nodeset object: %s" % ns)
         return ns 
-
-    def listNodesets(self):
-        docobj = self.ic.getdocumentobject('nodes')
-        nslist = []
-        try:
-            for ns in docobj['nodes'].keys():
-                    s = "{ '%s' : %s }" % (ns, docobj['nodes'][ns] )
-                    nd = {}
-                    nd[ns] = docobj['nodes'][ns]
-                    nso = Nodeset.objectFromDict(nd)
-                    nslist.append(nso)
-        except KeyError:
-            pass
-        return nslist
-    
-    def storeNodeset(self, nodeset):
-        nodeset.store(self.ic)
     
     def addNodesetToCluster(self, nodesetname, clustername):
         co = self.getCluster(clustername)
         if nodesetname not in co.nodesets:
             co.nodesets.append(nodesetname)
         self.storeCluster(co)
-    
-    def getNodeset(self, nodesetname):
-        nslist = self.listNodesets()
-        for ns in nslist:
-            if ns.name == nodesetname:
-                return ns
-    
+       
     def removeNodesetFromCluster(self, nodesetname, clustername):
         co = self.getCluster(clustername)
         if nodesetname in co.nodesets:
              co.nodesets.remove(nodesetname)
         self.storeCluster(co)
-
+        
+    def listNodesets(self):
+        return self._listEntities('Nodeset')
+       
+    def getNodeset(self, clustername):
+        return self._getEntity('Nodeset', nodesetname)
+    
+    def storeNodeset(self, nodeset):
+        nodeset.store(self.ic)
 
     ################################################################################
     #                        Environment-related calls
@@ -420,29 +338,10 @@ class VC3ClientAPI(object):
         environment.store(self.ic)
     
     def listEnvironments(self):
-        docobj = self.ic.getdocumentobject('environment')
-        elist = []
-        try:
-            for e in docobj['environment'].keys():
-                    s = "{ '%s' : %s }" % (e, docobj['environment'][e] )
-                    nd = {}
-                    nd[e] = docobj['environment'][e]
-                    eo = Environment.objectFromDict(nd)
-                    elist.append(eo)
-                    #js = json.dumps(s)
-                    #ys = yaml.safe_load(js)
-                    #a = ast.literal_eval(js) 
-        except KeyError:
-            pass
-
-        return elist
-
-
+        return self._listEntities('Environment')
+       
     def getEnvironment(self, environmentname):
-        elist = self.listEnvironments()
-        for e in elist:
-            if e.name == environmentname:
-                return e
+        return self._getEntity('Environment', environmentname)
 
     ################################################################################
     #                        Request-related calls
@@ -465,11 +364,14 @@ class VC3ClientAPI(object):
         self.log.debug("Creating Request object: %s " % r)
         return c
     
-    def storeRequest(self):
-        pass
+    def storeRequest(self, request):
+        request.store(self.ic)
 
     def listRequests(self):
-        pass
+        return self._listEntities('Request')
+       
+    def getRequest(self, requestname):
+        return self._getEntity('Request', requestname)
 
     def saveRequestAsBlueprint(self, requestid, newlabel):
         '''
@@ -477,17 +379,6 @@ class VC3ClientAPI(object):
         '''
         pass
     
-    def listBlueprints(self, project):
-        '''
-        Lists blueprints that this project contains.
-        '''
-        pass
-
-    def getBlueprint(self, name):
-        '''
-        :return Request
-        '''
- 
     
     ################################################################################
     #                        Infrastructural calls
@@ -522,6 +413,38 @@ class VC3ClientAPI(object):
         '''
         (cert, key) = self.ic.getPairing(pairingcode)
         return (cert, key)
+
+##############################################
+#          Private generic object methods.
+#          To make code shorter.  
+##############################################
+    def _listEntities(self, entityclass ):
+        m = sys.modules['client'] 
+        klass = getattr(m, entityclass)
+        infokey = klass.infokey     
+        docobj = self.ic.getdocumentobject(infokey)
+        olist = []
+        try:
+            for oname in docobj[infokey].keys():
+                    s = "{ '%s' : %s }" % (oname, docobj[infokey][oname] )
+                    nd = {}
+                    nd[oname] = docobj[infokey][oname]
+                    eo = klass.objectFromDict(nd)
+                    olist.append(eo)
+        except KeyError:
+            pass
+        return olist
+
+
+    def _getEntity(self, entityclass, objectname):
+        eolist = self._listEntities(entityclass)
+        for eo in eolist:
+            if eo.name == objectname:
+                return eo
+
+##############################################
+#        External Utility class methods. 
+##############################################
 
     @classmethod
     def encode(self, string):
