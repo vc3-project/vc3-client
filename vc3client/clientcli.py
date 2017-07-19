@@ -261,13 +261,24 @@ class VC3ClientCLI(object):
         parser_clustercreate.add_argument('clustername', 
                 help='name of the cluster to be created',
                 action="store")
-        
+            
         parser_clustercreate.add_argument('--nodesets', 
                 action='store', 
                 dest='nodesets', 
                 default='',
                 help='comma separated list of nodesets within this cluster'
                 )
+        parser_clusterlist = subparsers.add_parser('cluster-list', 
+                                                help='list vc3 cluster(s)')
+
+        parser_clusterlist.add_argument('--clustername', 
+                                         action="store",
+                                         required=False, 
+                                         help='list details of specified cluster',
+                                         default=None)
+    
+    
+    
     
         ########################### Environment  ##########################################
         parser_environ = subparsers.add_parser('environment-create', 
@@ -314,40 +325,63 @@ class VC3ClientCLI(object):
                                          default=None)
         
         ########################### Request  ##########################################
-        parser_request = subparsers.add_parser('request-create', 
+        parser_requestcreate = subparsers.add_parser('request-create', 
                 help='create new request specification')
 
-        parser_request.add_argument('requestname', 
+        parser_requestcreate.add_argument('requestname', 
                                     help='name of the request to be created',
                                     action="store")
 
-        parser_request.add_argument('--expiration', 
+        parser_requestcreate.add_argument('--owner', 
+                action='store', 
+                dest='owner', 
+                help='VC3 User owner of this Request.',
+                default=None
+                )
+
+        parser_requestcreate.add_argument('--expiration', 
                 action='store', 
                 dest='expiration', 
                 help='Date YYYY-MM-DD,HH:MM:SS at which this request expires',
                 default=None
                 )
 
-        
-        parser_request.add_argument('--allocations', 
+        parser_requestcreate.add_argument('--cluster', 
                 action='store', 
-                dest='allocations', 
-                help='comma separated list of allocations to be used by the request',
+                dest='cluster', 
+                help='Cluster template to use for this Request.',
                 default=None
                 )
 
-        parser_request.add_argument('--environments', 
-                action='store', 
-                dest='environments', 
-                help='Environment to be installed on top of the request',
-                default=None
-                )
-
-        parser_request.add_argument('--policy', 
+        parser_requestcreate.add_argument('--policy', 
                 action='store', 
                 dest='policy', 
                 help='Policy for using the allocations',
                 default='static-balanced')
+
+        parser_requestcreate.add_argument('--allocations', 
+                action='store', 
+                dest='allocations', 
+                help='Comma-separated list of Allocations to be used by the request',
+                default=None
+                )
+
+        parser_requestcreate.add_argument('--environments', 
+                action='store', 
+                dest='environments', 
+                help='Comma-separated list of Environment to be installed on top of the request',
+                default=None
+                )
+        
+        parser_requestlist = subparsers.add_parser('request-list', 
+                                                help='list vc3 request(s)')
+
+        parser_requestlist.add_argument('--requestname', 
+                                         action="store",
+                                         required=False, 
+                                         help='list details of specified request',
+                                         default=None)
+        
 
         ########################### Pairing  ##########################################
         parser_pairingcreate = subparsers.add_parser('pairing-create', 
@@ -502,22 +536,6 @@ class VC3ClientCLI(object):
             ao = capi.getAllocation(ns.allocationname)
             print(ao)
 
-        # Cluster template create, list
-        elif ns.subcommand == 'cluster-create':
-            c = capi.defineCluster( ns.clustername,
-                                    ns.nodesets.split)
-            self.log.debug("Cluster is %s" % c)
-            capi.storeCluster(c)    
-
-        elif ns.subcommand == 'cluster-list' and ns.clustername is None:
-            cl = capi.listClusters()
-            for co in cl:
-                print(co)
-                
-        elif ns.subcommand == 'cluster-list' and ns.clustername is not None:
-            co = capi.getCluster(ns.clustername)
-            print(co)
-
         # Nodeset create, list
         elif ns.subcommand == 'nodeset-create':
             ns = capi.defineNodeset(ns.nodesetname, 
@@ -537,6 +555,22 @@ class VC3ClientCLI(object):
             ns = capi.getNodeset(ns.nodesetname)
             print(ns)
                         
+        # Cluster template create, list
+        elif ns.subcommand == 'cluster-create':
+            c = capi.defineCluster( ns.clustername,
+                                    ns.nodesets.split)
+            self.log.debug("Cluster is %s" % c)
+            capi.storeCluster(c)    
+
+        elif ns.subcommand == 'cluster-list' and ns.clustername is None:
+            cl = capi.listClusters()
+            for co in cl:
+                print(co)
+                
+        elif ns.subcommand == 'cluster-list' and ns.clustername is not None:
+            co = capi.getCluster(ns.clustername)
+            print(co)               
+                                        
         elif ns.subcommand == 'cluster-nodeset-add':
             capi.addNodesetToCluster(ns.clustername,
                                      ns.nodesetname)
@@ -545,7 +579,6 @@ class VC3ClientCLI(object):
             capi.removeNodesetFromCluster(ns.clustername,
                                      ns.nodesetname)
 
-  
         # Environment create
         elif ns.subcommand == 'environment-create':
             filemap = ns.filesmap.split(',')
@@ -575,6 +608,39 @@ class VC3ClientCLI(object):
             eo = capi.getEnvironment(ns.environmentname)
             print(eo)
         
+        # Request commands
+       
+        elif ns.subcommand == 'request-create':
+            # Handle list args...    
+            if ns.allocations is not None:
+                allocationlist = ns.allocations.split(',')
+            else:
+                allocationlist = []
+    
+            if ns.environments is not None:
+                environmentlist = ns.environments.split(',')
+            else:
+                environmentlist = []
+            
+            r = capi.defineRequest( name=ns.requestname,
+                                    owner= ns.owner,
+                                    cluster=ns.cluster,
+                                    environments=environmentlist,
+                                    allocations=allocationslist,
+                                    policy= ns.policy,
+                                    expiration=None,
+                                     )
+            self.log.debug("Request is %s" % r)
+            capi.storeRequest(r)    
+        
+        elif ns.subcommand == 'request-list' and ns.requestname is None:
+            rlist = capi.listRequests()
+            for r in rlist:
+                print(r)
+        
+        elif ns.subcommand == 'request-list' and ns.requestname is not None:
+            ro = capi.getRequest(ns.requestname)
+            print(ro)
         
         
         

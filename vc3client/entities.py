@@ -547,6 +547,7 @@ class Request(InfoEntity):
     infoattributes = ['name',
                      'state',
                      'acl',
+                     'owner',
                      'cluster_state', # State of virtual cluster this Request represents.
                      'cluster_state_reason',
                      'expiration',

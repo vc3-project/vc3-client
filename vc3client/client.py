@@ -346,7 +346,16 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Request-related calls
     ################################################################################ 
-    def defineRequest(self, name, state, acl, cluster, environments, allocations, policy, expiration ):
+    def defineRequest(self, 
+                      name, 
+                      state, 
+                      acl, 
+                      owner,
+                      cluster, 
+                      environments, 
+                      allocations, 
+                      policy, 
+                      expiration ):
         '''
         
         :return Request
@@ -355,6 +364,7 @@ class VC3ClientAPI(object):
         r = Request(name, 
                     state='new', 
                     acl=None,
+                    owner=owner,
                     clusterstate='new',          # state of virtual cluster this Request represents 
                     cluster = cluster,           # name of abstract cluster specification
                     allocations = allocations,   # list of allocation names
