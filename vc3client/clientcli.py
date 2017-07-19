@@ -643,15 +643,13 @@ class VC3ClientCLI(object):
        
         elif ns.subcommand == 'request-create':
             # Handle list args...    
+            allocationslist = []
             if ns.allocations is not None:
                 allocationlist = ns.allocations.split(',')
-            else:
-                allocationlist = []
     
+            environmentlist = []
             if ns.environments is not None:
                 environmentlist = ns.environments.split(',')
-            else:
-                environmentlist = []
             
             r = capi.defineRequest( name=ns.requestname,
                                     owner = ns.owner,

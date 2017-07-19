@@ -365,8 +365,8 @@ class VC3ClientAPI(object):
                     owner=owner,
                     cluster_state='new',          # state of virtual cluster this Request represents 
                     cluster_state_reason='new',
-                    expiration = expiration,
                     cluster = cluster,           # name of abstract cluster specification
+                    expiration = expiration,
                     allocations = allocations,   # list of allocation names
                     environments = environments, # list of environment names
                     policy = policy, 
