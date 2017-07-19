@@ -348,7 +348,6 @@ class VC3ClientAPI(object):
     ################################################################################ 
     def defineRequest(self, 
                       name, 
-                      state, 
                       acl, 
                       owner,
                       cluster, 
@@ -365,14 +364,14 @@ class VC3ClientAPI(object):
                     state='new', 
                     acl=None,
                     owner=owner,
-                    clusterstate='new',          # state of virtual cluster this Request represents 
+                    cluster_state='new',          # state of virtual cluster this Request represents 
                     cluster = cluster,           # name of abstract cluster specification
                     allocations = allocations,   # list of allocation names
                     environments = environments, # list of environment names
                     policy = policy, 
                     expiration = expiration)
         self.log.debug("Creating Request object: %s " % r)
-        return c
+        return r
     
     def storeRequest(self, request):
         request.store(self.ic)
