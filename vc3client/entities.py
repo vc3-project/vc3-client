@@ -352,12 +352,12 @@ class Cluster(InfoEntity):
                         'state',
                         'owner',
                         'acl',
-                        'nodes',
+                        'nodesets',
                       ]
     validvalues = {}
 
 
-    def __init__(self, name, state, owner, acl, nodes ):
+    def __init__(self, name, state, owner, acl, nodesets ):
         '''
 
         '''
@@ -366,16 +366,16 @@ class Cluster(InfoEntity):
         self.state = state
         self.owner = owner
         self.acl = acl
-        self.nodes = [] # ordered list of nodeset labels
+        self.nodesets = [] # ordered list of nodeset labels
 
 
     def addNodeset(self, nodesetname ):
-        if nodesetname not in self.nodes:
-            self.nodes.append(nodesetname)
+        if nodesetname not in self.nodesets:
+            self.nodesets.append(nodesetname)
 
     def removeNodeset(self, nodesetname):
-        if nodesetname in self.nodes:
-            self.nodes.remove(nodesetname)
+        if nodesetname in self.nodesets:
+            self.nodesets.remove(nodesetname)
 
 
 class Nodeset(InfoEntity):

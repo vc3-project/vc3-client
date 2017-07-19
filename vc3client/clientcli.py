@@ -261,6 +261,12 @@ class VC3ClientCLI(object):
         parser_clustercreate.add_argument('clustername', 
                 help='name of the cluster to be created',
                 action="store")
+        
+        parser_clustercreate.add_argument('--owner', 
+                                         action="store",
+                                         required=False, 
+                                         help='owner of this cluster template',
+                                         default=None)
             
         parser_clustercreate.add_argument('--nodesets', 
                 action='store', 
@@ -268,6 +274,7 @@ class VC3ClientCLI(object):
                 default='',
                 help='comma separated list of nodesets within this cluster'
                 )
+        
         parser_clusterlist = subparsers.add_parser('cluster-list', 
                                                 help='list vc3 cluster(s)')
 
@@ -567,8 +574,9 @@ class VC3ClientCLI(object):
                         
         # Cluster template create, list
         elif ns.subcommand == 'cluster-create':
-            c = capi.defineCluster( ns.clustername,
-                                    ns.nodesets.split)
+            c = capi.defineCluster( name = ns.clustername,
+                                    owner = ns.owner,
+                                    nodesets=ns.nodesets.split(','))
             self.log.debug("Cluster is %s" % c)
             capi.storeCluster(c)    
 

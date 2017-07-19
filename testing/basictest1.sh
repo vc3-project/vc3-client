@@ -75,6 +75,11 @@ $CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 1 --app_t
 echo $CLIENT $DEBUGS -c $CONFIG nodeset-list
 $CLIENT $DEBUGS -c $CONFIG nodeset-list
 
+echo $CLIENT $DEBUGS -c $CONFIG cluster-create --owner jhover htcondor-scn-10workers
+$CLIENT $DEBUGS -c $CONFIG cluster-create --owner jhover htcondor-scn-10workers
+
+echo $CLIENT $DEBUGS -c $CONFIG cluster-list
+$CLIENT $DEBUGS -c $CONFIG cluster-list
 
 
 

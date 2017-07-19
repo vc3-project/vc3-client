@@ -256,13 +256,13 @@ class VC3ClientAPI(object):
     def defineCluster(self, 
                       name, 
                       owner, 
-                      nodes=[] ): 
+                      nodesets=[] ): 
         
         c = Cluster(name=name, 
                     state='new',
                     owner=owner,
                     acl=None,
-                    nodes=nodes, # list of names of nodesets in this cluster definition. 
+                    nodesets=nodesets, # list of names of nodesets in this cluster definition. 
                      )
         return c
                     
