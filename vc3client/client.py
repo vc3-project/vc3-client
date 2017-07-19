@@ -420,7 +420,7 @@ class VC3ClientAPI(object):
 #          To make code shorter.  
 ##############################################
     def _listEntities(self, entityclass ):
-        m = sys.modules['client'] 
+        m = sys.modules[__name__] 
         klass = getattr(m, entityclass)
         infokey = klass.infokey     
         docobj = self.ic.getdocumentobject(infokey)
