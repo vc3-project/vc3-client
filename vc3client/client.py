@@ -348,10 +348,6 @@ class VC3ClientAPI(object):
     ################################################################################ 
     def defineRequest(self, 
                       name, 
-<<<<<<< HEAD
-                      acl, 
-=======
->>>>>>> 868fae6b6e71f548f4dda0dba450ebaf9ca55145
                       owner,
                       cluster,
                       allocations,  
