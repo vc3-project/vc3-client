@@ -551,6 +551,8 @@ class Request(InfoEntity):
                      'cluster_state', # State of virtual cluster this Request represents.
                      'cluster_state_reason',
                      'expiration',
+                     'queuesconf',
+                     'authconf',
                      'policy',        # name of policy to use to satisfy request
                      'allocations',   # list of allocations to satisfy this request
                      'cluster',       # contains cluster def, which includes nodeset descriptions
@@ -575,7 +577,9 @@ class Request(InfoEntity):
                  acl,
                  cluster_state = "new",
                  cluster_state_reason = None,
-                 expiration = None, 
+                 expiration = None,
+                 queuesconf = None,
+                 authconf = None, 
                  cluster=None, 
                  policy = None, 
                  allocations = [], 
@@ -591,6 +595,8 @@ class Request(InfoEntity):
         self.expiration   = expiration
         self.cluster_state = cluster_state
         self.cluster_state_reason = cluster_state_reason
+        self.queuesconf = queuesconf
+        self.authconf = authconf
         
         # Composite attributes from other entities. 
         self.cluster = cluster        

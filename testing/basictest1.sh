@@ -72,6 +72,9 @@ $CLIENT $DEBUGS -c $CONFIG allocation-list
 echo $CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 1 --app_type htcondor --app_role head-node htcondor-head.1
 $CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 1 --app_type htcondor --app_role head-node htcondor-head.1
 
+echo $CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 10 --app_type htcondor --app_role worker-nodes htcondor-workers.1
+$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 10 --app_type htcondor --app_role worker-nodes htcondor-workers.1
+
 echo $CLIENT $DEBUGS -c $CONFIG nodeset-list
 $CLIENT $DEBUGS -c $CONFIG nodeset-list
 
@@ -80,6 +83,7 @@ $CLIENT $DEBUGS -c $CONFIG cluster-create --owner jhover htcondor-scn-10workers
 
 echo $CLIENT $DEBUGS -c $CONFIG cluster-list
 $CLIENT $DEBUGS -c $CONFIG cluster-list
+
 
 
 

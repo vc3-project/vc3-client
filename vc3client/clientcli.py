@@ -296,7 +296,20 @@ class VC3ClientCLI(object):
                                               action='store',
                                               help='clustername to add nodeset to'
                                               )
-     
+        
+        parser_clusterremovenodeset = subparsers.add_parser('cluster-removenodeset', 
+                help='add a nodeset to a cluster specification')
+    
+        parser_clusterremovenodeset.add_argument('nodesetname',
+                                              action='store',
+                                              help='nodeset to add'
+                                              )
+            
+        parser_clusterremovenodeset.add_argument('clustername',
+                                              action='store',
+                                              help='clustername to add nodeset to'
+                                              )
+        
         ########################### Environment  ##########################################
         parser_environ = subparsers.add_parser('environment-create', 
                 help='create new environment')
@@ -589,13 +602,13 @@ class VC3ClientCLI(object):
             co = capi.getCluster(ns.clustername)
             print(co)               
                                         
-        elif ns.subcommand == 'cluster-nodeset-add':
-            capi.addNodesetToCluster(ns.clustername,
-                                     ns.nodesetname)
+        elif ns.subcommand == 'cluster-addnodeset':
+            capi.addNodesetToCluster( ns.nodesetname,
+                                      ns.clustername )
 
-        elif ns.subcommand == 'cluster-nodeset-remove':
-            capi.removeNodesetFromCluster(ns.clustername,
-                                     ns.nodesetname)
+        elif ns.subcommand == 'cluster-removenodeset':
+            capi.removeNodesetFromCluster(ns.nodesetname,
+                                          ns.clustername )
 
         # Environment create
         elif ns.subcommand == 'environment-create':
