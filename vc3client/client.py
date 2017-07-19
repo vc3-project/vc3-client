@@ -348,11 +348,14 @@ class VC3ClientAPI(object):
     ################################################################################ 
     def defineRequest(self, 
                       name, 
+<<<<<<< HEAD
                       acl, 
+=======
+>>>>>>> 868fae6b6e71f548f4dda0dba450ebaf9ca55145
                       owner,
-                      cluster, 
+                      cluster,
+                      allocations,  
                       environments, 
-                      allocations, 
                       policy, 
                       expiration ):
         '''
@@ -365,11 +368,13 @@ class VC3ClientAPI(object):
                     acl=None,
                     owner=owner,
                     cluster_state='new',          # state of virtual cluster this Request represents 
+                    cluster_state_reason='new',
                     cluster = cluster,           # name of abstract cluster specification
+                    expiration = expiration,
                     allocations = allocations,   # list of allocation names
                     environments = environments, # list of environment names
                     policy = policy, 
-                    expiration = expiration)
+)
         self.log.debug("Creating Request object: %s " % r)
         return r
     

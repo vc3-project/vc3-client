@@ -84,6 +84,21 @@ $CLIENT $DEBUGS -c $CONFIG cluster-create --owner jhover htcondor-scn-10workers
 echo $CLIENT $DEBUGS -c $CONFIG cluster-list
 $CLIENT $DEBUGS -c $CONFIG cluster-list
 
+echo $CLIENT $DEBUGS -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
+$CLIENT $DEBUGS -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
+
+echo $CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  angusproject
+$CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  angusproject
+
+echo $CLIENT $DEBUGS -c $CONFIG environment-create --owner angus --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" angusenv1
+$CLIENT $DEBUGS -c $CONFIG environment-create --owner angus --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" angusenv1
+
+echo $CLIENT $DEBUGS -c $CONFIG environment-list
+$CLIENT $DEBUGS -c $CONFIG environment-list
+
+echo $CLIENT $DEBUGS -c $CONFIG request-create --owner jhover --cluster htcondor-scn-10workers --allocations jhover.sdcc-ic --environments angusenv1 jhover.request1
+$CLIENT $DEBUGS -c $CONFIG request-create --owner jhover --cluster htcondor-scn-10workers --allocations jhover.sdcc-ic --environments angusenv1 jhover.request1
+
 
 
 

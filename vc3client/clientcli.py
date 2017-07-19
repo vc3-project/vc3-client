@@ -652,11 +652,10 @@ class VC3ClientCLI(object):
                 environmentlist = ns.environments.split(',')
             
             r = capi.defineRequest( name=ns.requestname,
-                                    acl=None,
-                                    owner= ns.owner,
+                                    owner = ns.owner,
                                     cluster=ns.cluster,
+                                    allocations=allocationlist,
                                     environments=environmentlist,
-                                    allocations=allocationslist,
                                     policy= ns.policy,
                                     expiration=None,
                                      )
