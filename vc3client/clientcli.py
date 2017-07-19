@@ -716,6 +716,6 @@ if __name__ == '__main__':
     vc3cli = VC3ClientCLI()
     try:
         vc3cli.run()
-    except Exception, e:
+    except Exception:
             print(traceback.format_exc(None))
             sys.exit(1) 
