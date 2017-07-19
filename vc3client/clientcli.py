@@ -220,27 +220,55 @@ class VC3ClientCLI(object):
                                          default=None)
 
 
-        ########################### Nodes  ##########################################
-        
-        
-        
-        
-        
+        ########################### Nodeset  ##########################################
+        parser_nodesetcreate = subparsers.add_parser('nodeset-create',
+                                                     help='create new nodeset specification')
+
+        parser_nodesetcreate.add_argument('--owner', 
+                                     action="store", 
+                                     dest="owner", 
+                                     )
+
+        parser_nodesetcreate.add_argument('--node_number', 
+            help='number of nodes in nodeset',
+            action="store")
+      
+        parser_nodesetcreate.add_argument('--app_type', 
+            help='general middleware type of node',
+            action="store")
+
+        parser_nodesetcreate.add_argument('--app_role', 
+            help='general middleware type of node',
+            action="store")
+
+        parser_nodesetcreate.add_argument('nodesetname', 
+            help='name of the nodeset to be created',
+            action="store")
+      
+        parser_nodesetlist = subparsers.add_parser('nodeset-list', 
+                                                help='list vc3 nodeset(s)')
+
+        parser_nodesetlist.add_argument('--nodesetname', 
+                                         action="store",
+                                         required=False, 
+                                         help='list details of specified nodeset',
+                                         default=None)
+                                                        
         ########################### Cluster  ##########################################
-        parser_cluster = subparsers.add_parser('cluster-create', 
+        parser_clustercreate = subparsers.add_parser('cluster-create', 
                 help='create new cluster specification')
 
-        parser_cluster.add_argument('clustername', 
+        parser_clustercreate.add_argument('clustername', 
                 help='name of the cluster to be created',
                 action="store")
-
-
         
-        
-
-
-
-
+        parser_clustercreate.add_argument('--nodesets', 
+                action='store', 
+                dest='nodesets', 
+                default='',
+                help='comma separated list of nodesets within this cluster'
+                )
+    
         ########################### Environment  ##########################################
         parser_environ = subparsers.add_parser('environment-create', 
                 help='create new environment')
@@ -474,18 +502,50 @@ class VC3ClientCLI(object):
             ao = capi.getAllocation(ns.allocationname)
             print(ao)
 
-        # Request create
-        elif ns.subcommand == 'request-create':
-            c = capi.defineCluster( ns.requestname,
-                                    ns.allocations,
-                                    ns.policy,
-                                    ns.environments)
+        # Cluster template create, list
+        elif ns.subcommand == 'cluster-create':
+            c = capi.defineCluster( ns.clustername,
+                                    ns.nodesets.split)
             self.log.debug("Cluster is %s" % c)
             capi.storeCluster(c)    
 
-        
+        elif ns.subcommand == 'cluster-list' and ns.clustername is None:
+            cl = capi.listClusters()
+            for co in cl:
+                print(co)
+                
+        elif ns.subcommand == 'cluster-list' and ns.clustername is not None:
+            co = capi.getCluster(ns.clustername)
+            print(co)
 
+        # Nodeset create, list
+        elif ns.subcommand == 'nodeset-create':
+            ns = capi.defineNodeset(ns.nodesetname, 
+                                    ns.owner, 
+                                    ns.node_number, 
+                                    ns.app_type, 
+                                    ns.app_role
+                                    )
+            capi.storeNodeset(ns)
 
+        elif ns.subcommand == 'nodeset-list' and ns.nodesetname is None:
+            nsl = capi.listNodesets()
+            for ns in nsl:
+                print(ns)
+                
+        elif ns.subcommand == 'nodeset-list' and ns.nodesetname is not None:
+            ns = capi.getNodeset(ns.nodesetname)
+            print(ns)
+                        
+        elif ns.subcommand == 'cluster-nodeset-add':
+            capi.addNodesetToCluster(ns.clustername,
+                                     ns.nodesetname)
+
+        elif ns.subcommand == 'cluster-nodeset-remove':
+            capi.removeNodesetFromCluster(ns.clustername,
+                                     ns.nodesetname)
+
+  
         # Environment create
         elif ns.subcommand == 'environment-create':
             filemap = ns.filesmap.split(',')

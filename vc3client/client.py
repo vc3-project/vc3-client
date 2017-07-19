@@ -15,7 +15,7 @@ import logging
 import os
 import yaml
 
-from entities import User, Project, Resource, Allocation, Request, Cluster, Environment
+from entities import User, Project, Resource, Allocation, Nodeset, Request, Cluster, Environment
 from vc3infoservice import infoclient
 from vc3infoservice.infoclient import  InfoMissingPairingException, InfoConnectionFailure
 
@@ -170,15 +170,6 @@ class VC3ClientAPI(object):
                     nd[p] = docobj['project'][p]
                     po = Project.objectFromDict(nd)
                     plist.append(po)
-                    js = json.dumps(s)
-                    ys = yaml.safe_load(js)
-                    a = ast.literal_eval(js) 
-                    #self.log.debug("dict= %s " % s)
-                    #self.log.debug("obj= %s " % uo)
-                    #self.log.debug("json = %s" % js)
-                    #self.log.debug("yaml = %s" % ys)
-                    #self.log.debug("ast = %s" % a)
-                    #print(uo)
         except KeyError:
             pass    
         return plist
@@ -208,15 +199,14 @@ class VC3ClientAPI(object):
     ################################################################################
     #                           Resource-related calls
     ################################################################################    
-    def defineResource(self, name,
-                             state,
-                             acl, 
-                             owner, 
-                             accesstype, 
-                             accessmethod, 
-                             accessflavor, 
-                             gridresource, 
-                             mfa):
+    def defineResource(self, 
+                       name,
+                       owner, 
+                       accesstype, 
+                       accessmethod, 
+                       accessflavor, 
+                       gridresource, 
+                       mfa):
         '''
         Defines a new Resource object for usage elsewhere in the API. 
               
@@ -329,7 +319,11 @@ class VC3ClientAPI(object):
         :rtype: Cluster        
         
         '''
-    def defineCluster(self, name, owner, nodes=[] ): 
+    def defineCluster(self, 
+                      name, 
+                      owner, 
+                      nodes=[] ): 
+        
         c = Cluster(name=name, 
                     state='new',
                     owner=owner,
@@ -352,17 +346,61 @@ class VC3ClientAPI(object):
     ################################################################################ 
 
 
-    def defineNodeset(self, name, state, acl):
-        pass
+    def defineNodeset(self, name, owner, node_number, app_type, app_role):
+        ns = Nodeset( name=name, 
+                      state='new',
+                      owner=owner, 
+                      acl=None, 
+                       
+                      node_number=node_number, 
+                      app_type=app_type, 
+                      app_role=app_role,
+
+                      cores=1, 
+                      memory_mb=None, 
+                      storage_mb=None, 
+                      app_host = None, 
+                      app_port = None,
+                      app_sectoken = None
+                       )
+        self.log.debug("Created Nodeset object: %s" % ns)
+        return ns 
+
+    def listNodesets(self):
+        docobj = self.ic.getdocumentobject('nodes')
+        nslist = []
+        try:
+            for ns in docobj['nodes'].keys():
+                    s = "{ '%s' : %s }" % (ns, docobj['nodes'][ns] )
+                    nd = {}
+                    nd[ns] = docobj['nodes'][ns]
+                    nso = Nodeset.objectFromDict(nd)
+                    nslist.append(nso)
+        except KeyError:
+            pass
+        return nslist
     
     def storeNodeset(self, nodeset):
-        pass
+        nodeset.store(self.ic)
     
-    def addNodesToCluster(self, nodesetname, clustername):
-        pass
+    def addNodesetToCluster(self, nodesetname, clustername):
+        co = self.getCluster(clustername)
+        if nodesetname not in co.nodesets:
+            co.nodesets.append(nodesetname)
+        self.storeCluster(co)
     
-    def removeNodesFromCluster(self, nodesetname):
-        pass
+    def getNodeset(self, nodesetname):
+        nslist = self.listNodesets()
+        for ns in nslist:
+            if ns.name == nodesetname:
+                return ns
+    
+    def removeNodesetFromCluster(self, nodesetname, clustername):
+        co = self.getCluster(clustername)
+        if nodesetname in co.nodesets:
+             co.nodesets.remove(nodesetname)
+        self.storeCluster(co)
+
 
     ################################################################################
     #                        Environment-related calls
@@ -415,7 +453,10 @@ class VC3ClientAPI(object):
         :return Request
         
         '''
-        r = Request(name, state='new', acl=None, 
+        r = Request(name, 
+                    state='new', 
+                    acl=None,
+                    clusterstate='new',          # state of virtual cluster this Request represents 
                     cluster = cluster,           # name of abstract cluster specification
                     allocations = allocations,   # list of allocation names
                     environments = environments, # list of environment names

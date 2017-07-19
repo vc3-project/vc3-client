@@ -69,4 +69,12 @@ $CLIENT $DEBUGS -c $CONFIG allocation-create --owner jhover --resource sdcc-ic -
 echo $CLIENT $DEBUGS -c $CONFIG allocation-list
 $CLIENT $DEBUGS -c $CONFIG allocation-list
 
+echo $CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 1 --app_type htcondor --app_role head-node htcondor-head.1
+$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 1 --app_type htcondor --app_role head-node htcondor-head.1
+
+echo $CLIENT $DEBUGS -c $CONFIG nodeset-list
+$CLIENT $DEBUGS -c $CONFIG nodeset-list
+
+
+
 

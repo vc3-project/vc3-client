@@ -178,16 +178,18 @@ class Resource(InfoEntity):
                  mfa = False,
                  ):
         self.log = logging.getLogger()
+        self.name = name
         self.state = state
         self.acl = acl
-        self.name = name
         self.owner = owner
+        
+        # Entity-specific attriutes
         self.accesstype = accesstype
         self.accessmethod = accessmethod
         self.accessflavor = accessflavor
         self.gridresource = gridresource
         self.mfa = mfa
-        self.log.debug("Project object created: %s" % self)
+        self.log.debug("Resource object created: %s" % self)
 
 
 class Allocation(InfoEntity):
@@ -248,7 +250,13 @@ class Allocation(InfoEntity):
                      'privtoken',   # ssh privkey, cloud secret key, VOMS proxy
                     ]   
     
-    def __init__(self, name, state, acl, owner, resource, accountname, 
+    def __init__(self, 
+                 name, 
+                 state, 
+                 acl, 
+                 owner, 
+                 resource, 
+                 accountname, 
                  type='unlimited', 
                  quantity=None, 
                  units=None,
@@ -395,12 +403,14 @@ class Nodeset(InfoEntity):
                      'state',
                      'owner',
                      'acl',
-                     'number',
+                     
+                     'node_number',
+                     'app_type',
+                     'app_role',
+                     
                      'cores',
                      'memory_mb',
                      'storage_mb',
-                     'app_type',
-                     'app_role',
                      'app_host',
                      'app_port',
                      'app_sectoken',            
@@ -410,12 +420,14 @@ class Nodeset(InfoEntity):
                        state,
                        owner, 
                        acl, 
-                       number, 
-                       cores, 
-                       memory_mb, 
-                       storage_mb, 
+                       
+                       node_number, 
                        app_type, 
                        app_role,
+
+                       cores=1, 
+                       memory_mb=None, 
+                       storage_mb=None, 
                        app_host = None, 
                        app_port = None,
                        app_sectoken = None
@@ -425,12 +437,13 @@ class Nodeset(InfoEntity):
         self.state = state
         self.owner = owner
         self.acl = acl
-        self.number = number
+        self.node_number = node_number
+        self.app_type = app_type
+        self.app_role = app_role
+        
         self.cores = cores
         self.memory_mb = memory_mb
         self.storage_mb = storage_mb
-        self.app_type = app_type
-        self.app_role = app_role
         self.app_host = app_host
         self.app_port = app_port
         self.app_sectoken = app_sectoken
@@ -488,6 +501,8 @@ class Request(InfoEntity):
         "jhover-req00001" : {
             "name" : "jhover-req00001",
             "expiration" : "2017-07-07:1730", 
+            "cluster_state" : "new",
+            "cluster_state_reason",
             "environment" : {
                         <Environment json>
                     },
@@ -510,6 +525,8 @@ class Request(InfoEntity):
         }
         
         :param str name:          Label for this request. 
+        :param str cluster_state: State of virtual cluster
+        :param str cluster_state_reason:  Primarily for error reporting.
         :param str allocations:   List of allocations that the request shoud utilize.
         :param str environments:  List of environments to install on top of the cluster.
         :param str policy:        Policy for utilizing the allocations. 
@@ -520,6 +537,8 @@ class Request(InfoEntity):
     infoattributes = ['name',
                      'state',
                      'acl',
+                     'cluster_state', # State of virtual cluster this Request represents.
+                     'cluster_state_reason',
                      'expiration',
                      'policy',        # name of policy to use to satisfy request
                      'allocations',   # list of allocations to satisfy this request
@@ -530,7 +549,9 @@ class Request(InfoEntity):
     def __init__(self, 
                  name, 
                  state, 
-                 acl, 
+                 acl,
+                 cluster_state = "new",
+                 cluster_state_reason = None,
                  expiration = None, 
                  cluster=None, 
                  policy = None, 
@@ -545,6 +566,8 @@ class Request(InfoEntity):
 
         # Request-specific attributes
         self.expiration   = expiration
+        self.cluster_state = cluster_state
+        self.cluster_state_reason = cluster_state_reason
         
         # Composite attributes from other entities. 
         self.cluster = cluster        
@@ -588,15 +611,6 @@ class Factory(InfoEntity):
         self.authconfig = authconfig
         self.queuesconfig = queuesconfig
         
-    def getConfig(self, variety):
-        if variety == 'queuesconfig':
-            return self.queuesconfig
-        elif variety == 'authconfig':
-            return self.authconfig
-
-
-
-
 if __name__ == '__main__':
     pass
     
