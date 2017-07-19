@@ -2,7 +2,7 @@
 #
 # VC3 Client Test 
 #
-CLIENT=~/git/vc3-client/vc3client/clientcli.py
+CLIENT=vc3-client
 CONFIG=~/git/vc3-client/etc/vc3-client.conf
 
 

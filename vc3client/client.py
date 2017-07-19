@@ -434,16 +434,17 @@ class VC3ClientAPI(object):
         klass = getattr(m, entityclass)
         infokey = klass.infokey     
         docobj = self.ic.getdocumentobject(infokey)
+        self.log.debug("Got document object...")
         olist = []
         try:
             for oname in docobj[infokey].keys():
-                    s = "{ '%s' : %s }" % (oname, docobj[infokey][oname] )
+                    #s = "{ '%s' : %s }" % (oname, docobj[infokey][oname] )
                     nd = {}
                     nd[oname] = docobj[infokey][oname]
                     eo = klass.objectFromDict(nd)
                     olist.append(eo)
         except KeyError:
-            pass
+            self.log.warning('Key error exception during document object handling...')
         return olist
 
 

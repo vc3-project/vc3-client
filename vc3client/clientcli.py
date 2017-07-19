@@ -277,9 +277,19 @@ class VC3ClientCLI(object):
                                          help='list details of specified cluster',
                                          default=None)
     
+        parser_clusteraddnodeset = subparsers.add_parser('cluster-addnodeset', 
+                help='add a nodeset to a cluster specification')
     
-    
-    
+        parser_clusteraddnodeset.add_argument('nodesetname',
+                                              action='store',
+                                              help='nodeset to add'
+                                              )
+            
+        parser_clusteraddnodeset.add_argument('clustername',
+                                              action='store',
+                                              help='clustername to add nodeset to'
+                                              )
+     
         ########################### Environment  ##########################################
         parser_environ = subparsers.add_parser('environment-create', 
                 help='create new environment')
