@@ -40,6 +40,7 @@ class User(InfoEntity):
                      'institution',
                      'identity_id'] 
     infokey = 'user'
+    validvalues = {}
     
     def __init__(self,
                    name,
@@ -86,6 +87,7 @@ class Project(InfoEntity):
                      'members', 
                      'allocations',
                      'blueprints']
+    validvalues = {}
     
     
     def __init__(self, 
@@ -165,6 +167,7 @@ class Resource(InfoEntity):
                      'gridresource',
                      'mfa'
                      ]
+    validvalues = {}
     
     def __init__(self,
                  name,
@@ -249,6 +252,8 @@ class Allocation(InfoEntity):
                      'pubtoken',    # ssh pubkey, cloud access key
                      'privtoken',   # ssh privkey, cloud secret key, VOMS proxy
                     ]   
+    validvalues = {}
+    
     
     def __init__(self, 
                  name, 
@@ -298,6 +303,8 @@ class Policy(InfoEntity):
                      'acl',
                       'pluginname'
                       ]
+    validvalues = {}
+    
     
     def __init__(self, name, state, owner, acl, pluginname):
         ''' 
@@ -347,6 +354,8 @@ class Cluster(InfoEntity):
                         'acl',
                         'nodes',
                       ]
+    validvalues = {}
+
 
     def __init__(self, name, state, owner, acl, nodes ):
         '''
@@ -415,6 +424,7 @@ class Nodeset(InfoEntity):
                      'app_port',
                      'app_sectoken',            
                      ]
+    validvalues = {}
     
     def __init__(self, name, 
                        state,
@@ -465,7 +475,7 @@ class Environment(InfoEntity):
                      'envmap',
                      'files'
                      ]
-
+    validvalues = {}
 
     def __init__(self, name, state, owner, acl,  packagelist=[], files={}, envmap=[] ):
         '''
@@ -545,6 +555,18 @@ class Request(InfoEntity):
                      'cluster',       # contains cluster def, which includes nodeset descriptions
                      'environments',  # environment(s) to instantiate on nodesets.     
                      ]
+    validvalues = {
+                    'state' :['new', 
+                              'validated', 
+                              'configured', 
+                              'pending', 
+                              'growing', 
+                              'running', 
+                              'shrinking', 
+                              'terminating', 
+                              'terminated'],
+                    } 
+    
     
     def __init__(self, 
                  name, 
@@ -589,6 +611,7 @@ class Factory(InfoEntity):
                      'authconfig',
                      'queuesconf',
                      ]
+    validvalues = {}
 
 
     def __init__(self, name, state, acl, authconfig=None, queuesconfig=None ):

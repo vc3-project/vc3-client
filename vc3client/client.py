@@ -365,9 +365,6 @@ class VC3ClientAPI(object):
         return c
     
     def storeRequest(self, request):
-        if request.state not in ['new', 'validated', 'configured', 'pending', 'growing', 'running', 'shrinking', 'terminating', 'terminated']:
-            raise Exception("request '%s' has invalid state '%s'", request.name, str(request.state))
-        # do the actual storing
         request.store(self.ic)
 
 
