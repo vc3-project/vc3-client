@@ -575,6 +575,7 @@ class Request(InfoEntity):
                  name, 
                  state, 
                  acl,
+                 owner,
                  cluster_state = "new",
                  cluster_state_reason = None,
                  expiration = None,
@@ -590,6 +591,7 @@ class Request(InfoEntity):
         self.name = name
         self.state = state
         self.acl = acl
+        self.owner = owner
 
         # Request-specific attributes
         self.expiration   = expiration
