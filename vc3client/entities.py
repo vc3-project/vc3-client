@@ -73,6 +73,12 @@ class User(InfoEntity):
         self.identity_id = identity_id
         self.log.debug("User object created: %s" % self)
 
+
+    def addAllocation(self, allocation):
+        pass
+
+    def removeAllocation(self, allocation):
+        pass
                
 
 class Project(InfoEntity):
@@ -136,6 +142,9 @@ class Project(InfoEntity):
             self.members.append(user)
         self.log.debug("Members now %s" % self.members)
         
+
+    def removeUser(self, user):
+        pass
 
 
 class Resource(InfoEntity):
