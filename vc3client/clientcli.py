@@ -161,6 +161,18 @@ class VC3ClientCLI(object):
                                      help="condor-ce|slurm|sge|ec2|nova|gce",  
                                      )
 
+        parser_resourcecreate.add_argument('--accesshost', 
+                                     action="store", 
+                                     dest="accesshost",
+                                     help="DNS fully qualified hostname",  
+                                     )
+        
+        parser_resourcecreate.add_argument('--accessport', 
+                                     action="store", 
+                                     dest="accessport",
+                                     help="22|9618|8773|etc..",  
+                                     )
+        
         parser_resourcecreate.add_argument('--gridresource', 
                                      action="store", 
                                      dest="gridresource",
@@ -532,6 +544,8 @@ class VC3ClientCLI(object):
                                      ns.accesstype,
                                      ns.accessmethod,
                                      ns.accessflavor,
+                                     ns.accesshost,
+                                     ns.accessport,
                                      ns.gridresource,
                                      ns.mfa )
             self.log.debug("Resource is %s" % r)
