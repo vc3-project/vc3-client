@@ -566,8 +566,8 @@ class Request(InfoEntity):
                      'cluster_state', # State of virtual cluster this Request represents.
                      'cluster_state_reason',
                      'expiration',
-                     'queuesconf',
-                     'authconf',
+                     'queuesconf',    # base64-encoded contents of factory queues.conf sections. 
+                     'authconf',      # base64-encoded contents of factory auth.conf sections. 
                      'policy',        # name of policy to use to satisfy request
                      'allocations',   # list of allocations to satisfy this request
                      'cluster',       # contains cluster def, which includes nodeset descriptions
