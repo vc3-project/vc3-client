@@ -443,8 +443,8 @@ class VC3ClientAPI(object):
                     nd[oname] = docobj[infokey][oname]
                     eo = klass.objectFromDict(nd)
                     olist.append(eo)
-        except KeyError:
-            self.log.warning('Key error exception during document object handling...')
+        except KeyError, e:
+            self.log.warning("Document object does not have a '%s' key" % e.args[0])
         return olist
 
 
