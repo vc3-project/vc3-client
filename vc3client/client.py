@@ -172,7 +172,9 @@ class VC3ClientAPI(object):
                        owner, 
                        accesstype, 
                        accessmethod, 
-                       accessflavor, 
+                       accessflavor,
+                       accesshost, 
+                       accessport,  
                        gridresource, 
                        mfa):
         '''
@@ -183,6 +185,8 @@ class VC3ClientAPI(object):
         :param str resourcetype,  # grid remote-batch local-batch cloud
         :param str accessmethod,  # ssh, gsissh,  
         :param str accessflavor,  # htcondor-ce, slurm, sge, ec2, nova, gce
+        :param str accesshost,    # DNS hostname
+        :param str accessport,    # 22 , 6918, 8773
         :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud  | HTCondorCE hostname             
         :param Boolean mfa        # Does site need head-node factory?     
         :return: Resource          A valid Project object
@@ -196,6 +200,8 @@ class VC3ClientAPI(object):
                       accesstype=accesstype, 
                       accessmethod=accessmethod, 
                       accessflavor=accessflavor, 
+                      accesshost = accesshost,
+                      accessport = accessport,
                       gridresource=gridresource, 
                       mfa=mfa )
         self.log.debug("Creating Resource object: %s " % r)

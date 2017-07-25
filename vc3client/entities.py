@@ -173,6 +173,8 @@ class Resource(InfoEntity):
                      'accesstype', 
                      'accessmethod',
                      'accessflavor',
+                     'accesshost',
+                     'accessport',
                      'gridresource',
                      'mfa'
                      ]
@@ -186,7 +188,9 @@ class Resource(InfoEntity):
                  accesstype,   # grid, batch, cloud
                  accessmethod, # ssh, gsissh
                  accessflavor, # condor-ce, slurm, sge, ec2, nova, gce
-                 gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCodnor CE hostname[:port]              
+                 accesshost,   # hostname
+                 accessport,   # port
+                 gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCondor CE hostname[:port]              
                  mfa = False,
                  ):
         self.log = logging.getLogger()
@@ -199,6 +203,8 @@ class Resource(InfoEntity):
         self.accesstype = accesstype
         self.accessmethod = accessmethod
         self.accessflavor = accessflavor
+        self.accesshost = accesshost
+        self.accessport = accessport
         self.gridresource = gridresource
         self.mfa = mfa
         self.log.debug("Resource object created: %s" % self)
@@ -560,8 +566,8 @@ class Request(InfoEntity):
                      'cluster_state', # State of virtual cluster this Request represents.
                      'cluster_state_reason',
                      'expiration',
-                     'queuesconf',
-                     'authconf',
+                     'queuesconf',    # base64-encoded contents of factory queues.conf sections. 
+                     'authconf',      # base64-encoded contents of factory auth.conf sections. 
                      'policy',        # name of policy to use to satisfy request
                      'allocations',   # list of allocations to satisfy this request
                      'cluster',       # contains cluster def, which includes nodeset descriptions
