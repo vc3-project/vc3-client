@@ -5,6 +5,7 @@
 #
 
 import sys
+import re
 
 try:
     from setuptools import setup
@@ -27,10 +28,12 @@ def choose_data_file_location():
     elif '--user' in sys.argv:
         rpm_install = False
 
+    elif any( [ re.match('--home(=|\s)', arg) for arg in sys.argv] ):
+        rpm_install = False
+
     if rpm_install:
         return '/etc/vc3'
     else:
-        # Something probably went wrong, so punt
         return 'etc'
        
 # ===========================================================
