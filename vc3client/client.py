@@ -225,7 +225,9 @@ class VC3ClientAPI(object):
     def defineAllocation(self, name,
                                owner, 
                                resource, 
-                               accountname):
+                               accountname,
+
+                               ):
         '''
           
         '''
@@ -245,7 +247,7 @@ class VC3ClientAPI(object):
         return self._listEntities('Allocation')
        
     def getAllocation(self, allocationname):
-        return self._getEntity('Resource', allocationname)
+        return self._getEntity('Allocation', allocationname)
 
             
     ################################################################################
@@ -458,10 +460,10 @@ class VC3ClientAPI(object):
 
     def _getEntity(self, entityclass, objectname):
         eolist = self._listEntities(entityclass)
-        self.log.debug("Got list of %d entity objects, matching objectname %s..." % (len(eolist), 
-                                                                                     objectname ))
+        self.log.debug("Got list of %d entity objects, matching entityclass %s..." % (len(eolist), 
+                                                                                     entityclass))
         for eo in eolist:
-            if eo.name == objectname :
+            if eo.name == objectname:
                 self.log.debug("Found object of correct name %s" % objectname)
                 return eo
         self.log.debug("Didn't find desired objectname %s" % objectname)
