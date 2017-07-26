@@ -243,7 +243,7 @@ class VC3ClientAPI(object):
         return self._listEntities('Allocation')
        
     def getAllocation(self, allocationname):
-        return self._getEntity('Resource', allocationname)
+        return self._getEntity('Allocation', allocationname)
 
             
     ################################################################################
