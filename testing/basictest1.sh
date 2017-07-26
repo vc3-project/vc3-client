@@ -33,8 +33,10 @@ fi
 
 echo $CLIENT $DEBUGS -c $CONFIG user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL jhover
 $CLIENT $DEBUGS -c $CONFIG user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL jhover
-echo $CLIENT $DEBUGS -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
-$CLIENT $DEBUGS -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
+
+echo $CLIENT $DEBUGS -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL --identity_id "angus1@globus.org" angus 
+$CLIENT $DEBUGS -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL --identity_id "angus1@globus.org" angus
+
 echo $CLIENT $DEBUGS -c $CONFIG user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL adminjhover
 $CLIENT $DEBUGS -c $CONFIG user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL adminjhover
 
@@ -83,9 +85,6 @@ $CLIENT $DEBUGS -c $CONFIG cluster-create --owner jhover htcondor-scn-10workers
 
 echo $CLIENT $DEBUGS -c $CONFIG cluster-list
 $CLIENT $DEBUGS -c $CONFIG cluster-list
-
-echo $CLIENT $DEBUGS -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
-$CLIENT $DEBUGS -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
 
 echo $CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  angusproject
 $CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  angusproject
