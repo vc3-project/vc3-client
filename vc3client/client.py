@@ -51,7 +51,8 @@ class VC3ClientAPI(object):
                    first,
                    last,
                    email,
-                   institution):           
+                   institution,
+                   identity_id = None):           
         '''
        Defines a new User object for usage elsewhere in the API. 
               
@@ -70,7 +71,8 @@ class VC3ClientAPI(object):
                   first=first, 
                   last=last, 
                   email=email, 
-                  institution=institution)
+                  institution=institution,
+                  identity_id=identity_id)
         self.log.debug("Creating user object: %s " % u)
         return u
     

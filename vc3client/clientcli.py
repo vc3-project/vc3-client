@@ -56,23 +56,32 @@ class VC3ClientCLI(object):
         
         parser_usercreate.add_argument('--firstname', 
                                      action="store", 
-                                     dest="firstname", 
-                                     default='unknown')
+                                     dest="firstname",
+                                     required=True
+                                     )
 
         parser_usercreate.add_argument('--lastname', 
                                      action="store", 
-                                     dest="lastname", 
-                                     default='unknown')
+                                     dest="lastname",
+                                     required=True 
+                                     )
 
         parser_usercreate.add_argument('--email', 
                                      action="store", 
-                                     dest="email", 
-                                     default='unknown')
+                                     dest="email",
+                                     required=True 
+                                     )
 
         parser_usercreate.add_argument('--institution', 
                                      action="store", 
-                                     dest="institution", 
-                                     default='unknown')     
+                                     dest="institution",
+                                     required=True 
+                                     )  
+        
+        parser_usercreate.add_argument('--identity_id', 
+                                     action="store", 
+                                     dest="identity_id", 
+                                     default=None)   
         
         parser_userlist = subparsers.add_parser('user-list', 
                                                 help='list vc3 user(s)')
@@ -491,7 +500,8 @@ class VC3ClientCLI(object):
                                  ns.firstname,
                                  ns.lastname,
                                  ns.email,
-                                 ns.institution)
+                                 ns.institution,
+                                 ns.identity_id)
             self.log.debug("User is %s" % u)
             capi.storeUser(u)
             
