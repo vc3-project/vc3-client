@@ -550,6 +550,9 @@ class Request(InfoEntity):
         }
         
         :param str name:          Label for this request. 
+        :param str state:         State of request
+        :param str state_reason:  Error reporting for state
+        :param str action:        Command from webportal (e.g. run, terminate, etc.)
         :param str cluster_state: State of virtual cluster
         :param str cluster_state_reason:  Primarily for error reporting.
         :param str allocations:   List of allocations that the request shoud utilize.
@@ -563,6 +566,8 @@ class Request(InfoEntity):
                      'state',
                      'acl',
                      'owner',
+                     'action',        # Command from webportal (run, terminate, etc.)
+                     'state_reason',
                      'cluster_state', # State of virtual cluster this Request represents.
                      'cluster_state_reason',
                      'expiration',
@@ -591,6 +596,8 @@ class Request(InfoEntity):
                  state, 
                  acl,
                  owner,
+                 action = None,
+                 state_reason = None,
                  cluster_state = "new",
                  cluster_state_reason = None,
                  expiration = None,
@@ -608,7 +615,10 @@ class Request(InfoEntity):
         self.acl = acl
         self.owner = owner
 
+
         # Request-specific attributes
+        self.action = action
+        self.state_reason = state_reason
         self.expiration   = expiration
         self.cluster_state = cluster_state
         self.cluster_state_reason = cluster_state_reason
@@ -616,7 +626,7 @@ class Request(InfoEntity):
         self.authconf = authconf
         
         # Composite attributes from other entities. 
-        self.cluster = cluster        
+        self.cluster = cluster
         self.allocations  = allocations
         self.policy       = policy
         self.environments = environments
