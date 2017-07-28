@@ -72,14 +72,29 @@ class User(InfoEntity):
         self.institution = institution
         self.identity_id = identity_id
         self.log.debug("User object created: %s" % self)
-
+        self.allocations = []
 
     def addAllocation(self, allocation):
-        pass
+        '''
+            Adds provided allocation (string label) to this allocation.
+        '''
+        self.log.debug("Adding allocation %s to project" % allocation)
+        if allocation not in self.allocations:
+            self.allocations.append(allocation)
+        self.log.debug("Allocations now %s" % self.allocations)
+        
 
     def removeAllocation(self, allocation):
-        pass
-               
+        '''
+            Removes provided allocation (string label) to this project.
+        '''
+        self.log.debug("Removing allocation %s to project" % allocation)
+        if allocation not in self.allocations:
+            self.log.debug("Allocation %s did not belong to project")
+        else:
+            self.allocations.remove(allocation)
+            self.log.debug("Allocations now %s" % self.allocations)
+
 
 class Project(InfoEntity):
     '''
