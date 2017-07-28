@@ -54,5 +54,5 @@ setup(
     packages=['vc3client'],
     scripts=scripts,
     data_files=[(choose_data_file_location(), etc_files)],
-    install_requires=['requests', 'pyopenssl', 'cherrypy', 'pyyaml']
+    install_requires=['requests', 'pyopenssl', 'cherrypy', 'pyyaml', 'vc3-info-service']
 )
