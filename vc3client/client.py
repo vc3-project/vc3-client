@@ -15,6 +15,7 @@ import logging
 import os
 import sys
 import yaml
+import StringIO
 
 from entities import User, Project, Resource, Allocation, Nodeset, Request, Cluster, Environment
 from vc3infoservice import infoclient
@@ -410,12 +411,47 @@ class VC3ClientAPI(object):
         '''
         Get the queues.conf sections for the specified request and factory
         '''
-        pass
-    
+        r = self.getRequest(requestname)
+
+        if not r:
+            raise MissingDependencyException(name = requestname, entityclass = 'Request')
+
+        if not r.queuesconf:
+            raise Exception('Request %s does not have a queues.conf defined' % requestname)
+
+        try:
+            buf   = StringIO.StringIO(self.decode(r.queuesconf))
+            qconf = ConfigParser.ConfigParser()
+            qconf.readfp(buf)
+
+            return qconf.items(factoryname)
+
+        except Exception, e:
+            self.log.error('Error decoding queues.conf of request %s' % requestname)
+            raise e
+
     def getAuthConf(self, requestname, factoryname):
         '''
         Get the auth.conf sections for the specified request and factory
         '''
+        r = self.getRequest(requestname)
+
+        if not r:
+            raise MissingDependencyException(name = requestname, entityclass = 'Request')
+
+        if not r.authconf:
+            raise Exception('Request %s does not have a auth.conf defined' % requestname)
+
+        try:
+            buf   = StringIO.StringIO(self.decode(r.authconf))
+            aconf = ConfigParser.ConfigParser()
+            aconf.readfp(buf)
+
+            return aconf.items(factoryname)
+
+        except Exception, e:
+            self.log.error('Error decoding auth.conf of request %s' % requestname)
+            raise e
 
     def requestPairing(self, commonname):
         '''
@@ -493,8 +529,9 @@ class MissingDependencyException(Exception):
     '''
     To be thrown when an API call includes a reference to an entity that doesn't exist. 
     '''
-    def __init__(self, value):
-        self.value = value
+    def __init__(self, name, entityclass):
+        self.name        = name
+        self.entityclass = entityclass
     def __str__(self):
-        return repr(self.value)
+        return repr(self.name) + '(' + repr(self.entityclass) + ')'
 
