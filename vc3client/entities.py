@@ -144,8 +144,15 @@ class Project(InfoEntity):
         
 
     def removeUser(self, user):
-        pass
-
+        '''
+            Removes provided user (string label) to this project.
+        '''
+        self.log.debug("Removing user %s to project" % user)
+        if user not in self.members:
+            self.log.debug("User %s did not belong to project")
+        else:
+            self.members.remove(user)
+            self.log.debug("Members now %s" % self.members)
 
 class Resource(InfoEntity):
     '''
