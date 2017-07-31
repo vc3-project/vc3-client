@@ -650,12 +650,15 @@ class Request(InfoEntity):
         self.cluster_state_reason = cluster_state_reason
         self.queuesconf = queuesconf
         self.authconf = authconf
+        self.statusraw = statusraw
+        self.statusinfo = statusinfo
         
         # Composite attributes from other entities. 
         self.cluster = cluster
         self.allocations  = allocations
         self.policy       = policy
         self.environments = environments
+
         
 
 class Factory(InfoEntity):
