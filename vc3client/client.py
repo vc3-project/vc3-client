@@ -16,6 +16,7 @@ import os
 import sys
 import yaml
 import StringIO
+import ConfigParser
 
 from entities import User, Project, Resource, Allocation, Nodeset, Request, Cluster, Environment
 from vc3infoservice import infoclient
@@ -407,9 +408,9 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Infrastructural calls
     ################################################################################ 
-    def getQueuesConf(self, requestname, factoryname):
+    def getQueuesConf(self, requestname, queuename):
         '''
-        Get the queues.conf sections for the specified request and factory
+        Get the queues.conf sections for the specified request and queuename
         '''
         r = self.getRequest(requestname)
 
@@ -424,15 +425,15 @@ class VC3ClientAPI(object):
             qconf = ConfigParser.ConfigParser()
             qconf.readfp(buf)
 
-            return qconf.items(factoryname)
+            return qconf.items(queuename)
 
         except Exception, e:
             self.log.error('Error decoding queues.conf of request %s' % requestname)
             raise e
 
-    def getAuthConf(self, requestname, factoryname):
+    def getAuthConf(self, requestname, queuename):
         '''
-        Get the auth.conf sections for the specified request and factory
+        Get the auth.conf sections for the specified request and queuename
         '''
         r = self.getRequest(requestname)
 
@@ -447,7 +448,7 @@ class VC3ClientAPI(object):
             aconf = ConfigParser.ConfigParser()
             aconf.readfp(buf)
 
-            return aconf.items(factoryname)
+            return aconf.items(queuename)
 
         except Exception, e:
             self.log.error('Error decoding auth.conf of request %s' % requestname)
