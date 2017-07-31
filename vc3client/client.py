@@ -380,11 +380,11 @@ class VC3ClientAPI(object):
                     cluster_state='new',          # state of virtual cluster this Request represents 
                     cluster_state_reason='new',
                     cluster = cluster,           # name of abstract cluster specification
-                    expiration = expiration,
                     allocations = allocations,   # list of allocation names
                     environments = environments, # list of environment names
                     policy = policy, 
-)
+                    expiration = expiration
+                    )
         self.log.debug("Creating Request object: %s " % r)
         return r
     

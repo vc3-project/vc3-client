@@ -598,7 +598,9 @@ class Request(InfoEntity):
                      'policy',        # name of policy to use to satisfy request
                      'allocations',   # list of allocations to satisfy this request
                      'cluster',       # contains cluster def, which includes nodeset descriptions
-                     'environments',  # environment(s) to instantiate on nodesets.     
+                     'environments',  # environment(s) to instantiate on nodesets.
+                     'statusraw',     # raw dictionary of submissions for all factories+allocations.
+                     'statusinfo'     # aggregated submission status
                      ]
     validvalues = {
                     'state' :['new', 
@@ -628,7 +630,9 @@ class Request(InfoEntity):
                  cluster=None, 
                  policy = None, 
                  allocations = [], 
-                 environments = [], 
+                 environments = [],
+                 statusraw = None,
+                 statusinfo = None 
                  ):
         # Common attributes
         self.log = logging.getLogger()
