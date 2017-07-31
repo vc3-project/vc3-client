@@ -20,16 +20,10 @@ scripts = ['scripts/vc3-client', ]
 
 
 def choose_data_file_location():
-    rpm_install = True
+    rpm_install = False
 
     if 'bdist_rpm' in sys.argv:
         rpm_install = True
-
-    elif '--user' in sys.argv:
-        rpm_install = False
-
-    elif any( [ re.match('--home(=|\s)', arg) for arg in sys.argv] ):
-        rpm_install = False
 
     if rpm_install:
         return '/etc/vc3'
