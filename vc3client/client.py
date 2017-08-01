@@ -166,7 +166,18 @@ class VC3ClientAPI(object):
        
     def getProject(self, projectname):
         return self._getEntity('Project', projectname)
+
+    def getProjectsOfOwner(self, ownername):
+        projects = self.listProjects()
+        filtered = [ p for p in projects if ownername == p.owner ]
+        return filtered
+
+    def getProjectsOfUser(self, username):
+        projects = self.listProjects()
+        filtered = [ p for p in projects if username in p.members ]
+        return filtered
     
+
         
     ################################################################################
     #                           Resource-related calls
