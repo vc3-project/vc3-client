@@ -481,16 +481,19 @@ class VC3ClientAPI(object):
     def _listEntities(self, entityclass ):
         m = sys.modules[__name__] 
         klass = getattr(m, entityclass)
-        infokey = klass.infokey     
+        infokey = klass.infokey
+        self.log.debug("Listing class %s with infokey %s " % (entityclass, infokey))     
         docobj = self.ic.getdocumentobject(infokey)
-        self.log.debug("Got document object...")
+        self.log.debug("Got document object: %s " % docobj)
         olist = []
         try:
             for oname in docobj[infokey].keys():
+                    self.log.debug("Getting objectname %s" % oname)
                     #s = "{ '%s' : %s }" % (oname, docobj[infokey][oname] )
                     nd = {}
                     nd[oname] = docobj[infokey][oname]
                     eo = klass.objectFromDict(nd)
+                    self.log.debug("Appending eo %s" % eo)
                     olist.append(eo)
         except KeyError, e:
             self.log.warning("Document object does not have a '%s' key" % e.args[0])
