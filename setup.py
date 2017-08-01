@@ -7,29 +7,23 @@
 import sys
 import re
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
-
-release_version='0.9.1'
-
-etc_files = ['./etc/vc3-client.conf']
-
-scripts = ['scripts/vc3-client', ]
-
-
 def choose_data_file_location():
-    rpm_install = False
-
-    if 'bdist_rpm' in sys.argv:
-        rpm_install = True
-
     if rpm_install:
         return '/etc/vc3'
     else:
         return 'etc'
        
+rpm_install = 'bdist_rpm' in sys.argv
+if rpm_install:
+    from setuptools import setup
+else:
+    from distutils.core import setup
+
+release_version='0.9.1'
+etc_files = ['./etc/vc3-client.conf']
+scripts = ['scripts/vc3-client', ]
+
+
 # ===========================================================
 
 # setup for distutils
@@ -50,3 +44,5 @@ setup(
     data_files=[(choose_data_file_location(), etc_files)],
     install_requires=['requests', 'pyopenssl', 'cherrypy', 'pyyaml', 'vc3-info-service']
 )
+
+
