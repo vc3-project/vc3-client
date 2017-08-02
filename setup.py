@@ -6,21 +6,31 @@
 
 import sys
 import re
+from setuptools import setup
 
-def choose_data_file_location():
-    if rpm_install:
-        return '/etc/vc3'
+def choose_data_file_locations():
+    local_install = False
+
+    if '--user' in sys.argv:
+        local_install = True
+    elif any( [ re.match('--home(=|\s)', arg) for arg in sys.argv] ):
+        local_install = True
+    elif any( [ re.match('--prefix(=|\s)', arg) for arg in sys.argv] ):
+        local_install = True
+
+    if local_install:
+        return home_data_files
     else:
-        return 'etc'
-       
-rpm_install = 'bdist_rpm' in sys.argv
-
-from distutils.core import setup
+        return rpm_data_files
 
 release_version='0.9.1'
-etc_files = ['./etc/vc3-client.conf']
-scripts = ['scripts/vc3-client', ]
 
+scripts   = ['scripts/vc3-client', ]
+etc_files = ['etc/vc3-client.conf']
+
+rpm_data_files  = [('/etc/vc3', etc_files),]
+home_data_files = [('etc', etc_files),]
+data_files      = choose_data_file_locations()
 
 # ===========================================================
 
@@ -39,7 +49,7 @@ setup(
     url='http://virtualclusters.org/',
     packages=['vc3client'],
     scripts=scripts,
-    data_files=[(choose_data_file_location(), etc_files)],
+    data_files=data_files,
     install_requires=['requests', 'pyopenssl', 'cherrypy', 'pyyaml', 'vc3-info-service']
 )
 
