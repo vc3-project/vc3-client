@@ -14,10 +14,8 @@ def choose_data_file_location():
         return 'etc'
        
 rpm_install = 'bdist_rpm' in sys.argv
-if rpm_install:
-    from setuptools import setup
-else:
-    from distutils.core import setup
+
+from distutils.core import setup
 
 release_version='0.9.1'
 etc_files = ['./etc/vc3-client.conf']
