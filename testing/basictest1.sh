@@ -3,7 +3,7 @@
 # VC3 Client Test 
 #
 CLIENT=vc3-client
-CONFIG=~/git/vc3-client/etc/vc3-client.conf
+CONFIG=/etc/vc3/vc3-client.conf
 
 
 # DEFAULT values
