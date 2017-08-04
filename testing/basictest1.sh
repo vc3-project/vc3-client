@@ -3,7 +3,8 @@
 # VC3 Client Test 
 #
 CLIENT=vc3-client
-CONFIG=/etc/vc3/vc3-client.conf
+#CONFIG=/etc/vc3/vc3-client.conf
+CONFIG=~/git/vc3-client/etc/vc3-client.conf
 
 
 # DEFAULT values
@@ -56,8 +57,8 @@ $CLIENT $DEBUGS -c $CONFIG project-list
 echo $CLIENT $DEBUGS -c $CONFIG project-list --project jhoverproject
 $CLIENT $DEBUGS -c $CONFIG project-list --project jhoverproject
 
-echo $CLIENT $DEBUGS -c $CONFIG resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm --accesshost griddev03.racf.bnl.gov --accessport 22   sdcc-ic
-$CLIENT $DEBUGS -c $CONFIG resource-create  --owner adminjhover --accesstype remote-batch --accessmethod ssh --accessflavor slurm --accesshost griddev03.racf.bnl.gov --accessport 22 sdcc-ic
+echo $CLIENT $DEBUGS -c $CONFIG resource-create  --owner adminjhover --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost griddev03.racf.bnl.gov --accessport 22   sdcc-ic
+$CLIENT $DEBUGS -c $CONFIG resource-create  --owner adminjhover --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost griddev03.racf.bnl.gov --accessport 22 sdcc-ic
 
 echo $CLIENT $DEBUGS -c $CONFIG resource-list
 $CLIENT $DEBUGS -c $CONFIG resource-list

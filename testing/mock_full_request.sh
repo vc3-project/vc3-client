@@ -2,7 +2,8 @@
 
 requestid=MY_REQUEST
 owner=jhover
-config=/etc/vc3/vc3-client.conf
+#config=/etc/vc3/vc3-client.conf
+config=~/git/vc3-client/etc/vc3-client.conf
 
 echo vc3-client -c ${config} user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL jhover
 vc3-client -c ${config} user-create --firstname John --lastname Hover --email jhover@bnl.gov --institution BNL jhover
