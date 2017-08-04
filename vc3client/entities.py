@@ -603,15 +603,15 @@ class Request(InfoEntity):
                      'statusinfo'     # aggregated submission status
                      ]
     validvalues = {
-                    'state' :['new', 
-                              'validated', 
-                              'configured', 
-                              'pending', 
-                              'growing', 
-                              'running', 
-                              'shrinking', 
-                              'terminating', 
-                              'terminated'],
+#                    'state' : ['new', 
+#                              'validated', 
+#                              'configured', 
+#                              'pending', 
+#                              'growing', 
+#                              'running', 
+#                              'shrinking', 
+#                              'terminating', 
+#                              'terminated'],
                     } 
     
     
