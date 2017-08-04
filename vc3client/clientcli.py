@@ -347,21 +347,21 @@ class VC3ClientCLI(object):
         parser_environ.add_argument('--packages', 
                 action='store', 
                 dest='packages', 
-                default='',
+                default=None,
                 help='comma separated list of packages to be installed'
                 )
 
         parser_environ.add_argument('--filesmap', 
                 action='store', 
                 dest='filesmap', 
-                default='',
+                default=None,
                 help='comma separated list of LOCAL=REMOTE file name specifications'
                 )
 
         parser_environ.add_argument('--envmap', 
                 action='store', 
                 dest='envmap', 
-                default='',
+                default=None,
                 help='[[[ lacks documentation ]]]'
                 )
 
@@ -636,21 +636,33 @@ class VC3ClientCLI(object):
 
         # Environment create
         elif ns.subcommand == 'environment-create':
-            filemap = ns.filesmap.split(',')
+            # defaults
+            packs = []
             files = {}
-            for names in filemap:
-                (local, remote) = names.split('=')
-                local = os.path.expanduser(local)
-                self.log.debug("Reading local file %s for remote %s" % (local, remote))
-                with open(local, 'r') as l_f:
-                    all = l_f.read()
-                    files[remote] = VC3ClientAPI.encode(all)
+            envs = []
+            
+            if ns.filesmap is not None:
+                filemap = ns.filesmap.split(',')
+                files = {}
+                for names in filemap:
+                    (local, remote) = names.split('=')
+                    local = os.path.expanduser(local)
+                    self.log.debug("Reading local file %s for remote %s" % (local, remote))
+                    with open(local, 'r') as l_f:
+                        all = l_f.read()
+                        files[remote] = VC3ClientAPI.encode(all)
+
+            if ns.packages is not None:
+                packs = ns.packages.split(',')
+            
+            if ns.envmap is not None:
+                envs = ns.envmap
                                 
             e = capi.defineEnvironment( ns.environmentname,
-                    ns.owner,
-                    ns.packages.split(','),
-                    files,
-                    ns.envmap)
+                                        ns.owner,
+                                        packs,
+                                        files,
+                                        envs)
             self.log.debug("Environment is %s" % e)
             capi.storeEnvironment(e)
         
