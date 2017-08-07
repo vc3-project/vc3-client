@@ -14,6 +14,8 @@ import logging
 import os
 import sys
 import traceback
+import warnings
+
 
 from ConfigParser import ConfigParser
 from client import VC3ClientAPI
@@ -736,6 +738,10 @@ class VC3ClientCLI(object):
             
 
 if __name__ == '__main__':
+    
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        
     vc3cli = VC3ClientCLI()
     try:
         vc3cli.run()
