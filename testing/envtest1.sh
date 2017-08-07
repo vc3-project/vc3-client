@@ -3,7 +3,7 @@
 # VC3 Client Test 
 #
 
-set -x
+set -ex
 
 CLIENT=~/git/vc3-client/vc3client/clientcli.py
 CONFIG=~/git/vc3-client/etc/vc3-client.conf
