@@ -723,7 +723,7 @@ class VC3ClientCLI(object):
             print(ro)
         
         elif ns.subcommand == 'request-getconfstring':
-            cs = capi.getConfString(ns.authtype, ns.requestname)
+            cs = capi.getConfString(ns.conftype, ns.requestname)
             print(cs)
         
         
