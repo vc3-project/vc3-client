@@ -635,7 +635,6 @@ class VC3ClientCLI(object):
             
             if ns.filesmap is not None:
                 filemap = ns.filesmap.split(',')
-                files = {}
                 for names in filemap:
                     (local, remote) = names.split('=')
                     local = os.path.expanduser(local)
