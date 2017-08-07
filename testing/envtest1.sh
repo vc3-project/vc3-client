@@ -2,6 +2,9 @@
 #
 # VC3 Client Test 
 #
+
+set -x
+
 CLIENT=~/git/vc3-client/vc3client/clientcli.py
 CONFIG=~/git/vc3-client/etc/vc3-client.conf
 
@@ -30,14 +33,11 @@ else
    DEBUGS=""
 fi
 
-echo $CLIENT $DEBUGS -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
 $CLIENT $DEBUGS -c $CONFIG user-create --firstname Angus --lastname MacGuyver --email angus@bnl.gov --institution BNL angus
 
-echo $CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  angusproject
 $CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  angusproject
 
-echo $CLIENT $DEBUGS -c $CONFIG environment-create --owner angus --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" angusenv1
 $CLIENT $DEBUGS -c $CONFIG environment-create --owner angus --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" angusenv1
 
-echo $CLIENT $DEBUGS -c $CONFIG environment-list
 $CLIENT $DEBUGS -c $CONFIG environment-list
+
