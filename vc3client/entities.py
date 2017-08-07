@@ -509,12 +509,11 @@ class Environment(InfoEntity):
                      'owner',
                      'acl',
                      'packagelist',
-                     'envmap',
                      'files'
                      ]
-    validvalues = {}
+    validvalues = { }
 
-    def __init__(self, name, state, owner, acl,  packagelist=[], files={}, envmap=[] ):
+    def __init__(self, name, state, owner, acl,  packagelist=[], files={}):
         '''
         Defines a new Environment object. 
               
@@ -533,7 +532,7 @@ class Environment(InfoEntity):
         self.owner = owner
         self.packagelist = packagelist
         self.files = files
-        self.envmap = envmap
+
 
 
 class Request(InfoEntity):
@@ -603,15 +602,15 @@ class Request(InfoEntity):
                      'statusinfo'     # aggregated submission status
                      ]
     validvalues = {
-#                    'state' : ['new', 
-#                              'validated', 
-#                              'configured', 
-#                              'pending', 
-#                              'growing', 
-#                              'running', 
-#                              'shrinking', 
-#                              'terminating', 
-#                              'terminated'],
+                    'state' : ['new', 
+                              'validated', 
+                              'configured', 
+                              'pending', 
+                              'growing', 
+                              'running', 
+                              'shrinking', 
+                              'terminating', 
+                              'terminated'],
                     } 
     
     

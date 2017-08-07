@@ -358,13 +358,6 @@ class VC3ClientCLI(object):
                 help='comma separated list of LOCAL=REMOTE file name specifications'
                 )
 
-        parser_environ.add_argument('--envmap', 
-                action='store', 
-                dest='envmap', 
-                default=None,
-                help='[[[ lacks documentation ]]]'
-                )
-
         
         parser_environmentlist = subparsers.add_parser('environment-list', 
                                                 help='list vc3 environment(s)')
@@ -639,7 +632,6 @@ class VC3ClientCLI(object):
             # defaults
             packs = []
             files = {}
-            envs = []
             
             if ns.filesmap is not None:
                 filemap = ns.filesmap.split(',')
@@ -655,14 +647,11 @@ class VC3ClientCLI(object):
             if ns.packages is not None:
                 packs = ns.packages.split(',')
             
-            if ns.envmap is not None:
-                envs = ns.envmap
-                                
+                               
             e = capi.defineEnvironment( ns.environmentname,
                                         ns.owner,
                                         packs,
-                                        files,
-                                        envs)
+                                        files)
             self.log.debug("Environment is %s" % e)
             capi.storeEnvironment(e)
         

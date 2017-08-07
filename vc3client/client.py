@@ -346,14 +346,14 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Environment-related calls
     ################################################################################ 
-    def defineEnvironment(self, name, owner, packagelist = [], files={}, envmap = []):
+    def defineEnvironment(self, name, owner, packagelist = [], files={}):
         e = Environment(name, 
                         state='new', 
                         acl=None, 
                         owner = owner, 
                         packagelist = packagelist, 
                         files = files, 
-                        envmap = envmap)
+                        )
         self.log.debug("Creating Environment object: %s " % e)
         return e
     
