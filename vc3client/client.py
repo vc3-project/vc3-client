@@ -465,6 +465,24 @@ class VC3ClientAPI(object):
             self.log.error('Error decoding auth.conf of request %s' % requestname)
             raise e
 
+    def getConfString(self, conftype, requestname ):
+        '''
+        Return string contents of specified conf type auth|queues
+        '''
+        r = self.getRequest(requestname)
+        cs = ""
+        if r:
+            if conftype == 'queues':
+                buf  = StringIO.StringIO(self.decode(r.queuesconf))
+                cs = buf.read()
+            elif conftype == 'auth':
+                buf   = StringIO.StringIO(self.decode(r.authconf))
+                cs = buf.read()
+        else:
+            self.log.debug("No request with name %s" % requestname)
+        return cs
+
+
     def requestPairing(self, commonname):
         '''
         Create a request in the VC3 category to create a pairing setup protected by the supplied pairingcode.

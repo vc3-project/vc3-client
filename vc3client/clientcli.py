@@ -427,7 +427,23 @@ class VC3ClientCLI(object):
                                          required=False, 
                                          help='list details of specified request',
                                          default=None)
+
         
+        parser_requestgetconfstr = subparsers.add_parser('request-getconfstring', 
+                                                help='Get configuration string from Request(s)')
+        
+        parser_requestgetconfstr.add_argument('--requestname', 
+                                         action="store",
+                                         required=True, 
+                                         help='list details of specified request',
+                                         default=None)                
+
+        parser_requestgetconfstr.add_argument('--conftype', 
+                                         action="store",
+                                         required=True, 
+                                         help='auth|queues',
+                                         default=None) 
+
 
         ########################### Pairing  ##########################################
         parser_pairingcreate = subparsers.add_parser('pairing-create', 
@@ -459,7 +475,16 @@ class VC3ClientCLI(object):
                                      default=None
                                      )        
 
-        ############################################################          
+        ############################################################ 
+        
+
+        
+        
+        
+        
+        
+        
+                 
         self.results= parser.parse_args()
 
 
@@ -697,6 +722,9 @@ class VC3ClientCLI(object):
             ro = capi.getRequest(ns.requestname)
             print(ro)
         
+        elif ns.subcommand == 'request-getconfstring':
+            cs = capi.getConfString(ns.authtype, ns.requestname)
+            print(cs)
         
         
         # Pairing commands
