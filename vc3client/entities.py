@@ -509,20 +509,21 @@ class Environment(InfoEntity):
                      'owner',
                      'acl',
                      'packagelist',
+                     'envmap',
                      'files'
                      ]
     validvalues = { }
 
-    def __init__(self, name, state, owner, acl,  packagelist=[], files={}):
+    def __init__(self, name, state, owner, acl,  packagelist=[], envmap={}, files={}):
         '''
         Defines a new Environment object. 
               
         :param str name: The unique VC3 label for this environment.
         :param str owner:
-        :param List str   packagelist:
+        :param List str packagelist:
+        :param Dict str envmap: 
         :param List local-name=remote-name files: Files to be included in the environment. (Files will be 
                                                 base64 encoded.)
-        :param Dict str envmap: 
         :rtype: Environment
         '''  
         self.log = logging.getLogger()
@@ -531,6 +532,7 @@ class Environment(InfoEntity):
         self.acl   = acl
         self.owner = owner
         self.packagelist = packagelist
+        self.envmap = envmap
         self.files = files
 
 

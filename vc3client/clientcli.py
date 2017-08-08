@@ -353,6 +353,13 @@ class VC3ClientCLI(object):
                 help='comma separated list of packages to be installed'
                 )
 
+        parser_environ.add_argument('--envvar', 
+                action='append', 
+                dest='envmap', 
+                default=[],
+                help='VAR=VALUE to be set as an environment variable'
+                )
+
         parser_environ.add_argument('--filesmap', 
                 action='store', 
                 dest='filesmap', 
@@ -659,6 +666,7 @@ class VC3ClientCLI(object):
             # defaults
             packs = []
             files = {}
+            vars  = {}
             
             if ns.filesmap is not None:
                 filemap = ns.filesmap.split(',')
@@ -670,13 +678,17 @@ class VC3ClientCLI(object):
                         all = l_f.read()
                         files[remote] = VC3ClientAPI.encode(all)
 
+            for kv in ns.envmap:
+                (key, value) = kv.split('=', 1)
+                vars[key] = value
+
             if ns.packages is not None:
                 packs = ns.packages.split(',')
             
-                               
             e = capi.defineEnvironment( ns.environmentname,
                                         ns.owner,
                                         packs,
+                                        vars,
                                         files)
             self.log.debug("Environment is %s" % e)
             capi.storeEnvironment(e)
