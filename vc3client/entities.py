@@ -536,7 +536,6 @@ class Environment(InfoEntity):
         self.files = files
 
 
-
 class Request(InfoEntity):
     '''
     Represents and contains all information relevant to a concrete virtual cluster. 
