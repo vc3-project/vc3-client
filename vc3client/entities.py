@@ -289,7 +289,9 @@ class Allocation(InfoEntity):
                      'pubtoken',    # ssh pubkey, cloud access key
                      'privtoken',   # ssh privkey, cloud secret key, VOMS proxy
                     ]   
-    validvalues = {}
+    validvalues = {
+        'sectype' : ['ssh-rsa', 'ssh-dsa' , 'x509' ],
+        }
     
     
     def __init__(self, 
@@ -461,7 +463,10 @@ class Nodeset(InfoEntity):
                      'app_port',
                      'app_sectoken',            
                      ]
-    validvalues = {}
+    validvalues = {
+        'app_type' : ['htcondor' , 'workqueue' ],
+        'app_role' : ['head-node' , 'worker-nodes' ]
+        }
     
     def __init__(self, name, 
                        state,
