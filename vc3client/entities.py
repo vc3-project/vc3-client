@@ -200,7 +200,9 @@ class Resource(InfoEntity):
                      'gridresource',
                      'mfa'
                      ]
-    validvalues = {}
+    validvalues = {
+        'accesstype' : ['batch','cloud']
+        }
     
     def __init__(self,
                  name,
