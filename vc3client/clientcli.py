@@ -254,6 +254,7 @@ class VC3ClientCLI(object):
 
         parser_nodesetcreate.add_argument('--node_number', 
             help='number of nodes in nodeset',
+            default=1,
             action="store")
       
         parser_nodesetcreate.add_argument('--app_type', 
