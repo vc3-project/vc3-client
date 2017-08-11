@@ -337,7 +337,7 @@ class VC3ClientAPI(object):
     def listNodesets(self):
         return self._listEntities('Nodeset')
        
-    def getNodeset(self, clustername):
+    def getNodeset(self, nodesetname):
         return self._getEntity('Nodeset', nodesetname)
     
     def storeNodeset(self, nodeset):
