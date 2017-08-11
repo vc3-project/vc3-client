@@ -311,7 +311,6 @@ class VC3ClientAPI(object):
                       node_number=node_number, 
                       app_type=app_type, 
                       app_role=app_role,
-
                       cores=1, 
                       memory_mb=None, 
                       storage_mb=None, 

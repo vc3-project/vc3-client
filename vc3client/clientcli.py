@@ -294,8 +294,8 @@ class VC3ClientCLI(object):
             
         parser_clustercreate.add_argument('--nodesets', 
                 action='store', 
-                dest='nodesets', 
-                default='',
+                dest='nodesets',
+                default = None, 
                 help='comma separated list of nodesets within this cluster'
                 )
         
@@ -642,10 +642,17 @@ class VC3ClientCLI(object):
             print(ns)
                         
         # Cluster template create, list
-        elif ns.subcommand == 'cluster-create':
+        elif ns.subcommand == 'cluster-create' and ns.nodesets is not None:
             c = capi.defineCluster( name = ns.clustername,
                                     owner = ns.owner,
                                     nodesets=ns.nodesets.split(','))
+            self.log.debug("Cluster is %s" % c)
+            capi.storeCluster(c)    
+
+        elif ns.subcommand == 'cluster-create' and ns.nodesets is None:
+            c = capi.defineCluster( name = ns.clustername,
+                                    owner = ns.owner,
+                                  )
             self.log.debug("Cluster is %s" % c)
             capi.storeCluster(c)    
 
