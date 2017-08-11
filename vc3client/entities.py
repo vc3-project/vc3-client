@@ -407,7 +407,7 @@ class Cluster(InfoEntity):
         self.state = state
         self.owner = owner
         self.acl = acl
-        self.nodesets = [] # ordered list of nodeset labels
+        self.nodesets = nodesets # ordered list of nodeset labels
 
 
     def addNodeset(self, nodesetname ):
