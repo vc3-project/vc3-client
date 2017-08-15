@@ -447,7 +447,7 @@ class VC3ClientCLI(object):
         parser_requestgetconfstr.add_argument('--requestname', 
                                          action="store",
                                          required=True, 
-                                         help='list details of specified request',
+                                         help='Name of relevant Request.',
                                          default=None)                
 
         parser_requestgetconfstr.add_argument('--conftype', 
@@ -455,6 +455,16 @@ class VC3ClientCLI(object):
                                          required=True, 
                                          help='auth|queues',
                                          default=None) 
+
+        
+        parser_requestterminate = subparsers.add_parser('request-terminate', 
+                                                help='Terminate request.')
+        
+        parser_requestgetconfstr.add_argument('--requestname', 
+                                         action="store",
+                                         required=True, 
+                                         help='Name of relevant Request.',
+                                         default=None)             
 
 
         ########################### Pairing  ##########################################
@@ -752,6 +762,9 @@ class VC3ClientCLI(object):
             cs = capi.getConfString(ns.conftype, ns.requestname)
             print(cs)
         
+        elif ns.subcommand == 'request-terminate':
+            capi.terminateRequest(ns.requestname)
+                
         
         # Pairing commands
         elif ns.subcommand == 'pairing-create':

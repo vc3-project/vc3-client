@@ -478,7 +478,7 @@ class Nodeset(InfoEntity):
                        node_number, 
                        app_type, 
                        app_role,
-
+                       resource_type='allocation',   # external, managed, allocation
                        cores=1, 
                        memory_mb=None, 
                        storage_mb=None, 
@@ -494,6 +494,7 @@ class Nodeset(InfoEntity):
         self.node_number = node_number
         self.app_type = app_type
         self.app_role = app_role
+        self.resource_type = resource_type
         
         self.cores = cores
         self.memory_mb = memory_mb
@@ -619,6 +620,9 @@ class Request(InfoEntity):
                               'shrinking', 
                               'terminating', 
                               'terminated'],
+                     'action' : [ 'run',
+                                  'terminate',
+                                 ]
                     } 
     
     
@@ -627,7 +631,7 @@ class Request(InfoEntity):
                  state, 
                  acl,
                  owner,
-                 action = None,
+                 action = None,    # run | terminate
                  state_reason = None,
                  cluster_state = "new",
                  cluster_state_reason = None,

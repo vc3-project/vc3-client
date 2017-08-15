@@ -409,6 +409,16 @@ class VC3ClientAPI(object):
     def getRequest(self, requestname):
         return self._getEntity('Request', requestname)
 
+    def terminateRequest(self, requestname):
+        r = self._getEntity('Request', requestname)
+        if r is not None:
+            self.log.debug("Setting request action to terminate...")
+            r.action = 'terminate'
+        request.store(self.ic)
+
+    def getRequestStatus(self, requestname):
+        pass
+
     def saveRequestAsBlueprint(self, requestid, newlabel):
         '''
         Take the specified request and store it as a re-usable blueprint with new label
