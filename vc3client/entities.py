@@ -283,10 +283,10 @@ class Allocation(InfoEntity):
                      'acl',
                      'owner',
                      'resource',
-                     'type',
+                     'type',        # unlimited, quota, cumulative
                      'accountname',
                      'quantity',
-                     'units',
+                     'units',       # corehours, su, nodes, 
                      'sectype',     # ssh-rsa, ssh-dsa, pki, x509
                      'pubtoken',    # ssh pubkey, cloud access key
                      'privtoken',   # ssh privkey, cloud secret key, VOMS proxy
@@ -672,32 +672,34 @@ class Request(InfoEntity):
 
         
 
-class Factory(InfoEntity):
+class Provisioner(InfoEntity):
     '''
-    Represents a VC3 factory (static or dynamic). 
+    Represents a VC3 provisioner component (e.g. vc3-factory, kubernetes?, other?)
         
     '''
-    infokey = 'factory'
+    infokey = 'provisioner'
     infoattributes = ['name',
                      'state',
                      'acl',
                      'owner',
+                     'type', # autopyfactory, kubernetes
                      'authconfig',
                      'queuesconf',
                      ]
     validvalues = {}
 
 
-    def __init__(self, name, state, acl, authconfig=None, queuesconfig=None ):
+    def __init__(self, name, state, acl, provtype='autopyfactory', authconfig=None, queuesconfig=None ):
         '''
-        Defines a new Factory object. 
+        Defines a new Provisioner object. 
               
-        :param str name: The unique factory id.
+        :param str name: The unique object name.
         :param str owner:
-        :param str authconfig: (base64encoded) contents of auth.conf   
-        :param str queuesconfig:  (base64encoded) contents of auth.conf
-        :rtype: Factory
-        :return: Valid Factory object.  
+        :param str type:  What sort of provisioner [autopy/vc3-factory]
+        :param str authconfig: (base64encoded) contents of auth.conf for a vc3-factory   
+        :param str queuesconfig:  (base64encoded) contents of auth.conf a vc3-factory
+        :rtype: Provisioner
+        :return: Valid Provisioner object.  
         '''  
         self.log = logging.getLogger()
 
@@ -705,8 +707,10 @@ class Factory(InfoEntity):
         self.state = state
         self.acl   = acl
         self.owner = owner
+        self.type = provtype
         self.authconfig = authconfig
         self.queuesconfig = queuesconfig
+        
         
 if __name__ == '__main__':
     pass
