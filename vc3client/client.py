@@ -42,7 +42,7 @@ class VC3ClientAPI(object):
     def __init__(self, config):
         self.config = config
         self.ic = infoclient.InfoClient(self.config)
-        self.log = logging.getLogger() 
+        self.log = logging.getLogger('vc3client') 
 
 
     ################################################################################
@@ -417,7 +417,12 @@ class VC3ClientAPI(object):
         request.store(self.ic)
 
     def getRequestStatus(self, requestname):
-        pass
+        r = self._getEntity('Request', requestname)
+        out = (None, None)
+        if r is not None:
+            out = (r.statusraw, r.statusinfo)
+        return out
+        
 
     def saveRequestAsBlueprint(self, requestid, newlabel):
         '''
@@ -536,6 +541,8 @@ class VC3ClientAPI(object):
                     olist.append(eo)
         except KeyError, e:
             self.log.warning("Document object does not have a '%s' key" % e.args[0])
+        except TypeError, e:
+            self.log.warning("Document object empty.")
         return olist
 
 

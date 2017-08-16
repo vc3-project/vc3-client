@@ -460,11 +460,26 @@ class VC3ClientCLI(object):
         parser_requestterminate = subparsers.add_parser('request-terminate', 
                                                 help='Terminate request.')
         
-        parser_requestgetconfstr.add_argument('--requestname', 
+        parser_requestterminate.add_argument('--requestname', 
                                          action="store",
                                          required=True, 
                                          help='Name of relevant Request.',
                                          default=None)             
+
+        parser_requeststatus = subparsers.add_parser('request-status', 
+                                                help='Terminate request.')
+        
+        parser_requeststatus.add_argument('--requestname', 
+                                         action="store",
+                                         required=True, 
+                                         help='Name of relevant Request.',
+                                         default=None)          
+
+        parser_requeststatus.add_argument('--raw', 
+                                         action="store_true",
+                                         required=False, 
+                                         help='Name of relevant Request.',
+                                         default=False)  
 
 
         ########################### Pairing  ##########################################
@@ -764,7 +779,13 @@ class VC3ClientCLI(object):
         
         elif ns.subcommand == 'request-terminate':
             capi.terminateRequest(ns.requestname)
-                
+        
+        elif ns.subcommand == 'request-status':
+            (raw, info) =  capi.getRequestStatus(ns.requestname)
+            if ns.raw:
+                print(raw)
+            else:
+                print(info)
         
         # Pairing commands
         elif ns.subcommand == 'pairing-create':
