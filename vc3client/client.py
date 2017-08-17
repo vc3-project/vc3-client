@@ -262,6 +262,16 @@ class VC3ClientAPI(object):
     def getAllocation(self, allocationname):
         return self._getEntity('Allocation', allocationname)
 
+    def getAllocationPubToken(self, allocationname):
+        alloc = self.getAllocation(allocationname)
+        if alloc is not None:
+            if alloc.pubtoken is not None:
+                try:
+                    pubstring  = self.decode(alloc.pubtoken)
+                    return pubstring
+                except Exception, e:
+                    self.log.error('Error decoding pubtoken for Allocation %s' % allocationname)                
+        
             
     ################################################################################
     #                        Cluster-related calls

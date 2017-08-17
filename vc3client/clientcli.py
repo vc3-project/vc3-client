@@ -242,6 +242,16 @@ class VC3ClientCLI(object):
                                          help='list details of specified allocation',
                                          default=None)
 
+        parser_allocationgetpubtoken = subparsers.add_parser('allocation-getpubtoken', 
+                                                help='print pub token')
+
+        parser_allocationgetpubtoken.add_argument('--allocationname', 
+                                         action="store",
+                                         required=False, 
+                                         help='specify allocation',
+                                         default=None)
+
+
 
         ########################### Nodeset  ##########################################
         parser_nodesetcreate = subparsers.add_parser('nodeset-create',
@@ -646,6 +656,10 @@ class VC3ClientCLI(object):
         elif ns.subcommand == 'allocation-list' and ns.allocationname is not None:
             ao = capi.getAllocation(ns.allocationname)
             print(ao)
+
+        elif ns.subcommand == 'allocation-getpubtoken':
+            pt = capi.getAllocationPubToken(ns.allocationname)
+            print(pt)
 
         # Nodeset create, list
         elif ns.subcommand == 'nodeset-create':
