@@ -620,7 +620,8 @@ class Request(InfoEntity):
                               'shrinking', 
                               'terminating', 
                               'terminated'],
-                     'action' : [ 'run',
+                     'action' : [ 'new',
+                                  'run',
                                   'terminate',
                                  ]
                     } 
