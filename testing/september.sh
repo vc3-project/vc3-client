@@ -74,7 +74,7 @@ $CLIENT $DEBUGS -c $CONFIG environment-create --owner lincolnb --filesmap "~/git
 #$CLIENT $DEBUGS -c $CONFIG environment-list
 
 # Create request
-$CLIENT $DEBUGS -c $CONFIG request-create --owner lincolnb --cluster htcondor-10workers --allocations lincolnb-uchicago-midway,lincolnb-uchicago-coreos --environments lincolnb-env1 september-demo-request
+$CLIENT $DEBUGS -c $CONFIG request-create --owner lincolnb --cluster htcondor-10workers --allocations lincolnb.uchicago-midway,lincolnb.uchicago-coreos --environments lincolnb-env1 september-demo-request
 
 
 
