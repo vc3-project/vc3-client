@@ -424,7 +424,9 @@ class VC3ClientAPI(object):
         if r is not None:
             self.log.debug("Setting request action to terminate...")
             r.action = 'terminate'
-        request.store(self.ic)
+            r.store(self.ic)
+        else:
+            self.log.info("Request is None.")
 
     def getRequestStatus(self, requestname):
         r = self._getEntity('Request', requestname)
