@@ -425,6 +425,7 @@ class VC3ClientAPI(object):
             self.log.debug("Setting request action to terminate...")
             r.action = 'terminate'
             r.store(self.ic)
+            print("Request.action set to terminate.")
         else:
             self.log.info("Request is None.")
 
