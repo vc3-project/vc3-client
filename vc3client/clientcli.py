@@ -477,7 +477,7 @@ class VC3ClientCLI(object):
                                          default=None)             
 
         parser_requeststatus = subparsers.add_parser('request-status', 
-                                                help='Terminate request.')
+                                                help='Get status of the Request.')
         
         parser_requeststatus.add_argument('--requestname', 
                                          action="store",
