@@ -40,7 +40,7 @@ $CLIENT $DEBUGS -c $CONFIG user-create --firstname Lincoln --lastname Bryant --e
 $CLIENT $DEBUGS -c $CONFIG user-create --firstname Benedikt --lastname Riedel --email briedel@uchicago.edu --institution UChicago briedel
 $CLIENT $DEBUGS -c $CONFIG user-create --firstname Judith --lastname Stephen --email jlstephen@uchicago.edu --institution UChicago jlstephen
 
-# New proejct
+# New project
 $CLIENT $DEBUGS -c $CONFIG project-create --owner lincolnb --members lincolnb,briedel SPT
 
 # add user to existing project
