@@ -529,9 +529,8 @@ class Environment(InfoEntity):
         :param str name: The unique VC3 label for this environment.
         :param str owner:
         :param List str packagelist:
-        :param Dict str envmap: 
-        :param List local-name=remote-name files: Files to be included in the environment. (Files will be 
-                                                base64 encoded.)
+        :param Dict str->str envmap: 
+        :param Dist str->str files: remote-name->contents files. Files to be included in the environment. (Files will be base64 encoded.)
         :rtype: Environment
         '''  
         self.log = logging.getLogger()

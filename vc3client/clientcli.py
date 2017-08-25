@@ -720,7 +720,7 @@ class VC3ClientCLI(object):
             files = {}
 
             if ns.packagelist is not None:
-                packs = ns.packages.split(',')
+                packs = ns.packagelist.split(',')
 
             if ns.envmap is not None:
                 for kv in ns.envmap:
