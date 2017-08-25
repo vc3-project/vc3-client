@@ -1,1 +1,0 @@
-Search.setIndex({docnames:["index"],envversion:52,filenames:["index.rst"],objects:{},objnames:{},objtypes:{},terms:{The:0,index:0,modul:0,page:0,project:0,search:0,under:0},titles:["Welcome to the vc3-client\u2019s documentation!"],titleterms:{client:0,document:0,indic:0,licens:0,tabl:0,vc3:0,welcom:0}})
