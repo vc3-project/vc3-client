@@ -7,9 +7,9 @@ Welcome to vc3-client's documentation!
 ======================================
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 3
 
+   introduction
    modules
 
 

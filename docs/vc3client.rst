@@ -1,8 +1,6 @@
 vc3client package
 =================
 
-autodoc_mock_imports = ["vc3infoservice"]
-
 Submodules
 ----------
 

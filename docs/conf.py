@@ -186,3 +186,4 @@ import mock
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../'))
 
+autodoc_mock_imports = ["vc3infoservice", "vc3infoservice.core", "vc3infoservice.infoclient"]
