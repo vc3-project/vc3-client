@@ -10,6 +10,7 @@ Welcome to vc3-client's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   modules
 
 
 Indices and tables
