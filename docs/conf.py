@@ -182,5 +182,6 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 import sys
 import os
+import mock
 sys.path.insert(0, os.path.abspath('../'))
 
