@@ -71,7 +71,7 @@ $CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-workers-1 htcondor-10work
 # Create environment
 # below is likely wrong, as the file mappings go to /etc. Most likely, that will result in a permission denied error when writing the file.
 # $CLIENT $DEBUGS -c $CONFIG environment-create --owner lincolnb --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" lincolnb-env1
-$CLIENT $DEBUGS -c $CONFIG environment-create --owner lincolnb --packages condor-configure --envvar VC3_CONDOR_PASSWORD='$(pwd)/mycondorpassword' --envvar VC3_CONDOR_CONFIG_OPTIONS='--type=execute --central-manager SOMEWHERE.NET' --filesmap "~/git/vc3-client/testing/mycondorpassword=mycondorpassword" lincolnb-env1
+$CLIENT $DEBUGS -c $CONFIG environment-create --owner lincolnb --packages vc3-glidein --envvar VC3_CONDOR_PASSWORD='$(pwd)/mycondorpassword' --filesmap "~/git/vc3-client/testing/mycondorpassword=mycondorpassword" --command "vc3-glidein -c %(collector)s -C %(collector)s -p '${VC3_CONDOR_PASSWORD}'" lincolnb-env1
 
 # List environments
 #$CLIENT $DEBUGS -c $CONFIG environment-list
