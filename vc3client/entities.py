@@ -518,11 +518,12 @@ class Environment(InfoEntity):
                      'acl',
                      'packagelist',
                      'envmap',
-                     'files'
+                     'files',
+                     'command'
                      ]
     validvalues = { }
 
-    def __init__(self, name, state, owner, acl,  packagelist=[], envmap={}, files={}):
+    def __init__(self, name, state, owner, acl,  packagelist=[], envmap={}, files={}, command = None):
         '''
         Defines a new Environment object. 
               
@@ -541,6 +542,7 @@ class Environment(InfoEntity):
         self.packagelist = packagelist
         self.envmap = envmap
         self.files = files
+        self.command = command
 
 
 class Request(InfoEntity):

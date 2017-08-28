@@ -378,6 +378,13 @@ class VC3ClientCLI(object):
                 help='comma separated list of LOCAL=REMOTE file name specifications'
                 )
 
+        parser_environ.add_argument('--command', 
+                action='store', 
+                dest='command', 
+                default=None,
+                help='Command to execute the environment. No two environments in a request may define a command.'
+                )
+
 
 
 
@@ -740,8 +747,9 @@ class VC3ClientCLI(object):
             e = capi.defineEnvironment( ns.environmentname,
                                         ns.owner,
                                         packagelist = packs,
-                                        envmap = vars,
-                                        files=files)
+                                        envmap      = vars,
+                                        files       = files,
+                                        command     = ns.command)
             
             self.log.debug("Environment is %s" % e)
             capi.storeEnvironment(e)
