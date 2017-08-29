@@ -385,8 +385,12 @@ class VC3ClientCLI(object):
                 help='Command to execute the environment. No two environments in a request may define a command.'
                 )
 
-
-
+        parser_environ.add_argument('--extra-args', 
+                action='store', 
+                dest='builder_extra_args', 
+                default=None,
+                help='Extra argument to pass to the builder.'
+                )
 
 
         
@@ -749,7 +753,8 @@ class VC3ClientCLI(object):
                                         packagelist = packs,
                                         envmap      = vars,
                                         files       = files,
-                                        command     = ns.command)
+                                        command     = ns.command,
+                                        builder_extra_args = ns.builder_extra_args)
             
             self.log.debug("Environment is %s" % e)
             capi.storeEnvironment(e)

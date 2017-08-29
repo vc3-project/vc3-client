@@ -519,11 +519,12 @@ class Environment(InfoEntity):
                      'packagelist',
                      'envmap',
                      'files',
-                     'command'
+                     'command',
+                     'builder_extra_args'
                      ]
     validvalues = { }
 
-    def __init__(self, name, state, owner, acl,  packagelist=[], envmap={}, files={}, command = None):
+    def __init__(self, name, state, owner, acl,  packagelist=[], envmap={}, files={}, command = None, builder_extra_args = None):
         '''
         Defines a new Environment object. 
               
@@ -532,6 +533,8 @@ class Environment(InfoEntity):
         :param List str packagelist:
         :param Dict str->str envmap: 
         :param Dist str->str files: remote-name->contents files. Files to be included in the environment. (Files will be base64 encoded.)
+        :param str command: command to execute the environment inside the builder. (e.g., vc3-glidein -c ...)
+        :param str builder_extra_args: extra arguments to pass to the builder.
         :rtype: Environment
         '''  
         self.log = logging.getLogger()
@@ -543,6 +546,7 @@ class Environment(InfoEntity):
         self.envmap = envmap
         self.files = files
         self.command = command
+        self.builder_extra_args = builder_extra_args
 
 
 class Request(InfoEntity):
