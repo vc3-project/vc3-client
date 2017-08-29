@@ -80,5 +80,5 @@ $CLIENT $DEBUGS -c $CONFIG environment-create --owner lincolnb --packages vc3-gl
 $CLIENT $DEBUGS -c $CONFIG request-create --owner lincolnb --cluster htcondor-10workers --allocations lincolnb.uchicago-midway,lincolnb.uchicago-coreos --environments lincolnb-env1 september-demo-request
 
 
-
-
+# Terminate a request
+# $CLIENT $DEBUGS -c $CONFIG request-terminate --requestname september-demo-request
