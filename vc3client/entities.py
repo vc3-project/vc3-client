@@ -534,7 +534,7 @@ class Environment(InfoEntity):
         :param Dict str->str envmap: 
         :param Dist str->str files: remote-name->contents files. Files to be included in the environment. (Files will be base64 encoded.)
         :param str command: command to execute the environment inside the builder. (e.g., vc3-glidein -c ...)
-        :param str builder_extra_args: extra arguments to pass to the builder.
+        :param List builder_extra_args: extra arguments to pass to the builder.
         :rtype: Environment
         '''  
         self.log = logging.getLogger()

@@ -386,7 +386,7 @@ class VC3ClientCLI(object):
                 )
 
         parser_environ.add_argument('--extra-args', 
-                action='store', 
+                action='append', 
                 dest='builder_extra_args', 
                 default=None,
                 help='Extra argument to pass to the builder.'
