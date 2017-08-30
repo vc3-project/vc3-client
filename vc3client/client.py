@@ -118,7 +118,9 @@ class VC3ClientAPI(object):
                      state='new', 
                      acl=None, 
                      owner=owner, 
-                     members=members)
+                     members=members,
+                     allocations=[],
+                     blueprints=[])
         self.log.debug("Creating project object: %s " % p)
         return p
     
@@ -139,8 +141,6 @@ class VC3ClientAPI(object):
         '''
         :param str project
         :param str user
-        
-        
         '''
         self.log.debug("Looking up user %s project %s " % (user, project))
         po = self.getProject(project)
@@ -148,17 +148,26 @@ class VC3ClientAPI(object):
         po.addUser(user)
         self.storeProject(po)        
 
-    def addAllocationToProject(self, allocation, projectname ):
-        po = self.getProject(projectname)
-        if allocation not in po.allocations:
-            po.allocations.append(allocation)
+    def addAllocationToProject(self, project, allocation):
+        '''
+        :param str project
+        :param str allocation
+        '''
+        self.log.debug("Looking up allocation %s project %s " % (allocation, project))
+        po = self.getProject(project)
+        self.log.debug("Adding allocation %s to project object %s " % (allocation, po))
+        po.addAllocation(allocation)
         self.storeProject(po)
         
-    
     def removeAllocationFromProject(self, allocation, projectname):
-        po = self.getProject(projectname)
-        if allocation in po.allocations:
-            po.allocations.remove(allocation)
+        '''
+        :param str project
+        :param str allocation
+        '''
+        self.log.debug("Looking up allocation %s project %s " % (allocation, project))
+        po = self.getProject(project)
+        self.log.debug("Adding allocation %s to project object %s " % (allocation, po))
+        po.addAllocation(allocation)
         self.storeProject(po)
 
     def listProjects(self):

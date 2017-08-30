@@ -117,8 +117,8 @@ class Project(InfoEntity):
                    acl,
                    owner,
                    members,   # list
-                   allocations=None,  # list of names 
-                   blueprints=None):  # list of names
+                   allocations=[],  # list of names 
+                   blueprints=[]):  # list of names
         '''
         Defines a new Project object for usage elsewhere in the API. 
               
@@ -160,7 +160,7 @@ class Project(InfoEntity):
 
     def removeUser(self, user):
         '''
-            Removes provided user (string label) to this project.
+            Removes provided user (string label) from this project.
         '''
         self.log.debug("Removing user %s to project" % user)
         if user not in self.members:
@@ -168,6 +168,27 @@ class Project(InfoEntity):
         else:
             self.members.remove(user)
             self.log.debug("Members now %s" % self.members)
+
+    def addAllocation(self, allocation):
+        '''
+            Adds provided allocation (string label) to this project.
+        '''
+        self.log.debug("Adding allocation %s to project" % allocation)
+        if allocation not in self.allocations:
+            self.allocations.append(allocation)
+        self.log.debug("Allocations now %s" % self.allocations)
+        
+
+    def removeAllocation(self, allocation):
+        '''
+            Removes provided allocation (string label) from this project.
+        '''
+        self.log.debug("Removing allocation %s to project" % allocation)
+        if allocation not in self.allocations:
+            self.log.debug("Allocation %s did not belong to project")
+        else:
+            self.allocations.remove(allocation)
+            self.log.debug("Allocations now %s" % self.allocations)
 
 class Resource(InfoEntity):
     '''

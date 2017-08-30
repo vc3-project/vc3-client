@@ -615,15 +615,10 @@ class VC3ClientCLI(object):
             print(po)
 
         elif ns.subcommand == 'project-adduser':
-            po = capi.getProject(ns.project)
-            po.addUser(ns.user)
-            capi.storeProject(po)
+            capi.addUserToProject(ns.project, ns.user)
         
         elif ns.subcommand == 'project-addallocation':
-            po = capi.getProject(ns.project)
-            po.addAllocationToProject(ns.allocation)
-            capi.storeProject(po)
-        
+            capi.addAllocationToProject(ns.project, ns.allocation)
             
         # Resource commands
         elif ns.subcommand == 'resource-create':
