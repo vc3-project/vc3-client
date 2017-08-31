@@ -144,9 +144,12 @@ class VC3ClientAPI(object):
         '''
         self.log.debug("Looking up user %s project %s " % (user, project))
         po = self.getProject(project)
-        self.log.debug("Adding user %s to project object %s " % (user, po))
-        po.addUser(user)
-        self.storeProject(po)        
+        if po is None:
+            self.log.warning("Could not find project object %s " % (po,))
+        else:
+            self.log.debug("Adding user %s to project object %s " % (user, po))
+            po.addUser(user)
+            self.storeProject(po)        
 
     def removeUserFromProject(self, user, project):
         '''
@@ -155,9 +158,12 @@ class VC3ClientAPI(object):
         '''
         self.log.debug("Looking up user %s project %s " % (user, project))
         po = self.getProject(project)
-        self.log.debug("Removing user %s from project object %s " % (user, po))
-        po.addUser(user)
-        self.storeProject(po)        
+        if po is None:
+            self.log.warning("Could not find project object %s " % (po,))
+        else:
+            self.log.debug("Removing user %s from project object %s " % (user, po))
+            po.addUser(user)
+            self.storeProject(po)        
 
     def addAllocationToProject(self, allocation, projectname):
         '''
@@ -166,9 +172,12 @@ class VC3ClientAPI(object):
         '''
         self.log.debug("Looking up allocation %s project %s " % (allocation, projectname))
         po = self.getProject(projectname)
-        self.log.debug("Adding allocation %s to project object %s " % (allocation, po))
-        po.addAllocation(allocation)
-        self.storeProject(po)
+        if po is None:
+            self.log.warning("Could not find project object %s " % (po,))
+        else:
+            self.log.debug("Adding allocation %s to project object %s " % (allocation, po))
+            po.addAllocation(allocation)
+            self.storeProject(po)
         
     def removeAllocationFromProject(self, allocation, projectname):
         '''
@@ -177,9 +186,12 @@ class VC3ClientAPI(object):
         '''
         self.log.debug("Looking up allocation %s project %s " % (allocation, projectname))
         po = self.getProject(projectname)
-        self.log.debug("Removing allocation %s from project object %s " % (allocation, po))
-        po.removeAllocation(allocation)
-        self.storeProject(po)
+        if po is None:
+            self.log.warning("Could not find project object %s " % (po,))
+        else:
+            self.log.debug("Removing allocation %s from project object %s " % (allocation, po))
+            po.removeAllocation(allocation)
+            self.storeProject(po)
 
     def listProjects(self):
         return self._listEntities('Project')
@@ -284,14 +296,16 @@ class VC3ClientAPI(object):
 
     def getAllocationPubToken(self, allocationname):
         alloc = self.getAllocation(allocationname)
-        if alloc is not None:
+        if alloc is None:
+            self.log.warning('Could not find allocation object %s' % allocationname)
+        else:
             if alloc.pubtoken is not None:
                 try:
                     pubstring  = self.decode(alloc.pubtoken)
                     return pubstring
                 except Exception, e:
                     self.log.error('Error decoding pubtoken for Allocation %s' % allocationname)                
-        
+
             
     ################################################################################
     #                        Cluster-related calls
@@ -330,15 +344,20 @@ class VC3ClientAPI(object):
 
     def addNodesetToCluster(self, nodesetname, clustername):
         co = self.getCluster(clustername)
-        co.addNodeset(nodesetname)
-        self.storeCluster(co)
+        if co is None:
+            self.log.warning('Could not find cluster object %s', clustername)
+        else:
+            co.addNodeset(nodesetname)
+            self.storeCluster(co)
        
     def removeNodesetFromCluster(self, nodesetname, clustername):
         co = self.getCluster(clustername)
-        co.removeNodeset(nodesetname)
-        self.storeCluster(co)
+        if co is None:
+            self.log.warning('Could not find cluster object %s', clustername)
+        else:
+            co.removeNodeset(nodesetname)
+            self.storeCluster(co)
         
-    
 
     ################################################################################
     #                        Nodeset-related calls
