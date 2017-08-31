@@ -80,7 +80,7 @@ $CLIENT $DEBUGS -c $CONFIG environment-create\
     --packages   vc3-glidein\
     --extra-args='--home=.'\
     --extra-args='--install=.'\
-    --extra-args='--sys=python:2.7'\
+    --extra-args='--sys python:2.7=/usr'\
     --filesmap   '~/git/vc3-client/testing/mycondorpassword=mycondorpassword'\
     --command    "vc3-glidein -c ${CONDOR_COLLECTOR} -C ${CONDOR_COLLECTOR} -p mycondorpassword"\
     lincolnb-env1
