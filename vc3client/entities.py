@@ -78,6 +78,10 @@ class User(InfoEntity):
         '''
             Adds provided allocation (string label) to this allocation.
         '''
+
+        if self.allocations is None:
+            self.allocations = []
+
         self.log.debug("Adding allocation %s to project" % allocation)
         if allocation not in self.allocations:
             self.allocations.append(allocation)
@@ -88,6 +92,10 @@ class User(InfoEntity):
         '''
             Removes provided allocation (string label) to this project.
         '''
+
+        if self.allocations is None:
+            self.allocations = []
+
         self.log.debug("Removing allocation %s to project" % allocation)
         if allocation not in self.allocations:
             self.log.debug("Allocation %s did not belong to project")
@@ -152,6 +160,10 @@ class Project(InfoEntity):
         '''
             Adds provided user (string label) to this project.
         '''
+
+        if self.members is None:
+            self.members = []
+
         self.log.debug("Adding user %s to project" % user)
         if user not in self.members:
             self.members.append(user)
@@ -162,6 +174,10 @@ class Project(InfoEntity):
         '''
             Removes provided user (string label) from this project.
         '''
+
+        if self.members is None:
+            self.members = []
+
         self.log.debug("Removing user %s to project" % user)
         if user not in self.members:
             self.log.debug("User %s did not belong to project")
@@ -173,6 +189,10 @@ class Project(InfoEntity):
         '''
             Adds provided allocation (string label) to this project.
         '''
+
+        if self.allocations is None:
+            self.allocations = []
+
         self.log.debug("Adding allocation %s to project" % allocation)
         if allocation not in self.allocations:
             self.allocations.append(allocation)
@@ -183,6 +203,10 @@ class Project(InfoEntity):
         '''
             Removes provided allocation (string label) from this project.
         '''
+
+        if self.allocations is None:
+            self.allocations = []
+
         self.log.debug("Removing allocation %s to project" % allocation)
         if allocation not in self.allocations:
             self.log.debug("Allocation %s did not belong to project")
@@ -432,10 +456,16 @@ class Cluster(InfoEntity):
 
 
     def addNodeset(self, nodesetname ):
+        if self.nodesets is None:
+            self.nodesets = []
+
         if nodesetname not in self.nodesets:
             self.nodesets.append(nodesetname)
 
     def removeNodeset(self, nodesetname):
+        if self.nodesets is None:
+            self.nodesets = []
+
         if nodesetname in self.nodesets:
             self.nodesets.remove(nodesetname)
 

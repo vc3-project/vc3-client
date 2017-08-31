@@ -42,15 +42,29 @@ $CLIENT $DEBUGS -c $CONFIG user-create --firstname John --lastname Hover --email
 
 $CLIENT $DEBUGS -c $CONFIG user-list
 
+$CLIENT $DEBUGS -c $CONFIG user-list --user jhover
+
+
+
 $CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  angusproject
 
 $CLIENT $DEBUGS -c $CONFIG project-create --owner jhover --members jhover  jhoverproject
 
-$CLIENT $DEBUGS -c $CONFIG project-adduser jhoverproject angus
+$CLIENT $DEBUGS -c $CONFIG project-adduser jhoverproject jhover
+
+$CLIENT $DEBUGS -c $CONFIG project-removeuser jhoverproject jhover
+
+$CLIENT $DEBUGS -c $CONFIG project-addallocation jhoverproject jhover.sdcc-ic
+
+$CLIENT $DEBUGS -c $CONFIG project-addallocation jhoverproject jhover.sdcc-icx
+
+$CLIENT $DEBUGS -c $CONFIG project-removeallocation jhoverproject jhover.sdcc-icx
 
 $CLIENT $DEBUGS -c $CONFIG project-list
 
 $CLIENT $DEBUGS -c $CONFIG project-list --project jhoverproject
+
+
 
 $CLIENT $DEBUGS -c $CONFIG resource-create  --owner adminjhover --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost griddev03.racf.bnl.gov --accessport 22 sdcc-ic
 
@@ -58,9 +72,17 @@ $CLIENT $DEBUGS -c $CONFIG resource-list
 
 $CLIENT $DEBUGS -c $CONFIG resource-list --resource sdcc-ic
 
+
+
 $CLIENT $DEBUGS -c $CONFIG allocation-create --owner jhover --resource sdcc-ic --accountname jhover jhover.sdcc-ic
 
 $CLIENT $DEBUGS -c $CONFIG allocation-list
+
+$CLIENT $DEBUGS -c $CONFIG allocation-list --allocation jhover.sdcc-ic
+
+$CLIENT $DEBUGS -c $CONFIG allocation-getpubtoken --allocation jhover.sdcc-ic
+
+
 
 $CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 1 --app_type htcondor --app_role head-node htcondor-head.1
 
@@ -68,15 +90,45 @@ $CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 10 --app_
 
 $CLIENT $DEBUGS -c $CONFIG nodeset-list
 
+$CLIENT $DEBUGS -c $CONFIG nodeset-list --node htcondor-workers.1
+
+
+
 $CLIENT $DEBUGS -c $CONFIG cluster-create --owner jhover htcondor-scn-10workers
 
 $CLIENT $DEBUGS -c $CONFIG cluster-list
 
-$CLIENT $DEBUGS -c $CONFIG project-create --owner angus --members angus  angusproject
+$CLIENT $DEBUGS -c $CONFIG cluster-list --cluster htcondor-scn-10workers
+
+$CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-scn-10workers htcondor-workers.1
+
+$CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-scn-10workers htcondor-workers.2
+
+$CLIENT $DEBUGS -c $CONFIG cluster-removenodeset htcondor-scn-10workers htcondor-workers.2
+
 
 $CLIENT $DEBUGS -c $CONFIG environment-create --owner angus --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" angusenv1
 
 $CLIENT $DEBUGS -c $CONFIG environment-list
 
+$CLIENT $DEBUGS -c $CONFIG environment-list --environment angusenv1
+
+
+
 $CLIENT $DEBUGS -c $CONFIG request-create --owner jhover --cluster htcondor-scn-10workers --allocations jhover.sdcc-ic --environments angusenv1 jhover.request1
+
+$CLIENT $DEBUGS -c $CONFIG request-list
+
+$CLIENT $DEBUGS -c $CONFIG request-list --request jhover.request1
+
+$CLIENT $DEBUGS -c $CONFIG request-state --request jhover.request1
+
+$CLIENT $DEBUGS -c $CONFIG request-status --request jhover.request1
+
+$CLIENT $DEBUGS -c $CONFIG request-terminate --request jhover.request1
+
+
+# pin=$($CLIENT $DEBUGS -c $CONFIG pairing-create jhover.pair1)
+
+# $CLIENT $DEBUGS -c $CONFIG pairing-retrieve ${pin}
 

@@ -9,8 +9,8 @@ export PATH=$PATH:~/.local/bin
 
 CLIENT=vc3-client
 #CONFIG=/etc/vc3/vc3-client.conf
-#CONFIG=~/git/vc3-client/etc/vc3-client.conf
-CONFIG=~/vc3/etc/vc3-client.conf
+CONFIG=~/git/vc3-client/etc/vc3-client.conf
+#CONFIG=~/vc3/etc/vc3-client.conf
 
 
 # DEFAULT values

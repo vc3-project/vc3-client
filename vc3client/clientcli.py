@@ -110,23 +110,47 @@ class VC3ClientCLI(object):
                                      help='comma-separated list of vc3users'
                                      )
 
+
         parser_projectadduser = subparsers.add_parser('project-adduser', 
                                                 help='add user to vc3 project')
         
-        parser_projectadduser.add_argument('project', 
+        parser_projectadduser.add_argument('projectname', 
                                      action="store")
 
         parser_projectadduser.add_argument('user', 
                                      action="store", 
                                      )
 
-        parser_projectaddallocation = subparsers.add_parser('project-addallocation', 
-                                                help='add allocation to vc3 project')
+
+        parser_projectremoveuser = subparsers.add_parser('project-removeuser', 
+                help='remove user from vc3 project')
         
-        parser_projectaddallocation.add_argument('project', 
+        parser_projectremoveuser.add_argument('projectname', 
                                      action="store")
 
-        parser_projectaddallocation.add_argument('allocation', 
+        parser_projectremoveuser.add_argument('user', 
+                                     action="store", 
+                                     )
+
+
+        parser_projectaddallocation = subparsers.add_parser('project-addallocation', 
+                                                help='add allocation to vc3 project')
+
+        parser_projectaddallocation.add_argument('projectname', 
+                                     action="store")
+
+        parser_projectaddallocation.add_argument('allocationname', 
+                                     action="store", 
+                                     )
+
+
+        parser_projectremoveallocation = subparsers.add_parser('project-removeallocation', 
+                                                help='remove allocation from vc3 project')
+
+        parser_projectremoveallocation.add_argument('projectname', 
+                                     action="store")
+
+        parser_projectremoveallocation.add_argument('allocationname', 
                                      action="store", 
                                      )
 
@@ -236,22 +260,19 @@ class VC3ClientCLI(object):
         parser_allocationlist = subparsers.add_parser('allocation-list', 
                                                 help='list vc3 allocation(s)')
 
-        parser_allocationlist.add_argument('--allocationname', 
-                                         action="store",
-                                         required=False, 
-                                         help='list details of specified allocation',
-                                         default=None)
+        parser_allocationlist.add_argument('--allocationname',
+                                        action="store",
+                                        required=False, 
+                                        help='list details of specified allocation',
+                                        default=None)
 
         parser_allocationgetpubtoken = subparsers.add_parser('allocation-getpubtoken', 
                                                 help='print pub token')
 
         parser_allocationgetpubtoken.add_argument('--allocationname', 
-                                         action="store",
-                                         required=False, 
-                                         help='specify allocation',
-                                         default=None)
-
-
+                                        action="store",
+                                        required=True,
+                                        help='specify allocation')
 
         ########################### Nodeset  ##########################################
         parser_nodesetcreate = subparsers.add_parser('nodeset-create',
@@ -321,28 +342,30 @@ class VC3ClientCLI(object):
         parser_clusteraddnodeset = subparsers.add_parser('cluster-addnodeset', 
                 help='add a nodeset to a cluster specification')
     
+        parser_clusteraddnodeset.add_argument('clustername',
+                                              action='store',
+                                              help='clustername to add nodeset to'
+                                              )
+
         parser_clusteraddnodeset.add_argument('nodesetname',
                                               action='store',
                                               help='nodeset to add'
                                               )
             
-        parser_clusteraddnodeset.add_argument('clustername',
-                                              action='store',
-                                              help='clustername to add nodeset to'
-                                              )
         
         parser_clusterremovenodeset = subparsers.add_parser('cluster-removenodeset', 
                 help='add a nodeset to a cluster specification')
     
-        parser_clusterremovenodeset.add_argument('nodesetname',
-                                              action='store',
-                                              help='nodeset to add'
-                                              )
-            
         parser_clusterremovenodeset.add_argument('clustername',
                                               action='store',
-                                              help='clustername to add nodeset to'
+                                              help='clustername to remove nodeset from'
                                               )
+
+        parser_clusterremovenodeset.add_argument('nodesetname',
+                                              action='store',
+                                              help='nodeset to remove'
+                                              )
+            
         
         ########################### Environment  ##########################################
         parser_environ = subparsers.add_parser('environment-create', 
@@ -502,6 +525,15 @@ class VC3ClientCLI(object):
                                          help='Name of relevant Request.',
                                          default=False)  
 
+        parser_requeststate = subparsers.add_parser('request-state', 
+                                                help='Get state of the Request.')
+        
+        parser_requeststate.add_argument('--requestname', 
+                                         action="store",
+                                         required=True, 
+                                         help='Name of relevant Request.',
+                                         default=None)          
+
 
         ########################### Pairing  ##########################################
         parser_pairingcreate = subparsers.add_parser('pairing-create', 
@@ -615,10 +647,16 @@ class VC3ClientCLI(object):
             print(po)
 
         elif ns.subcommand == 'project-adduser':
-            capi.addUserToProject(ns.project, ns.user)
+            capi.addUserToProject(ns.user, ns.projectname)
+
+        elif ns.subcommand == 'project-removeuser':
+            capi.removeUserFromProject(ns.user, ns.projectname)
         
         elif ns.subcommand == 'project-addallocation':
-            capi.addAllocationToProject(ns.project, ns.allocation)
+            capi.addAllocationToProject(ns.allocationname, ns.projectname)
+
+        elif ns.subcommand == 'project-removeallocation':
+            capi.removeAllocationFromProject(ns.allocationname, ns.projectname)
             
         # Resource commands
         elif ns.subcommand == 'resource-create':
@@ -808,6 +846,10 @@ class VC3ClientCLI(object):
                 print(raw)
             else:
                 print(info)
+
+        elif ns.subcommand == 'request-state':
+            (state, reason) =  capi.getRequestState(ns.requestname)
+            print((str(state), str(reason)))
         
         # Pairing commands
         elif ns.subcommand == 'pairing-create':
@@ -844,6 +886,7 @@ class VC3ClientCLI(object):
                 print("Invalid pairing code or not satisfied yet. Try in 30 seconds.")   
         else:
             self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)
+            sys.exit(1)
             
 
 if __name__ == '__main__':

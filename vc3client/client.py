@@ -137,7 +137,7 @@ class VC3ClientAPI(object):
         self.log.debug("Done.")
     
     
-    def addUserToProject(self, project, user):
+    def addUserToProject(self, user, project):
         '''
         :param str project
         :param str user
@@ -148,13 +148,24 @@ class VC3ClientAPI(object):
         po.addUser(user)
         self.storeProject(po)        
 
-    def addAllocationToProject(self, project, allocation):
+    def removeUserFromProject(self, user, project):
+        '''
+        :param str project
+        :param str user
+        '''
+        self.log.debug("Looking up user %s project %s " % (user, project))
+        po = self.getProject(project)
+        self.log.debug("Removing user %s from project object %s " % (user, po))
+        po.addUser(user)
+        self.storeProject(po)        
+
+    def addAllocationToProject(self, allocation, projectname):
         '''
         :param str project
         :param str allocation
         '''
-        self.log.debug("Looking up allocation %s project %s " % (allocation, project))
-        po = self.getProject(project)
+        self.log.debug("Looking up allocation %s project %s " % (allocation, projectname))
+        po = self.getProject(projectname)
         self.log.debug("Adding allocation %s to project object %s " % (allocation, po))
         po.addAllocation(allocation)
         self.storeProject(po)
@@ -164,10 +175,10 @@ class VC3ClientAPI(object):
         :param str project
         :param str allocation
         '''
-        self.log.debug("Looking up allocation %s project %s " % (allocation, project))
-        po = self.getProject(project)
-        self.log.debug("Adding allocation %s to project object %s " % (allocation, po))
-        po.addAllocation(allocation)
+        self.log.debug("Looking up allocation %s project %s " % (allocation, projectname))
+        po = self.getProject(projectname)
+        self.log.debug("Removing allocation %s from project object %s " % (allocation, po))
+        po.removeAllocation(allocation)
         self.storeProject(po)
 
     def listProjects(self):
@@ -316,6 +327,17 @@ class VC3ClientAPI(object):
        
     def getCluster(self, clustername):
         return self._getEntity('Cluster', clustername)
+
+    def addNodesetToCluster(self, nodesetname, clustername):
+        co = self.getCluster(clustername)
+        co.addNodeset(nodesetname)
+        self.storeCluster(co)
+       
+    def removeNodesetFromCluster(self, nodesetname, clustername):
+        co = self.getCluster(clustername)
+        co.removeNodeset(nodesetname)
+        self.storeCluster(co)
+        
     
 
     ################################################################################
@@ -340,18 +362,6 @@ class VC3ClientAPI(object):
         self.log.debug("Created Nodeset object: %s" % ns)
         return ns 
     
-    def addNodesetToCluster(self, nodesetname, clustername):
-        co = self.getCluster(clustername)
-        if nodesetname not in co.nodesets:
-            co.nodesets.append(nodesetname)
-        self.storeCluster(co)
-       
-    def removeNodesetFromCluster(self, nodesetname, clustername):
-        co = self.getCluster(clustername)
-        if nodesetname in co.nodesets:
-             co.nodesets.remove(nodesetname)
-        self.storeCluster(co)
-        
     def listNodesets(self):
         return self._listEntities('Nodeset')
        
@@ -445,6 +455,13 @@ class VC3ClientAPI(object):
         out = (None, None)
         if r is not None:
             out = (r.statusraw, r.statusinfo)
+        return out
+
+    def getRequestState(self, requestname):
+        r = self._getEntity('Request', requestname)
+        out = (None, None)
+        if r is not None:
+            out = (r.state, r.state_reason)
         return out
         
 
