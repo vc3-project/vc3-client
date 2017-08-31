@@ -70,7 +70,7 @@ $CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 10 --ap
 $CLIENT $DEBUGS -c $CONFIG cluster-create --owner lincolnb htcondor-10workers
 
 # Add nodeset to cluster
-$CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-workers-1 htcondor-10workers
+$CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-10workers htcondor-workers-1
 
 # Create environment
 # below is likely wrong, as the file mappings go to /etc. Most likely, that will result in a permission denied error when writing the file.
