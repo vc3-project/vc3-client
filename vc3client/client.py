@@ -362,7 +362,7 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Nodeset-related calls
     ################################################################################ 
-    def defineNodeset(self, name, owner, node_number, app_type, app_role):
+    def defineNodeset(self, name, owner, node_number, app_type, app_role, environment):
         ns = Nodeset( name=name, 
                       state='new',
                       owner=owner, 
@@ -376,7 +376,8 @@ class VC3ClientAPI(object):
                       storage_mb=None, 
                       app_host = None, 
                       app_port = None,
-                      app_sectoken = None
+                      app_sectoken = None,
+                      environment = None
                        )
         self.log.debug("Created Nodeset object: %s" % ns)
         return ns 
@@ -424,8 +425,7 @@ class VC3ClientAPI(object):
                       owner,
                       cluster,
                       allocations,  
-                      environments, 
-                      policy, 
+                      policy,
                       expiration ):
         '''
         
@@ -442,7 +442,6 @@ class VC3ClientAPI(object):
                     cluster_state_reason='new',
                     cluster = cluster,           # name of abstract cluster specification
                     allocations = allocations,   # list of allocation names
-                    environments = environments, # list of environment names
                     policy = policy, 
                     expiration = expiration
                     )
@@ -600,7 +599,7 @@ class VC3ClientAPI(object):
                     self.log.debug("Appending eo %s" % eo)
                     olist.append(eo)
         except KeyError, e:
-            self.log.warning("Document object does not have a '%s' key" % e.args[0])
+            self.log.warning("Document has no key '%s'", e.args[0])
         except TypeError, e:
             self.log.warning("Document object empty.")
         return olist
