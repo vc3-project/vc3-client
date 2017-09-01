@@ -61,17 +61,6 @@ $CLIENT $DEBUGS -c $CONFIG allocation-create --owner lincolnb --resource uchicag
 $CLIENT $DEBUGS -c $CONFIG allocation-create --owner lincolnb --resource uchicago-coreos --accountname lincolnb lincolnb.uchicago-coreos
 $CLIENT $DEBUGS -c $CONFIG allocation-create --owner lincolnb --resource nersc-cori --accountname briedel briedel.nersc-cori
 
-# Node set for the virtual cluster
-# Only one nodeset per cluster for now. Just workers..
-#$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 1 --app_type htcondor --app_role head-node htcondor-head-1
-$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 10 --app_type htcondor --app_role worker-nodes htcondor-workers-1
-
-# virtual cluster holder
-$CLIENT $DEBUGS -c $CONFIG cluster-create --owner lincolnb htcondor-10workers
-
-# Add nodeset to cluster
-$CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-10workers htcondor-workers-1
-
 # Create environment
 # below is likely wrong, as the file mappings go to /etc. Most likely, that will result in a permission denied error when writing the file.
 # $CLIENT $DEBUGS -c $CONFIG environment-create --owner lincolnb --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" lincolnb-env1
@@ -87,10 +76,19 @@ $CLIENT $DEBUGS -c $CONFIG environment-create\
 
 # List environments
 #$CLIENT $DEBUGS -c $CONFIG environment-list
+# Node set for the virtual cluster
+# Only one nodeset per cluster for now. Just workers..
+#$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 1 --app_type htcondor --app_role head-node --environment lincolnb-env1 htcondor-head-1
+$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 10 --app_type htcondor --app_role worker-nodes --environment lincolnb-env1 htcondor-workers-1
+# virtual cluster holder
+$CLIENT $DEBUGS -c $CONFIG cluster-create --owner lincolnb htcondor-10workers
+
+# Add nodeset to cluster
+$CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-10workers htcondor-workers-1
+
 
 # Create request
-$CLIENT $DEBUGS -c $CONFIG request-create --owner lincolnb --cluster htcondor-10workers --allocations lincolnb.uchicago-midway,lincolnb.uchicago-coreos --environments lincolnb-env1 september-demo-request
-
+$CLIENT $DEBUGS -c $CONFIG request-create --owner lincolnb --cluster htcondor-10workers --allocations lincolnb.uchicago-midway,lincolnb.uchicago-coreos september-demo-request
 
 # Terminate a request
 # $CLIENT $DEBUGS -c $CONFIG request-terminate --requestname september-demo-request

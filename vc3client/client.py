@@ -367,7 +367,7 @@ class VC3ClientAPI(object):
                       state='new',
                       owner=owner, 
                       acl=None, 
-                       
+
                       node_number=node_number, 
                       app_type=app_type, 
                       app_role=app_role,
@@ -377,7 +377,7 @@ class VC3ClientAPI(object):
                       app_host = None, 
                       app_port = None,
                       app_sectoken = None,
-                      environment = None
+                      environment = environment
                        )
         self.log.debug("Created Nodeset object: %s" % ns)
         return ns 

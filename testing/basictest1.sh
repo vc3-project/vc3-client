@@ -84,7 +84,15 @@ $CLIENT $DEBUGS -c $CONFIG allocation-getpubtoken --allocation jhover.sdcc-ic
 
 
 
-$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 1 --app_type htcondor --app_role head-node htcondor-head.1
+$CLIENT $DEBUGS -c $CONFIG environment-create --owner angus --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" angusenv1
+
+$CLIENT $DEBUGS -c $CONFIG environment-list
+
+$CLIENT $DEBUGS -c $CONFIG environment-list --environment angusenv1
+
+
+
+$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 1 --app_type htcondor --app_role head-node --environment angusenv1 htcondor-head.1
 
 $CLIENT $DEBUGS -c $CONFIG nodeset-create --owner jhover --node_number 10 --app_type htcondor --app_role worker-nodes htcondor-workers.1
 
@@ -107,15 +115,8 @@ $CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-scn-10workers htcondor-wo
 $CLIENT $DEBUGS -c $CONFIG cluster-removenodeset htcondor-scn-10workers htcondor-workers.2
 
 
-$CLIENT $DEBUGS -c $CONFIG environment-create --owner angus --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" angusenv1
 
-$CLIENT $DEBUGS -c $CONFIG environment-list
-
-$CLIENT $DEBUGS -c $CONFIG environment-list --environment angusenv1
-
-
-
-$CLIENT $DEBUGS -c $CONFIG request-create --owner jhover --cluster htcondor-scn-10workers --allocations jhover.sdcc-ic --environments angusenv1 jhover.request1
+$CLIENT $DEBUGS -c $CONFIG request-create --owner jhover --cluster htcondor-scn-10workers --allocations jhover.sdcc-ic jhover.request1
 
 $CLIENT $DEBUGS -c $CONFIG request-list
 

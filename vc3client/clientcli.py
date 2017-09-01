@@ -296,6 +296,10 @@ class VC3ClientCLI(object):
             help='general middleware type of node',
             action="store")
 
+        parser_nodesetcreate.add_argument('--environment', 
+            help='Environment to be installed per job in the nodeset (e.g. a glidein)',
+            action="store")
+
         parser_nodesetcreate.add_argument('nodesetname', 
             help='name of the nodeset to be created',
             action="store")
@@ -468,13 +472,6 @@ class VC3ClientCLI(object):
                 default=None
                 )
 
-        parser_requestcreate.add_argument('--environments', 
-                action='store', 
-                dest='environments', 
-                help='Comma-separated list of Environment to be installed on top of the request',
-                default=None
-                )
-        
         parser_requestlist = subparsers.add_parser('request-list', 
                                                 help='list vc3 request(s)')
 
@@ -707,13 +704,13 @@ class VC3ClientCLI(object):
 
         # Nodeset create, list
         elif ns.subcommand == 'nodeset-create':
-            ns = capi.defineNodeset(ns.nodesetname, 
+            n = capi.defineNodeset(ns.nodesetname, 
                                     ns.owner, 
                                     ns.node_number, 
                                     ns.app_type, 
-                                    ns.app_role
-                                    )
-            capi.storeNodeset(ns)
+                                    ns.app_role,
+                                    environment = ns.environment)
+            capi.storeNodeset(n)
 
         elif ns.subcommand == 'nodeset-list' and ns.nodesetname is None:
             nsl = capi.listNodesets()
@@ -809,15 +806,10 @@ class VC3ClientCLI(object):
             if ns.allocations is not None:
                 allocationlist = ns.allocations.split(',')
     
-            environmentlist = []
-            if ns.environments is not None:
-                environmentlist = ns.environments.split(',')
-            
             r = capi.defineRequest( name=ns.requestname,
                                     owner = ns.owner,
                                     cluster=ns.cluster,
                                     allocations=allocationlist,
-                                    environments=environmentlist,
                                     policy= ns.policy,
                                     expiration=None,
                                      )

@@ -484,6 +484,9 @@ class Nodeset(InfoEntity):
                 "app_role" : "head-node",
                 "app_port" : "9618"
                 "app_password" : "XXXXXXX",
+                "environment" : {
+                            <Environment json>
+                        }
             },
             "workers1" : {
                 "app_depends" : "headnode1",
@@ -515,6 +518,7 @@ class Nodeset(InfoEntity):
                      'app_host',
                      'app_port',
                      'app_sectoken',            
+                     'environment'
                      ]
     validvalues = {
         'app_type' : ['htcondor' , 'workqueue' ],
@@ -535,8 +539,12 @@ class Nodeset(InfoEntity):
                        storage_mb=None, 
                        app_host = None, 
                        app_port = None,
-                       app_sectoken = None
+                       app_sectoken = None,
+                       environment = None
                        ):
+        '''
+        :param str environment:  Environment to preload per job (e.g. a glidein)
+        '''
         self.log = logging.getLogger()
         self.name = name
         self.state = state
@@ -553,6 +561,7 @@ class Nodeset(InfoEntity):
         self.app_host = app_host
         self.app_port = app_port
         self.app_sectoken = app_sectoken
+        self.environment = environment
 
 
 class Environment(InfoEntity):
@@ -614,9 +623,6 @@ class Request(InfoEntity):
             "expiration" : "2017-07-07:1730", 
             "cluster_state" : "new",
             "cluster_state_reason",
-            "environment" : {
-                        <Environment json>
-                    },
             "allocation" : {
                         <Allocations>
                         },
@@ -642,7 +648,6 @@ class Request(InfoEntity):
         :param str cluster_state: State of virtual cluster
         :param str cluster_state_reason:  Primarily for error reporting.
         :param str allocations:   List of allocations that the request shoud utilize.
-        :param str environments:  List of environments to install on top of the cluster.
         :param str policy:        Policy for utilizing the allocations. 
         :param str expiration:    Date YYYY-MM-DD,HH:MM:SS when this cluster expires and should be unconditionally terminated.    
         
@@ -662,7 +667,6 @@ class Request(InfoEntity):
                      'policy',        # name of policy to use to satisfy request
                      'allocations',   # list of allocations to satisfy this request
                      'cluster',       # contains cluster def, which includes nodeset descriptions
-                     'environments',  # environment(s) to instantiate on nodesets.
                      'statusraw',     # raw dictionary of submissions for all factories+allocations.
                      'statusinfo'     # aggregated submission status
                      ]
@@ -698,7 +702,6 @@ class Request(InfoEntity):
                  cluster=None, 
                  policy = None, 
                  allocations = [], 
-                 environments = [],
                  statusraw = None,
                  statusinfo = None 
                  ):
@@ -725,8 +728,6 @@ class Request(InfoEntity):
         self.cluster = cluster
         self.allocations  = allocations
         self.policy       = policy
-        self.environments = environments
-
         
 
 class Provisioner(InfoEntity):

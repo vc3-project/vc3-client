@@ -17,24 +17,24 @@ vc3-client -c ${config} allocation-create --owner ${owner} --resource RESOURCE_1
 
 vc3-client -c ${config} allocation-create --owner ${owner} --resource RESOURCE_2 --accountname vc3-${owner} ALLOCATION_2
 
-vc3-client -c ${config} nodeset-create --owner ${owner} --node_number 1 --app_type APP_TYPE --app_role APP_ROLE NODESET_1
+vc3-client -c ${config} environment-create --owner ${owner} --packages cctools --envvar HELLO=world ENVIRONMENT_1
+
+vc3-client -c ${config} nodeset-create --owner ${owner} --node_number 1 --app_type APP_TYPE --app_role APP_ROLE NODESET_1 --environment ENVIRONMENT_1
 
 vc3-client -c ${config} cluster-create --owner ${owner} --nodesets NODESET_1 CLUSTER_1
 
-vc3-client -c ${config} environment-create --owner ${owner} --packages cctools --envvar HELLO=world ENVIRONMENT_1
-
-vc3-client -c ${config} request-create --owner ${owner} --cluster CLUSTER_1 --allocations ALLOCATION_1,ALLOCATION_2 --environments ENVIRONMENT_1 ${requestid}
+vc3-client -c ${config} request-create --owner ${owner} --cluster CLUSTER_1 --allocations ALLOCATION_1,ALLOCATION_2 ${requestid}
 
 
 vc3-client -c ${config} allocation-list
 
 vc3-client -c ${config} resource-list
 
+vc3-client -c ${config} environment-list
+
 vc3-client -c ${config} nodeset-list
 
 vc3-client -c ${config} cluster-list
-
-vc3-client -c ${config} environment-list
 
 vc3-client -c ${config} request-list
 
