@@ -53,15 +53,24 @@ $CLIENT $DEBUGS -c $CONFIG resource-create --owner btovar --accesstype local --a
 $CLIENT $DEBUGS -c $CONFIG allocation-create --owner btovar --resource condor-schedd-local --accountname btovar btovar.condor-schedd-local
 
 # Create environment
+# $CLIENT $DEBUGS -c $CONFIG environment-create\
+#     --owner      btovar\
+#     --packages   vc3-glidein\
+#     --extra-args='--home=.'\
+#     --extra-args='--install=.'\
+#     --extra-args='--sys python:2.7=/usr'\
+#     --filesmap   '~/git/vc3-client/testing/mycondorpassword=mycondorpassword,~/git/vc3-client/testing/filea.txt=filea.txt'\
+#     --command    "vc3-glidein -c ${CONDOR_COLLECTOR} -C ${CONDOR_COLLECTOR} -p mycondorpassword"\
+#     btovar-env1
+# 
 $CLIENT $DEBUGS -c $CONFIG environment-create\
     --owner      btovar\
-    --packages   vc3-glidein\
+    --packages   cctools-statics\
     --extra-args='--home=.'\
     --extra-args='--install=.'\
-    --extra-args='--sys python:2.7=/usr'\
-    --filesmap   '~/git/vc3-client/testing/mycondorpassword=mycondorpassword,~/git/vc3-client/testing/filea.txt=filea.txt'\
-    --command    "vc3-glidein -c ${CONDOR_COLLECTOR} -C ${CONDOR_COLLECTOR} -p mycondorpassword"\
+    --command    "work_queue_worker -M vc3.btovar.project -t300"\
     btovar-env1
+
 
 # Node set for the virtual cluster
 $CLIENT $DEBUGS -c $CONFIG nodeset-create --owner btovar --node_number 5 --app_type htcondor --app_role worker-nodes --environment btovar-env1 htcondor-workers-1
@@ -73,7 +82,7 @@ $CLIENT $DEBUGS -c $CONFIG cluster-create --owner btovar htcondor-10workers
 $CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-10workers htcondor-workers-1
 
 # Create request
-$CLIENT $DEBUGS -c $CONFIG request-create --owner btovar --cluster htcondor-10workers --allocations btovar.condor-schedd-local btovar.request_local
+$CLIENT $DEBUGS -c $CONFIG request-create --owner btovar --cluster htcondor-10workers --allocations btovar.condor-schedd-local request_local
 
 # Terminate a request
 # $CLIENT $DEBUGS -c $CONFIG request-terminate --requestname september-demo-request
