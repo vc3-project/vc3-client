@@ -48,7 +48,6 @@ $CLIENT $DEBUGS -c $CONFIG project-create --owner btovar --members btovar NDWQ
 
 # Create resource
 $CLIENT $DEBUGS -c $CONFIG resource-create --owner btovar --accesstype local --accessmethod local condor-schedd-local
-$CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost midway-login1.rcc.uchicago.edu --accessport 22 uchicago-midway
 
 # Create allocation
 $CLIENT $DEBUGS -c $CONFIG allocation-create --owner btovar --resource condor-schedd-local --accountname btovar btovar.condor-schedd-local
@@ -60,7 +59,7 @@ $CLIENT $DEBUGS -c $CONFIG environment-create\
     --extra-args='--home=.'\
     --extra-args='--install=.'\
     --extra-args='--sys python:2.7=/usr'\
-    --filesmap   '~/git/vc3-client/testing/mycondorpassword=mycondorpassword'\
+    --filesmap   '~/git/vc3-client/testing/mycondorpassword=mycondorpassword,~/git/vc3-client/testing/filea.txt=filea.txt'\
     --command    "vc3-glidein -c ${CONDOR_COLLECTOR} -C ${CONDOR_COLLECTOR} -p mycondorpassword"\
     btovar-env1
 
