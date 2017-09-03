@@ -49,13 +49,13 @@ $CLIENT $DEBUGS -c $CONFIG project-create --owner khurtado --members khurtado,li
 
 # Create resource
 $CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost midway-login1.rcc.uchicago.edu --accessport 22 uchicago-midway
-$CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor condor --accesshost condor.grid.uchicago.edu --accessport 22 uchicago-coreos
-$CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost cori.nersc.gov --accessport 22 nersc-cori
+#$CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor condor --accesshost condor.grid.uchicago.edu --accessport 22 uchicago-coreos
+#$CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost cori.nersc.gov --accessport 22 nersc-cori
 
 # Create allocation
 $CLIENT $DEBUGS -c $CONFIG allocation-create --owner lincolnb --resource uchicago-midway --accountname lincolnb lincolnb.uchicago-midway
-$CLIENT $DEBUGS -c $CONFIG allocation-create --owner lincolnb --resource uchicago-coreos --accountname lincolnb lincolnb.uchicago-coreos
-$CLIENT $DEBUGS -c $CONFIG allocation-create --owner lincolnb --resource nersc-cori --accountname briedel briedel.nersc-cori
+#$CLIENT $DEBUGS -c $CONFIG allocation-create --owner lincolnb --resource uchicago-coreos --accountname lincolnb lincolnb.uchicago-coreos
+#$CLIENT $DEBUGS -c $CONFIG allocation-create --owner lincolnb --resource nersc-cori --accountname briedel briedel.nersc-cori
 
 # Create environment
 # below is likely wrong, as the file mappings go to /etc. Most likely, that will result in a permission denied error when writing the file.
