@@ -472,6 +472,13 @@ class VC3ClientCLI(object):
                 default=None
                 )
 
+        parser_requestcreate.add_argument('--environments', 
+                action='store', 
+                dest='environments', 
+                help='Comma-separated list of Environments to be used by the request',
+                default=None
+                )
+
         parser_requestlist = subparsers.add_parser('request-list', 
                                                 help='list vc3 request(s)')
 
@@ -805,11 +812,15 @@ class VC3ClientCLI(object):
             allocationslist = []
             if ns.allocations is not None:
                 allocationlist = ns.allocations.split(',')
+            environmentlist = []
+            if ns.environments is not None:
+                environmentlist = ns.environments.split(',')
     
             r = capi.defineRequest( name=ns.requestname,
                                     owner = ns.owner,
                                     cluster=ns.cluster,
                                     allocations=allocationlist,
+                                    environments=environmentlist,
                                     policy= ns.policy,
                                     expiration=None,
                                      )

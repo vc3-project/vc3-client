@@ -666,6 +666,7 @@ class Request(InfoEntity):
                      'authconf',      # base64-encoded contents of factory auth.conf sections. 
                      'policy',        # name of policy to use to satisfy request
                      'allocations',   # list of allocations to satisfy this request
+                     'environments',  # list of environments to satisfy this request
                      'cluster',       # contains cluster def, which includes nodeset descriptions
                      'statusraw',     # raw dictionary of submissions for all factories+allocations.
                      'statusinfo'     # aggregated submission status
@@ -680,10 +681,7 @@ class Request(InfoEntity):
                               'shrinking', 
                               'terminating', 
                               'terminated'],
-                     'action' : [ 'new',
-                                  'run',
-                                  'terminate',
-                                 ]
+                     'action' : [ 'new', 'run', 'terminate' ]
                     } 
     
     
@@ -701,7 +699,8 @@ class Request(InfoEntity):
                  authconf = None, 
                  cluster=None, 
                  policy = None, 
-                 allocations = [], 
+                 allocations  = [],
+                 environments = [],
                  statusraw = None,
                  statusinfo = None 
                  ):
@@ -726,8 +725,15 @@ class Request(InfoEntity):
         
         # Composite attributes from other entities. 
         self.cluster = cluster
+        self.policy  = policy
+
+        if allocations is None:
+            allocations = []
+        if environments is None:
+            environments = []
+
         self.allocations  = allocations
-        self.policy       = policy
+        self.environments = environments
         
 
 class Provisioner(InfoEntity):
