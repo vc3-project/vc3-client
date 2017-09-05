@@ -550,14 +550,14 @@ class Nodeset(InfoEntity):
         self.state = state
         self.owner = owner
         self.acl = acl
-        self.node_number = node_number
+        self.node_number = int(node_number)
         self.app_type = app_type
         self.app_role = app_role
         self.resource_type = resource_type
         
-        self.cores = cores
-        self.memory_mb = memory_mb
-        self.storage_mb = storage_mb
+        self.cores = int(cores)
+        self.memory_mb = int(memory_mb)
+        self.storage_mb = int(storage_mb)
         self.app_host = app_host
         self.app_port = app_port
         self.app_sectoken = app_sectoken
