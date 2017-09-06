@@ -41,6 +41,7 @@ class User(InfoEntity):
                      'identity_id'] 
     infokey = 'user'
     validvalues = {}
+    intattributes = []
     
     def __init__(self,
                    name,
@@ -117,7 +118,7 @@ class Project(InfoEntity):
                      'allocations',
                      'blueprints']
     validvalues = {}
-    
+    intattributes = []    
     
     def __init__(self, 
                    name,
@@ -248,6 +249,7 @@ class Resource(InfoEntity):
     validvalues = {
         'accesstype' : ['batch','cloud']
         }
+    intattributes = []
     
     def __init__(self,
                  name,
@@ -339,7 +341,7 @@ class Allocation(InfoEntity):
     validvalues = {
         'sectype' : ['ssh-rsa', 'ssh-dsa' , 'x509' ],
         }
-    
+    intattributes = []    
     
     def __init__(self, 
                  name, 
@@ -390,6 +392,7 @@ class Policy(InfoEntity):
                       'pluginname'
                       ]
     validvalues = {}
+    intattributes = []
     
     
     def __init__(self, name, state, owner, acl, pluginname):
@@ -441,7 +444,7 @@ class Cluster(InfoEntity):
                         'nodesets',
                       ]
     validvalues = {}
-
+    intattributes = []
 
     def __init__(self, name, state, owner, acl, nodesets ):
         '''
@@ -524,6 +527,11 @@ class Nodeset(InfoEntity):
         'app_type' : ['htcondor' , 'workqueue' ],
         'app_role' : ['head-node' , 'worker-nodes' ]
         }
+    intattributes = [ 'node_number',
+                      'cores',
+                      'memory_mb',
+                      'storage_mb'
+                     ]
     
     def __init__(self, name, 
                        state,
@@ -550,14 +558,14 @@ class Nodeset(InfoEntity):
         self.state = state
         self.owner = owner
         self.acl = acl
-        self.node_number = int(node_number)
+        self.node_number = node_number
         self.app_type = app_type
         self.app_role = app_role
         self.resource_type = resource_type
         
-        self.cores = int(cores)
-        self.memory_mb = int(memory_mb)
-        self.storage_mb = int(storage_mb)
+        self.cores = cores
+        self.memory_mb = memory_mb
+        self.storage_mb = storage_mb
         self.app_host = app_host
         self.app_port = app_port
         self.app_sectoken = app_sectoken
@@ -583,6 +591,7 @@ class Environment(InfoEntity):
                      'builder_extra_args'
                      ]
     validvalues = { }
+    intattributes = []
 
     def __init__(self, name, state, owner, acl,  packagelist=[], envmap={}, files={}, command = None, builder_extra_args = None):
         '''
@@ -685,7 +694,7 @@ class Request(InfoEntity):
                                   'terminate',
                                  ]
                     } 
-    
+    intattributes = []
     
     def __init__(self, 
                  name, 
@@ -745,7 +754,7 @@ class Provisioner(InfoEntity):
                      'queuesconf',
                      ]
     validvalues = {}
-
+    intattributes = []
 
     def __init__(self, name, state, acl, provtype='autopyfactory', authconfig=None, queuesconfig=None ):
         '''
