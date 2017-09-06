@@ -73,16 +73,16 @@ $CLIENT $DEBUGS -c $CONFIG environment-create\
 
 
 # Node set for the virtual cluster
-$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner btovar --node_number 5 --app_type htcondor --app_role worker-nodes --environment btovar-env1 htcondor-workers-1
+$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner btovar --node_number 2 --app_type workqueue --app_role worker-nodes --environment btovar-env1 wq-workers-1
 
 # virtual cluster holder
-$CLIENT $DEBUGS -c $CONFIG cluster-create --owner btovar htcondor-10workers
+$CLIENT $DEBUGS -c $CONFIG cluster-create --owner btovar wq-10workers
 
 # Add nodeset to cluster
-$CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-10workers htcondor-workers-1
+$CLIENT $DEBUGS -c $CONFIG cluster-addnodeset wq-10workers wq-workers-1
 
 # Create request
-$CLIENT $DEBUGS -c $CONFIG request-create --owner btovar --cluster htcondor-10workers --allocations btovar.condor-schedd-local request_local
+$CLIENT $DEBUGS -c $CONFIG request-create --owner btovar --cluster wq-10workers --allocations btovar.condor-schedd-local request_local
 
 # Terminate a request
 # $CLIENT $DEBUGS -c $CONFIG request-terminate --requestname september-demo-request

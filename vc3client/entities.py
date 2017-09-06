@@ -334,7 +334,7 @@ class Allocation(InfoEntity):
                      'accountname',
                      'quantity',
                      'units',       # corehours, su, nodes, 
-                     'sectype',     # ssh-rsa, ssh-dsa, pki, x509
+                     'sectype',     # ssh-rsa, ssh-dsa, pki, x509, local
                      'pubtoken',    # ssh pubkey, cloud access key
                      'privtoken',   # ssh privkey, cloud secret key, VOMS proxy
                     ]   
