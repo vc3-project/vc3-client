@@ -339,7 +339,7 @@ class Allocation(InfoEntity):
                      'privtoken',   # ssh privkey, cloud secret key, VOMS proxy
                     ]   
     validvalues = {
-        'sectype' : ['ssh-rsa', 'ssh-dsa' , 'x509' ],
+        'sectype' : [ None, 'ssh-rsa', 'ssh-dsa' , 'x509' ],
         }
     intattributes = []    
     
