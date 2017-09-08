@@ -52,28 +52,8 @@ $CLIENT $DEBUGS -c $CONFIG resource-create --owner btovar --accesstype local --a
 # Create allocation
 $CLIENT $DEBUGS -c $CONFIG allocation-create --owner btovar --resource condor-schedd-local --accountname btovar btovar.condor-schedd-local
 
-# Create environment
-# $CLIENT $DEBUGS -c $CONFIG environment-create\
-#     --owner      btovar\
-#     --packages   vc3-glidein\
-#     --extra-args='--home=.'\
-#     --extra-args='--install=.'\
-#     --extra-args='--sys python:2.7=/usr'\
-#     --filesmap   '~/git/vc3-client/testing/mycondorpassword=mycondorpassword,~/git/vc3-client/testing/filea.txt=filea.txt'\
-#     --command    "vc3-glidein -c ${CONDOR_COLLECTOR} -C ${CONDOR_COLLECTOR} -p mycondorpassword"\
-#     btovar-env1
-# 
-$CLIENT $DEBUGS -c $CONFIG environment-create\
-    --owner      btovar\
-    --packages   cctools-statics\
-    --extra-args='--home=.'\
-    --extra-args='--install=.'\
-    --command    "work_queue_worker -M vc3.btovar.project -t300"\
-    btovar-env1
-
-
 # Node set for the virtual cluster
-$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner btovar --node_number 2 --app_type workqueue --app_role worker-nodes --environment btovar-env1 wq-workers-1
+$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner btovar --node_number 2 --app_type workqueue --app_role worker-nodes wq-workers-1
 
 # virtual cluster holder
 $CLIENT $DEBUGS -c $CONFIG cluster-create --owner btovar wq-10workers
@@ -86,3 +66,4 @@ $CLIENT $DEBUGS -c $CONFIG request-create --owner btovar --cluster wq-10workers 
 
 # Terminate a request
 # $CLIENT $DEBUGS -c $CONFIG request-terminate --requestname september-demo-request
+

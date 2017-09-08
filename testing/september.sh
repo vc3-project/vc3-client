@@ -64,14 +64,12 @@ $CLIENT $DEBUGS -c $CONFIG allocation-create --owner lincolnb --resource nersc-c
 # Create environment
 # below is likely wrong, as the file mappings go to /etc. Most likely, that will result in a permission denied error when writing the file.
 # $CLIENT $DEBUGS -c $CONFIG environment-create --owner lincolnb --filesmap "~/git/vc3-client/testing/filea.txt=/etc/filea.txt,~/git/vc3-client/testing/fileb.txt=/etc/fileb.txt" lincolnb-env1
+
+# we simply use the environment to send the password file (temporal solution for the demo)
+# make sure the name of this environment is the environment for the nodesets that need to talk to the condor collector
 $CLIENT $DEBUGS -c $CONFIG environment-create\
     --owner      lincolnb\
-    --packages   vc3-glidein\
-    --extra-args='--home=.'\
-    --extra-args='--install=.'\
-    --extra-args='--sys python:2.7=/usr'\
     --filesmap   '~/git/vc3-client/testing/mycondorpassword=mycondorpassword'\
-    --command    "vc3-glidein -c ${CONDOR_COLLECTOR} -C ${CONDOR_COLLECTOR} -p mycondorpassword"\
     lincolnb-env1
 
 # List environments
