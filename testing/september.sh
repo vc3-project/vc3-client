@@ -67,17 +67,19 @@ $CLIENT $DEBUGS -c $CONFIG allocation-create --owner lincolnb --resource nersc-c
 
 # we simply use the environment to send the password file (temporal solution for the demo)
 # make sure the name of this environment is the environment for the nodesets that need to talk to the condor collector
+PASSWORD_REMOTE_NAME=mycondorpassword
 $CLIENT $DEBUGS -c $CONFIG environment-create\
     --owner      lincolnb\
-    --filesmap   '~/git/vc3-client/testing/mycondorpassword=mycondorpassword'\
-    lincolnb-env1
+    --envvar     VC3_CONDOR_PASSWORD_FILE=${PASSWORD_REMOTE_NAME}\
+    --filesmap   "~/git/vc3-client/testing/mycondorpassword=${PASSWORD_REMOTE_NAME}"\
+    condor-glidein-password-env1
 
 # List environments
 #$CLIENT $DEBUGS -c $CONFIG environment-list
 # Node set for the virtual cluster
 # Only one nodeset per cluster for now. Just workers..
-#$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 1 --app_type htcondor --app_role head-node --environment lincolnb-env1 htcondor-head-1
-$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 10 --app_type htcondor --app_role worker-nodes --environment lincolnb-env1 htcondor-workers-1
+#$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 1 --app_type htcondor --app_role head-node --environment condor-glidein-password-env1 htcondor-head-1
+$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 10 --app_type htcondor --app_role worker-nodes --environment condor-glidein-password-env1 htcondor-workers-1
 # virtual cluster holder
 $CLIENT $DEBUGS -c $CONFIG cluster-create --owner lincolnb htcondor-10workers
 
