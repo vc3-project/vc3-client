@@ -29,7 +29,7 @@ else
 fi
 
 # Only one nodeset per cluster for now. Just workers..
-$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 10 --app_type htcondor --app_role worker-nodes --environment condorglidein-env1 htcondor-workers-1
+$CLIENT $DEBUGS -c $CONFIG nodeset-create --owner lincolnb --node_number 10 --app_type htcondor --app_role worker-nodes --environment condor-glidein-password-env1 htcondor-workers-1
 
 # virtual cluster holder
 $CLIENT $DEBUGS -c $CONFIG cluster-create --owner lincolnb htcondor-10workers
