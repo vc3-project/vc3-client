@@ -689,6 +689,7 @@ class Request(InfoEntity):
                               'running', 
                               'shrinking', 
                               'terminating', 
+                              'cleanup', 
                               'terminated'],
                      'action' : [ 'new', 'run', 'terminate' ]
                     } 
