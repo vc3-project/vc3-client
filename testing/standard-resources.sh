@@ -29,6 +29,9 @@ else
 fi
 
 # Create resource
-$CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost midway-login1.rcc.uchicago.edu --accessport 22 uchicago-midway
+$CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor slurm  --accesshost midway-login1.rcc.uchicago.edu --accessport 22 uchicago-midway
 $CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor condor --accesshost condor.grid.uchicago.edu --accessport 22 uchicago-coreos
-$CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost cori.nersc.gov --accessport 22 nersc-cori
+$CLIENT $DEBUGS -c $CONFIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor slurm  --accesshost cori.nersc.gov --accessport 22 nersc-cori
+
+$CLIENT $DEBUGS -c $CONDIG resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor condor --accesshost pool.virtualclusters.org --accessport 22 vc3-test-pool
+
