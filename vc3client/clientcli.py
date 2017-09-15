@@ -76,7 +76,7 @@ class VC3ClientCLI(object):
 
         parser_usercreate.add_argument('--institution', 
                                      action="store", 
-                                     dest="institution",
+                                     dest="organization",
                                      required=True 
                                      )  
         
@@ -84,6 +84,38 @@ class VC3ClientCLI(object):
                                      action="store", 
                                      dest="identity_id", 
                                      default=None)   
+        
+        
+        # description, displayname,url, docurl 
+        parser_usercreate.add_argument('--description', 
+                                     action="store", 
+                                     dest="description",
+                                     required=False,
+                                     default=None 
+                                     )
+
+        parser_usercreate.add_argument('--displayname', 
+                                     action="store", 
+                                     dest="displayname",
+                                     required=False,
+                                     default=None
+                                     )        
+
+        parser_usercreate.add_argument('--url', 
+                                     action="store", 
+                                     dest="url",
+                                     required=False,
+                                     default=None 
+                                     )         
+
+        parser_usercreate.add_argument('--docurl', 
+                                     action="store", 
+                                     dest="docurl",
+                                     required=False,
+                                     default=None 
+                                     )          
+        
+        
         
         parser_userlist = subparsers.add_parser('user-list', 
                                                 help='list vc3 user(s)')
@@ -109,7 +141,41 @@ class VC3ClientCLI(object):
                                      default=None,
                                      help='comma-separated list of vc3users'
                                      )
+        
+        parser_projectcreate.add_argument('--description', 
+                                     action="store", 
+                                     dest="description",
+                                     required=False,
+                                     default=None 
+                                     )
 
+        parser_projectcreate.add_argument('--displayname', 
+                                     action="store", 
+                                     dest="displayname",
+                                     required=False,
+                                     default=None 
+                                     )        
+
+        parser_projectcreate.add_argument('--url', 
+                                     action="store", 
+                                     dest="url",
+                                     required=False,
+                                     default=None 
+                                     )         
+
+        parser_projectcreate.add_argument('--docurl', 
+                                     action="store", 
+                                     dest="docurl",
+                                     required=False,
+                                     default=None 
+                                     )
+
+        parser_projectcreate.add_argument('--organization', 
+                                     action="store", 
+                                     dest="organization",
+                                     required=False,
+                                     default=None 
+                                     )
 
         parser_projectadduser = subparsers.add_parser('project-adduser', 
                                                 help='add user to vc3 project')
@@ -220,8 +286,39 @@ class VC3ClientCLI(object):
                                      dest="mfa",
                                      help="requires multi-factor/OTP authentication",
                                      default=False, 
+                                     )
+        parser_resourcecreate.add_argument('--description', 
+                                     action="store", 
+                                     dest="description",
+                                     required=False,
+                                     default=None 
+                                     )
+
+        parser_resourcecreate.add_argument('--displayname', 
+                                     action="store", 
+                                     dest="displayname",
+                                     required=False,
+                                     default=None 
                                      )        
-                                        
+
+        parser_resourcecreate.add_argument('--url', 
+                                     action="store", 
+                                     dest="url",
+                                     required=False,
+                                     default=None 
+                                     )         
+
+        parser_resourcecreate.add_argument('--docurl', 
+                                     action="store", 
+                                     dest="docurl",
+                                     required=False,
+                                     default=None 
+                                     )        
+        parser_resourcecreate.add_argument('--organization', 
+                                     action="store", 
+                                     dest="organization",
+                                     required=False 
+                                     )                
                                         
         parser_resourcelist = subparsers.add_parser('resource-list', 
                                                 help='list vc3 resource(s)')
@@ -253,6 +350,34 @@ class VC3ClientCLI(object):
         parser_allocationcreate.add_argument('--accountname', 
                                      action="store", 
                                      dest="accountname", 
+                                     )
+        
+        parser_allocationcreate.add_argument('--description', 
+                                     action="store", 
+                                     dest="description",
+                                     required=False,
+                                     default=None 
+                                     )
+
+        parser_allocationcreate.add_argument('--displayname', 
+                                     action="store", 
+                                     dest="displayname",
+                                     required=False,
+                                     default=None 
+                                     )        
+
+        parser_allocationcreate.add_argument('--url', 
+                                     action="store", 
+                                     dest="url",
+                                     required=False,
+                                     default=None 
+                                     )         
+
+        parser_allocationcreate.add_argument('--docurl', 
+                                     action="store", 
+                                     dest="docurl",
+                                     required=False,
+                                     default=None 
                                      )        
         
     
@@ -279,26 +404,54 @@ class VC3ClientCLI(object):
                                                      help='create new nodeset specification')
 
         parser_nodesetcreate.add_argument('--owner', 
-                                     action="store", 
-                                     dest="owner", 
-                                     )
+                                          action="store", 
+                                          dest="owner", 
+                                          )
 
         parser_nodesetcreate.add_argument('--node_number', 
-            help='number of nodes in nodeset',
-            default=1,
-            action="store")
+                                          help='number of nodes in nodeset',
+                                          default=1,
+                                          action="store")
       
         parser_nodesetcreate.add_argument('--app_type', 
-            help='general middleware type of node',
-            action="store")
+                                          help='general middleware type of node',
+                                          action="store")
 
         parser_nodesetcreate.add_argument('--app_role', 
-            help='general middleware type of node',
-            action="store")
+                                          help='general middleware type of node',
+                                          action="store")
 
         parser_nodesetcreate.add_argument('--environment', 
-            help='Environment to be installed per job in the nodeset (e.g. a glidein)',
-            action="store")
+                                          help='Environment to be installed per job in the nodeset (e.g. a glidein)',
+                                          action="store")
+
+        parser_nodesetcreate.add_argument('--description', 
+                                     action="store", 
+                                     dest="description",
+                                     required=False,
+                                     default=None 
+                                     )
+
+        parser_nodesetcreate.add_argument('--displayname', 
+                                     action="store", 
+                                     dest="displayname",
+                                     required=False,
+                                     default=None 
+                                     )        
+
+        parser_nodesetcreate.add_argument('--url', 
+                                     action="store", 
+                                     dest="url",
+                                     required=False,
+                                     default=None 
+                                     )         
+
+        parser_nodesetcreate.add_argument('--docurl', 
+                                     action="store", 
+                                     dest="docurl",
+                                     required=False,
+                                     default=None 
+                                     ) 
 
         parser_nodesetcreate.add_argument('nodesetname', 
             help='name of the nodeset to be created',
@@ -334,6 +487,34 @@ class VC3ClientCLI(object):
                 help='comma separated list of nodesets within this cluster'
                 )
         
+        parser_clustercreate.add_argument('--description', 
+                                     action="store", 
+                                     dest="description",
+                                     required=False,
+                                     default=None 
+                                     )
+
+        parser_clustercreate.add_argument('--displayname', 
+                                     action="store", 
+                                     dest="displayname",
+                                     required=False,
+                                     default=None 
+                                     )        
+
+        parser_clustercreate.add_argument('--url', 
+                                     action="store", 
+                                     dest="url",
+                                     required=False,
+                                     default=None 
+                                     )         
+
+        parser_clustercreate.add_argument('--docurl', 
+                                     action="store", 
+                                     dest="docurl",
+                                     required=False,
+                                     default=None 
+                                     ) 
+
         parser_clusterlist = subparsers.add_parser('cluster-list', 
                                                 help='list vc3 cluster(s)')
 
@@ -372,54 +553,80 @@ class VC3ClientCLI(object):
             
         
         ########################### Environment  ##########################################
-        parser_environ = subparsers.add_parser('environment-create', 
+        parser_environcreate = subparsers.add_parser('environment-create', 
                 help='create new environment')
 
-        parser_environ.add_argument('environmentname', 
+        parser_environcreate.add_argument('environmentname', 
                 help='name of the environment to be created',
                 action="store")
 
-        parser_environ.add_argument('--owner',
+        parser_environcreate.add_argument('--owner',
                 action="store", 
                 dest="owner", 
                 default='unknown')
 
-        parser_environ.add_argument('--packages', 
+        parser_environcreate.add_argument('--packages', 
                 action='store', 
                 dest='packagelist', 
                 default=None,
                 help='comma separated list of packages to be installed'
                 )
 
-        parser_environ.add_argument('--envvar', 
+        parser_environcreate.add_argument('--envvar', 
                 action='append', 
                 dest='envmap', 
                 default=None,
                 help='VAR=VALUE to be set as an environment variable'
                 )
 
-        parser_environ.add_argument('--filesmap', 
+        parser_environcreate.add_argument('--filesmap', 
                 action='store', 
                 dest='filesmap', 
                 default=None,
                 help='comma separated list of LOCAL=REMOTE file name specifications'
                 )
 
-        parser_environ.add_argument('--command', 
+        parser_environcreate.add_argument('--command', 
                 action='store', 
                 dest='command', 
                 default=None,
                 help='Command to execute the environment. No two environments in a request may define a command.'
                 )
 
-        parser_environ.add_argument('--extra-args', 
+        parser_environcreate.add_argument('--extra-args', 
                 action='append', 
                 dest='builder_extra_args', 
                 default=None,
                 help='Extra argument to pass to the builder.'
                 )
 
+        parser_environcreate.add_argument('--description', 
+                                     action="store", 
+                                     dest="description",
+                                     required=False,
+                                     default=None 
+                                     )
 
+        parser_environcreate.add_argument('--displayname', 
+                                     action="store", 
+                                     dest="displayname",
+                                     required=False,
+                                     default=None 
+                                     )        
+
+        parser_environcreate.add_argument('--url', 
+                                     action="store", 
+                                     dest="url",
+                                     required=False,
+                                     default=None 
+                                     )         
+
+        parser_environcreate.add_argument('--docurl', 
+                                     action="store", 
+                                     dest="docurl",
+                                     required=False,
+                                     default=None 
+                                     ) 
         
         parser_environmentlist = subparsers.add_parser('environment-list', 
                                                 help='list vc3 environment(s)')
@@ -478,6 +685,41 @@ class VC3ClientCLI(object):
                 help='Comma-separated list of Environments to be used by the request',
                 default=None
                 )
+
+        parser_requestcreate.add_argument('--description', 
+                                     action="store", 
+                                     dest="description",
+                                     required=False,
+                                     default=None 
+                                     )
+
+        parser_requestcreate.add_argument('--displayname', 
+                                     action="store", 
+                                     dest="displayname",
+                                     required=False,
+                                     default=None 
+                                     )        
+
+        parser_requestcreate.add_argument('--url', 
+                                     action="store", 
+                                     dest="url",
+                                     required=False,
+                                     default=None 
+                                     )         
+
+        parser_requestcreate.add_argument('--docurl', 
+                                     action="store", 
+                                     dest="docurl",
+                                     required=False,
+                                     default=None 
+                                     ) 
+
+        parser_requestcreate.add_argument('--organization', 
+                                     action="store", 
+                                     dest="organization",
+                                     required=False,
+                                     default=None 
+                                     )
 
         parser_requestlist = subparsers.add_parser('request-list', 
                                                 help='list vc3 request(s)')
@@ -569,18 +811,7 @@ class VC3ClientCLI(object):
                                      default=None
                                      )        
 
-        ############################################################ 
-        
-
-        
-        
-        
-        
-        
-        
-                 
         self.results= parser.parse_args()
-
 
 
     def setuplogging(self):
@@ -610,12 +841,17 @@ class VC3ClientCLI(object):
         
         # User commands
         if ns.subcommand == 'user-create':
-            u = capi.defineUser( ns.username,
-                                 ns.firstname,
-                                 ns.lastname,
-                                 ns.email,
-                                 ns.institution,
-                                 ns.identity_id)
+            u = capi.defineUser( name = ns.username,
+                                 first = ns.firstname,
+                                 last = ns.lastname,
+                                 email = ns.email,
+                                 organization = ns.organization,
+                                 identity_id = ns.identity_id,
+                                 description = ns.description, 
+                                 displayname = ns.displayname, 
+                                 url = ns.url, 
+                                 docurl = ns.docurl                                  
+                                 )
             self.log.debug("User is %s" % u)
             capi.storeUser(u)
             
@@ -635,9 +871,15 @@ class VC3ClientCLI(object):
             else:
                 memberslist = []
                 
-            p = capi.defineProject( ns.projectname,
-                                    ns.owner,
-                                    memberslist )
+            p = capi.defineProject( name = ns.projectname,
+                                    owner = ns.owner,
+                                    members = memberslist,
+                                    description = ns.description, 
+                                    displayname = ns.displayname, 
+                                    url = ns.url, 
+                                    docurl = ns.docurl,
+                                    organization = ns.organization
+                                    )
             self.log.debug("Project is %s" % p)
             capi.storeUser(p)    
             
@@ -664,15 +906,21 @@ class VC3ClientCLI(object):
             
         # Resource commands
         elif ns.subcommand == 'resource-create':
-            r = capi.defineResource( ns.resourcename,
-                                     ns.owner,
-                                     ns.accesstype,
-                                     ns.accessmethod,
-                                     ns.accessflavor,
-                                     ns.accesshost,
-                                     ns.accessport,
-                                     ns.gridresource,
-                                     ns.mfa )
+            r = capi.defineResource( name = ns.resourcename,
+                                     owner = ns.owner,
+                                     accesstype = ns.accesstype,
+                                     accessmethod = ns.accessmethod,
+                                     accessflavor = ns.accessflavor,
+                                     accesshost = ns.accesshost,
+                                     accessport = ns.accessport,
+                                     gridresource = ns.gridresource,
+                                     mfa = ns.mfa,
+                                     organization = ns.organization,
+                                     description = ns.description, 
+                                     displayname = ns.displayname, 
+                                     url = ns.url, 
+                                     docurl = ns.docurl 
+                                      )
             self.log.debug("Resource is %s" % r)
             capi.storeResource(r)    
             
@@ -688,10 +936,14 @@ class VC3ClientCLI(object):
         
         # Allocation commands
         elif ns.subcommand == 'allocation-create':
-            a = capi.defineAllocation( ns.allocationname,
-                                       ns.owner,
-                                       ns.resource,
-                                       ns.accountname
+            a = capi.defineAllocation( name = ns.allocationname,
+                                       owner = ns.owner,
+                                       resource = ns.resource,
+                                       accountname = ns.accountname,
+                                       description = ns.description, 
+                                       displayname = ns.displayname, 
+                                       url = ns.url, 
+                                       docurl = ns.docurl 
                                        )
             self.log.debug("Allocation is %s" % a)
             capi.storeAllocation(a)    
@@ -711,12 +963,17 @@ class VC3ClientCLI(object):
 
         # Nodeset create, list
         elif ns.subcommand == 'nodeset-create':
-            n = capi.defineNodeset(ns.nodesetname, 
-                                    ns.owner, 
-                                    ns.node_number, 
-                                    ns.app_type, 
-                                    ns.app_role,
-                                    environment = ns.environment)
+            n = capi.defineNodeset(name = ns.nodesetname, 
+                                   owner =  ns.owner, 
+                                   node_number = ns.node_number, 
+                                   app_type = ns.app_type, 
+                                   app_role = ns.app_role,
+                                   environment = ns.environment,
+                                   description = ns.description, 
+                                   displayname = ns.displayname, 
+                                   url = ns.url, 
+                                   docurl = ns.docurl                                    
+                                   )
             capi.storeNodeset(n)
 
         elif ns.subcommand == 'nodeset-list' and ns.nodesetname is None:
@@ -732,13 +989,22 @@ class VC3ClientCLI(object):
         elif ns.subcommand == 'cluster-create' and ns.nodesets is not None:
             c = capi.defineCluster( name = ns.clustername,
                                     owner = ns.owner,
-                                    nodesets=ns.nodesets.split(','))
+                                    nodesets=ns.nodesets.split(','),
+                                    description = ns.description, 
+                                    displayname = ns.displayname, 
+                                    url = ns.url, 
+                                    docurl = ns.docurl                                     
+                                    )
             self.log.debug("Cluster is %s" % c)
             capi.storeCluster(c)    
 
         elif ns.subcommand == 'cluster-create' and ns.nodesets is None:
             c = capi.defineCluster( name = ns.clustername,
                                     owner = ns.owner,
+                                    description = ns.description, 
+                                    displayname = ns.displayname, 
+                                    url = ns.url, 
+                                    docurl = ns.docurl                                    
                                   )
             self.log.debug("Cluster is %s" % c)
             capi.storeCluster(c)    
@@ -785,13 +1051,18 @@ class VC3ClientCLI(object):
                         all = l_f.read()
                         files[remote] = VC3ClientAPI.encode(all)
             
-            e = capi.defineEnvironment( ns.environmentname,
-                                        ns.owner,
+            e = capi.defineEnvironment( name = ns.environmentname,
+                                        owner = ns.owner,
                                         packagelist = packs,
                                         envmap      = vars,
                                         files       = files,
                                         command     = ns.command,
-                                        builder_extra_args = ns.builder_extra_args)
+                                        builder_extra_args = ns.builder_extra_args,
+                                        description = ns.description, 
+                                        displayname = ns.displayname, 
+                                        url = ns.url, 
+                                        docurl = ns.docurl                                        
+                                        )
             
             self.log.debug("Environment is %s" % e)
             capi.storeEnvironment(e)
@@ -823,6 +1094,11 @@ class VC3ClientCLI(object):
                                     environments=environmentlist,
                                     policy= ns.policy,
                                     expiration=None,
+                                    organization = ns.organization,
+                                    description = ns.description, 
+                                    displayname = ns.displayname, 
+                                    url = ns.url, 
+                                    docurl = ns.docurl                                    
                                      )
             self.log.debug("Request is %s" % r)
             capi.storeRequest(r)    

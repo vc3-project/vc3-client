@@ -53,8 +53,13 @@ class VC3ClientAPI(object):
                    first,
                    last,
                    email,
-                   institution,
-                   identity_id = None):           
+                   organization,
+                   identity_id = None,
+                   description = None,
+                   displayname = None,
+                   url = None,
+                   docurl = None,
+                   ):           
         '''
        Defines a new User object for usage elsewhere in the API. 
               
@@ -62,7 +67,7 @@ class VC3ClientAPI(object):
        :param str first: User's first name
        :param str last: User's last name
        :param str email: User's email address
-       :param str institution: User's intitutional affiliation or employer
+       :param str organization: User's institutional affiliation or employer
        :return: User  A valid User object
        
        :rtype: User        
@@ -73,8 +78,13 @@ class VC3ClientAPI(object):
                   first=first, 
                   last=last, 
                   email=email, 
-                  institution=institution,
-                  identity_id=identity_id)
+                  organization=organization,
+                  identity_id=identity_id,
+                  description = description,
+                  displayname = displayname,
+                  url = url,
+                  docurl = docurl
+                  )
         self.log.debug("Creating user object: %s " % u)
         return u
     
@@ -104,7 +114,16 @@ class VC3ClientAPI(object):
     ################################################################################
     #                           Project-related calls
     ################################################################################  
-    def defineProject(self, name, owner, members):
+    def defineProject(self, 
+                      name, 
+                      owner, 
+                      members,
+                      description = None,
+                      displayname = None,
+                      url = None,
+                      docurl = None,
+                      organization = None,                      
+                      ):
         '''
         Defines a new Project object for usage elsewhere in the API. 
               
@@ -120,7 +139,13 @@ class VC3ClientAPI(object):
                      owner=owner, 
                      members=members,
                      allocations=[],
-                     blueprints=[])
+                     blueprints=[],
+                     description = description,
+                     displayname = displayname,
+                     url = url,
+                     docurl = docurl,
+                     organization = organization                     
+                     )
         self.log.debug("Creating project object: %s " % p)
         return p
     
@@ -223,7 +248,13 @@ class VC3ClientAPI(object):
                        accesshost, 
                        accessport,  
                        gridresource, 
-                       mfa):
+                       mfa,
+                       description = None,
+                       displayname = None,
+                       url = None,
+                       docurl = None,
+                       organization = None,
+                       ):
         '''
         Defines a new Resource object for usage elsewhere in the API. 
               
@@ -250,7 +281,13 @@ class VC3ClientAPI(object):
                       accesshost = accesshost,
                       accessport = accessport,
                       gridresource=gridresource, 
-                      mfa=mfa )
+                      mfa=mfa,
+                      description = description,
+                      displayname = displayname,
+                      url = url,
+                      docurl = docurl,
+                      organization = organization                      
+                       )
         self.log.debug("Creating Resource object: %s " % r)
         return r
     
@@ -271,7 +308,10 @@ class VC3ClientAPI(object):
                                owner, 
                                resource, 
                                accountname,
-
+                               description=None,
+                               displayname=None,
+                               url=None,
+                               docurl=None,  
                                ):
         '''
           
@@ -281,7 +321,11 @@ class VC3ClientAPI(object):
                         acl=None, 
                         owner=owner, 
                         resource=resource, 
-                        accountname=accountname)
+                        accountname=accountname,
+                        description=description,
+                        displayname=displayname,
+                        url=url,
+                        docurl=docurl, )
         self.log.debug("Creating Allocation object: %s " % ao)
         return ao
     
@@ -323,13 +367,22 @@ class VC3ClientAPI(object):
     def defineCluster(self, 
                       name, 
                       owner, 
-                      nodesets=[] ): 
+                      nodesets=[],
+                      description = None,
+                      displayname = None,
+                      url = None,
+                      docurl = None,                       
+                       ): 
         
         c = Cluster(name=name, 
                     state='new',
                     owner=owner,
                     acl=None,
-                    nodesets=nodesets, # list of names of nodesets in this cluster definition. 
+                    nodesets=nodesets, # list of names of nodesets in this cluster definition.
+                    description = description,
+                    displayname = displayname,
+                    url = url,
+                    docurl = docurl 
                      )
         return c
                     
@@ -362,7 +415,18 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Nodeset-related calls
     ################################################################################ 
-    def defineNodeset(self, name, owner, node_number, app_type, app_role, environment):
+    def defineNodeset(self, 
+                      name, 
+                      owner, 
+                      node_number, 
+                      app_type, 
+                      app_role, 
+                      environment,
+                      description = None,
+                      displayname = None,
+                      url = None,
+                      docurl = None,                      
+                      ):
         ns = Nodeset( name=name, 
                       state='new',
                       owner=owner, 
@@ -377,7 +441,11 @@ class VC3ClientAPI(object):
                       app_host = None, 
                       app_port = None,
                       app_sectoken = None,
-                      environment = environment
+                      environment = environment,
+                      description = description,
+                      displayname = displayname,
+                      url = url,
+                      docurl = docurl
                        )
         self.log.debug("Created Nodeset object: %s" % ns)
         return ns 
@@ -394,7 +462,19 @@ class VC3ClientAPI(object):
     ################################################################################
     #                        Environment-related calls
     ################################################################################ 
-    def defineEnvironment(self, name, owner, packagelist = [], envmap = {}, files={}, command = None, builder_extra_args = None):
+    def defineEnvironment(self, 
+                          name, 
+                          owner, 
+                          packagelist = [], 
+                          envmap = {}, 
+                          files={}, 
+                          command = None, 
+                          builder_extra_args = None,
+                          description = None,
+                          displayname = None,
+                          url = None,
+                          docurl = None,                          
+                          ):
         e = Environment(name, 
                         state='new', 
                         acl=None, 
@@ -404,6 +484,10 @@ class VC3ClientAPI(object):
                         files = files, 
                         command = command,
                         builder_extra_args = builder_extra_args,
+                        description = description,
+                        displayname = displayname,
+                        url = url,
+                        docurl = docurl
                         )
         self.log.debug("Creating Environment object: %s " % e)
         return e
@@ -427,7 +511,13 @@ class VC3ClientAPI(object):
                       allocations,  
                       environments,
                       policy,
-                      expiration ):
+                      expiration,
+                      description = None,
+                      displayname = None,
+                      url = None,
+                      docurl = None,
+                      organization = None,                       
+                       ):
         '''
         
         :return Request
@@ -445,7 +535,12 @@ class VC3ClientAPI(object):
                     allocations  = allocations,   # list of allocation names
                     environments = environments,   # list of environments names
                     policy = policy, 
-                    expiration = expiration
+                    expiration = expiration,       # string representation of UTC time when request should be terminated. 
+                    description = description,
+                    displayname = displayname,
+                    url = url,
+                    docurl = docurl,
+                    organization = organization
                     )
         self.log.debug("Creating Request object: %s " % r)
         return r
