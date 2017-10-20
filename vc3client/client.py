@@ -112,6 +112,9 @@ class VC3ClientAPI(object):
     def getUser(self, username):
         return self.ic.getentity(User , username)
     
+    def deleteUser(self, username):
+        self.ic.deleteentity( User, username)
+    
     ################################################################################
     #                           Project-related calls
     ################################################################################  
@@ -235,7 +238,9 @@ class VC3ClientAPI(object):
         projects = self.listProjects()
         filtered = [ p for p in projects if username in p.members ]
         return filtered
-    
+
+    def deleteProject(self, projectname):
+        self.ic.deleteentity( Project, projectname)    
 
         
     ################################################################################
@@ -304,6 +309,10 @@ class VC3ClientAPI(object):
     def getResource(self, resourcename):
         return self.ic.getentity(Resource, resourcename)
 
+    def deleteResource(self, resourcename):
+        self.ic.deleteentity( Project, resourcename)
+
+
     ################################################################################
     #                           Allocation-related calls
     ################################################################################ 
@@ -341,6 +350,10 @@ class VC3ClientAPI(object):
        
     def getAllocation(self, allocationname):
         return self.ic.getentity( Allocation, allocationname)
+
+    def deleteAllocation(self, allocationname):
+        self.ic.deleteentity( Allocation, allocationname)
+
 
     def getAllocationPubToken(self, allocationname):
         alloc = self.getAllocation(allocationname)
@@ -399,6 +412,9 @@ class VC3ClientAPI(object):
        
     def getCluster(self, clustername):
         return self.ic.getentity(Cluster , clustername)
+
+    def deleteCluster(self, clustername):
+        return self.ic.deleteentity(Cluster , clustername)
 
     def addNodesetToCluster(self, nodesetname, clustername):
         co = self.getCluster(clustername)
@@ -461,6 +477,9 @@ class VC3ClientAPI(object):
        
     def getNodeset(self, nodesetname):
         return self.ic.getentity(Nodeset, nodesetname)
+
+    def deleteNodeset(self, nodesetname):
+        return self.ic.deleteentity(Nodeset, nodesetname)
     
     def storeNodeset(self, nodeset):
         nodeset.store(self.ic)
@@ -506,7 +525,11 @@ class VC3ClientAPI(object):
         return self.ic.listentities(Environment)
        
     def getEnvironment(self, environmentname):
-        return self.ic.getentity('Environment', environmentname)
+        return self.ic.getentity(Environment, environmentname)
+
+    def deleteEnvironment(self, environmentname):
+        return self.ic.deleteentity(Environment , environmentname)
+
 
     ################################################################################
     #                        Request-related calls
@@ -562,6 +585,9 @@ class VC3ClientAPI(object):
        
     def getRequest(self, requestname):
         return self.ic.getentity( Request, requestname)
+
+    def deleteRequest(self, requestname):
+        return self.ic.deleteentity( Request, requestname)
 
     def terminateRequest(self, requestname):
         r = self.ic.getentity( Request, requestname)
@@ -690,25 +716,4 @@ class VC3ClientAPI(object):
     @classmethod
     def decode(self, string):
         return base64.b64decode(string)
-        
-
-#
-# These exceptions in infoclient now. 
-#
-    
-#class EntityExistsException(Exception):
-#    def __init__(self, value):
-#        self.value = value
-#    def __str__(self):
-#        return repr(self.value)
-
-#class MissingDependencyException(Exception):
-#    '''
-#    To be thrown when an API call includes a reference to an entity that doesn't exist. 
-#    '''
-#    def __init__(self, name, entityclass):
-#        self.name        = name
-#        self.entityclass = entityclass
-#    def __str__(self):
-#        return repr(self.name) + '(' + repr(self.entityclass) + ')'
-
+       
