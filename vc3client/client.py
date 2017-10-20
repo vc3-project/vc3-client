@@ -107,7 +107,7 @@ class VC3ClientAPI(object):
         :rtype: List of User objects. 
         
         '''
-        return self._listEntities('User')
+        return self.ic.listentities('User')
        
     def getUser(self, username):
         return self.ic.getentity(User , username)
@@ -581,7 +581,7 @@ class VC3ClientAPI(object):
 
 
     def listRequests(self):
-        return self._listEntities('Request')
+        return self.ic.listentities('Request')
        
     def getRequest(self, requestname):
         return self.ic.getentity( Request, requestname)

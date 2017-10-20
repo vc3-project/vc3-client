@@ -35,7 +35,7 @@ class VC3ClientCLI(object):
         parser.add_argument('-c', '--config', 
                             action="store", 
                             dest='configpath', 
-                            default='~/vc3-services/etc/vc3-client.conf', 
+                            default='~/vc3-services/etc/vc3-client.conf, ~/git/vc3-client/etc/vc3-client.conf ', 
                             help='configuration file path.')
         
         parser.add_argument('-d', '--debug', 
@@ -887,9 +887,14 @@ class VC3ClientCLI(object):
     def run(self):
         cp = ConfigParser()
         ns = self.results
-        self.log.info("Config is %s" % ns.configpath)
-        cp.read(os.path.expanduser(ns.configpath))
-
+        self.log.info("Config string is %s" % ns.configpath)
+        configpaths = ns.configpath.split(',')
+        configfiles = []
+        for p in configpaths:
+            p = p.strip()
+            configfiles.append(os.path.expanduser(p))
+        readfiles = cp.read(configfiles)
+        self.log.info('Read config files %s' % readfiles)
         capi = VC3ClientAPI(cp)
         
         try:
