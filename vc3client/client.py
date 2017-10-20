@@ -310,7 +310,7 @@ class VC3ClientAPI(object):
         return self.ic.getentity(Resource, resourcename)
 
     def deleteResource(self, resourcename):
-        self.ic.deleteentity( Project, resourcename)
+        self.ic.deleteentity( Resource, resourcename)
 
 
     ################################################################################
