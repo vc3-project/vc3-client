@@ -124,6 +124,12 @@ class VC3ClientCLI(object):
         parser_userlist.add_argument('--username', 
                                      action="store")
 
+        parser_userdelete = subparsers.add_parser('user-delete', 
+                                                help='delete a vc3 user')
+        parser_userdelete.add_argument('username', 
+                                     action="store")
+        
+       
         ########################### Project ##########################################
         parser_projectcreate = subparsers.add_parser('project-create', 
                                                 help='create new vc3 project')
@@ -233,6 +239,13 @@ class VC3ClientCLI(object):
                                      help='list details of specified project',
                                      default=None)
 
+        parser_projectdelete = subparsers.add_parser('project-delete', 
+                                                help='delete a vc3 project')
+        
+        parser_projectdelete.add_argument('projectname', 
+                                     action="store")
+
+
         ########################### Resource ##########################################
         parser_resourcecreate = subparsers.add_parser('resource-create', 
                                                 help='create new vc3 resource')
@@ -331,6 +344,12 @@ class VC3ClientCLI(object):
                                          help='list details of specified resource',
                                          default=None)
 
+        parser_resourcedelete = subparsers.add_parser('resource-delete', 
+                                                help='delete vc3 resource')
+        
+        parser_resourcedelete.add_argument('resourcename',
+                                           action="store")
+
         ########################### Allocation  ##########################################
         parser_allocationcreate = subparsers.add_parser('allocation-create', 
                                                 help='create new vc3 allocation')
@@ -400,6 +419,13 @@ class VC3ClientCLI(object):
                                         required=True,
                                         help='specify allocation')
 
+        parser_allocationdelete = subparsers.add_parser('allocation-delete', 
+                                                help='delete a vc3 allocation')
+        
+        parser_allocationdelete.add_argument('allocationname', 
+                                     action="store")
+
+
         ########################### Nodeset  ##########################################
         parser_nodesetcreate = subparsers.add_parser('nodeset-create',
                                                      help='create new nodeset specification')
@@ -466,6 +492,12 @@ class VC3ClientCLI(object):
                                          required=False, 
                                          help='list details of specified nodeset',
                                          default=None)
+
+        parser_nodesetdelete = subparsers.add_parser('nodeset-delete',
+                                                     help='delete a nodeset specification')
+        parser_nodesetdelete.add_argument('nodesetname',
+                                           action="store")
+
                                                         
         ########################### Cluster  ##########################################
         parser_clustercreate = subparsers.add_parser('cluster-create', 
@@ -551,6 +583,12 @@ class VC3ClientCLI(object):
                                               action='store',
                                               help='nodeset to remove'
                                               )
+
+        parser_clusterdelete = subparsers.add_parser('cluster-delete', 
+                help='delete a cluster specification')
+
+        parser_clustercreate.add_argument('clustername', 
+                                          action="store")
             
         
         ########################### Environment  ##########################################
@@ -637,6 +675,14 @@ class VC3ClientCLI(object):
                                          required=False, 
                                          help='list details of specified environment',
                                          default=None)
+
+        parser_environdelete = subparsers.add_parser('environment-delete', 
+                help='delete an environment')
+
+        parser_environdelete.add_argument('environmentname', 
+                help='name of the environment to be deleted',
+                action="store")
+
         
         ########################### Request  ##########################################
         parser_requestcreate = subparsers.add_parser('request-create', 
@@ -781,6 +827,12 @@ class VC3ClientCLI(object):
                                          help='Name of relevant Request.',
                                          default=None)          
 
+        parser_requestdelete = subparsers.add_parser('request-delete', 
+                help='delete a request specification')
+
+        parser_requestdelete.add_argument('requestname', 
+                                    help='name of the request to be deleted',
+                                    action="store")
 
         ########################### Pairing  ##########################################
         parser_pairingcreate = subparsers.add_parser('pairing-create', 
@@ -866,6 +918,9 @@ class VC3ClientCLI(object):
             elif ns.subcommand == 'user-list' and ns.username is not None:
                 uo = capi.getUser(ns.username)
                 print(uo)
+
+            elif ns.subcommand == 'user-delete':
+                capi.deleteUser(ns.username)
             
             # Project commands
             elif ns.subcommand == 'project-create':
@@ -906,6 +961,10 @@ class VC3ClientCLI(object):
     
             elif ns.subcommand == 'project-removeallocation':
                 capi.removeAllocationFromProject(ns.allocationname, ns.projectname)
+
+            elif ns.subcommand == 'project-delete':
+                capi.deleteProject(ns.projectname)
+
                 
             # Resource commands
             elif ns.subcommand == 'resource-create':
@@ -935,6 +994,9 @@ class VC3ClientCLI(object):
             elif ns.subcommand == 'resource-list' and ns.resourcename is not None:
                 ro = capi.getResource(ns.resourcename)
                 print(ro)
+
+            elif ns.subcommand == 'resource-delete':
+                capi.deleteResource(ns.resourcename)
             
             
             # Allocation commands
@@ -963,6 +1025,10 @@ class VC3ClientCLI(object):
             elif ns.subcommand == 'allocation-getpubtoken':
                 pt = capi.getAllocationPubToken(ns.allocationname)
                 print(pt)
+
+            elif ns.subcommand == 'allocation-delete':
+                capi.deleteAllocation(ns.allocationname)
+
     
             # Nodeset create, list
             elif ns.subcommand == 'nodeset-create':
@@ -987,6 +1053,10 @@ class VC3ClientCLI(object):
             elif ns.subcommand == 'nodeset-list' and ns.nodesetname is not None:
                 ns = capi.getNodeset(ns.nodesetname)
                 print(ns)
+
+            elif ns.subcommand == 'nodeset-delete':
+                capi.deleteNodeset(ns.nodesetname)
+
                             
             # Cluster template create, list
             elif ns.subcommand == 'cluster-create' and ns.nodesets is not None:
@@ -1028,8 +1098,12 @@ class VC3ClientCLI(object):
             elif ns.subcommand == 'cluster-removenodeset':
                 capi.removeNodesetFromCluster(ns.nodesetname,
                                               ns.clustername )
+
+            elif ns.subcommand == 'cluster-delete':
+                capi.deleteCluster(ns.clustername)
+
     
-            # Environment create
+            # Environment commands
             elif ns.subcommand == 'environment-create':
                 # defaults
                 packs = []
@@ -1078,7 +1152,10 @@ class VC3ClientCLI(object):
             elif ns.subcommand == 'environment-list' and ns.environmentname is not None:
                 eo = capi.getEnvironment(ns.environmentname)
                 print(eo)
-            
+
+            elif ns.subcommand == 'environment-delete':
+                capi.deleteEnvironment(ns.environmentname)
+                            
             # Request commands
            
             elif ns.subcommand == 'request-create':
@@ -1132,6 +1209,10 @@ class VC3ClientCLI(object):
             elif ns.subcommand == 'request-state':
                 (state, reason) =  capi.getRequestState(ns.requestname)
                 print((str(state), str(reason)))
+
+            elif ns.subcommand == 'request-delete':
+                capi.deleteRequest(ns.requestname)
+
             
             # Pairing commands
             elif ns.subcommand == 'pairing-create':
