@@ -587,7 +587,7 @@ class VC3ClientCLI(object):
         parser_clusterdelete = subparsers.add_parser('cluster-delete', 
                 help='delete a cluster specification')
 
-        parser_clustercreate.add_argument('clustername', 
+        parser_clusterdelete.add_argument('clustername', 
                                           action="store")
             
         

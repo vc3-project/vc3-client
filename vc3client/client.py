@@ -414,7 +414,7 @@ class VC3ClientAPI(object):
         return self.ic.getentity(Cluster , clustername)
 
     def deleteCluster(self, clustername):
-        return self.ic.deleteentity(Cluster , clustername)
+        self.ic.deleteentity(Cluster , clustername)
 
     def addNodesetToCluster(self, nodesetname, clustername):
         co = self.getCluster(clustername)
@@ -479,7 +479,7 @@ class VC3ClientAPI(object):
         return self.ic.getentity(Nodeset, nodesetname)
 
     def deleteNodeset(self, nodesetname):
-        return self.ic.deleteentity(Nodeset, nodesetname)
+        self.ic.deleteentity(Nodeset, nodesetname)
     
     def storeNodeset(self, nodeset):
         nodeset.store(self.ic)
@@ -528,7 +528,7 @@ class VC3ClientAPI(object):
         return self.ic.getentity(Environment, environmentname)
 
     def deleteEnvironment(self, environmentname):
-        return self.ic.deleteentity(Environment , environmentname)
+        self.ic.deleteentity(Environment , environmentname)
 
 
     ################################################################################
@@ -587,7 +587,7 @@ class VC3ClientAPI(object):
         return self.ic.getentity( Request, requestname)
 
     def deleteRequest(self, requestname):
-        return self.ic.deleteentity( Request, requestname)
+        self.ic.deleteentity( Request, requestname)
 
     def terminateRequest(self, requestname):
         r = self.ic.getentity( Request, requestname)
