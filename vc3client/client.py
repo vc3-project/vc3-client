@@ -20,7 +20,7 @@ import ConfigParser
 
 from entities import User, Project, Resource, Allocation, Nodeset, Request, Cluster, Environment
 from vc3infoservice import infoclient
-from vc3infoservice.infoclient import  InfoMissingPairingException, InfoConnectionFailure
+from vc3infoservice.core import  InfoMissingPairingException, InfoConnectionFailure, InfoEntityExistsException, InfoEntityMissingException
 
 class VC3ClientAPI(object):
     '''
@@ -85,6 +85,7 @@ class VC3ClientAPI(object):
                   url = url,
                   docurl = docurl
                   )
+        u.storenew = True
         self.log.debug("Creating user object: %s " % u)
         return u
     
@@ -109,7 +110,7 @@ class VC3ClientAPI(object):
         return self._listEntities('User')
        
     def getUser(self, username):
-        return self._getEntity('User', username)
+        return self.ic.getentity(User , username)
     
     ################################################################################
     #                           Project-related calls
@@ -146,7 +147,8 @@ class VC3ClientAPI(object):
                      docurl = docurl,
                      organization = organization                     
                      )
-        self.log.debug("Creating project object: %s " % p)
+        p.storenew = True
+        self.log.debug("Created project object: %s " % p)
         return p
     
     
@@ -219,10 +221,10 @@ class VC3ClientAPI(object):
             self.storeProject(po)
 
     def listProjects(self):
-        return self._listEntities('Project')
+        return self.ic.listentities(Project)
        
     def getProject(self, projectname):
-        return self._getEntity('Project', projectname)
+        return self.ic.getentity(Project, projectname)
 
     def getProjectsOfOwner(self, ownername):
         projects = self.listProjects()
@@ -288,6 +290,7 @@ class VC3ClientAPI(object):
                       docurl = docurl,
                       organization = organization                      
                        )
+        r.storenew = True
         self.log.debug("Creating Resource object: %s " % r)
         return r
     
@@ -296,10 +299,10 @@ class VC3ClientAPI(object):
         resource.store(self.ic)
     
     def listResources(self):
-        return self._listEntities('Resource')
+        return self.ic.listentities(Resource)
        
     def getResource(self, resourcename):
-        return self._getEntity('Resource', resourcename)
+        return self.ic.getentity(Resource, resourcename)
 
     ################################################################################
     #                           Allocation-related calls
@@ -326,6 +329,7 @@ class VC3ClientAPI(object):
                         displayname=displayname,
                         url=url,
                         docurl=docurl, )
+        ao.storenew = True
         self.log.debug("Creating Allocation object: %s " % ao)
         return ao
     
@@ -333,10 +337,10 @@ class VC3ClientAPI(object):
         allocation.store(self.ic)
         
     def listAllocations(self):
-        return self._listEntities('Allocation')
+        return self.ic.listentities( Allocation )
        
     def getAllocation(self, allocationname):
-        return self._getEntity('Allocation', allocationname)
+        return self.ic.getentity( Allocation, allocationname)
 
     def getAllocationPubToken(self, allocationname):
         alloc = self.getAllocation(allocationname)
@@ -384,16 +388,17 @@ class VC3ClientAPI(object):
                     url = url,
                     docurl = docurl 
                      )
+        c.storenew = True
         return c
                     
     def storeCluster(self, cluster):
         cluster.store(self.ic)
     
     def listClusters(self):
-        return self._listEntities('Cluster')
+        return self.ic.listentities(Cluster)
        
     def getCluster(self, clustername):
-        return self._getEntity('Cluster', clustername)
+        return self.ic.getentity(Cluster , clustername)
 
     def addNodesetToCluster(self, nodesetname, clustername):
         co = self.getCluster(clustername)
@@ -447,14 +452,15 @@ class VC3ClientAPI(object):
                       url = url,
                       docurl = docurl
                        )
+        ns.storenew = True
         self.log.debug("Created Nodeset object: %s" % ns)
         return ns 
     
     def listNodesets(self):
-        return self._listEntities('Nodeset')
+        return self.ic.listentities(Nodeset)
        
     def getNodeset(self, nodesetname):
-        return self._getEntity('Nodeset', nodesetname)
+        return self.ic.getentity(Nodeset, nodesetname)
     
     def storeNodeset(self, nodeset):
         nodeset.store(self.ic)
@@ -489,6 +495,7 @@ class VC3ClientAPI(object):
                         url = url,
                         docurl = docurl
                         )
+        e.storenew = True
         self.log.debug("Creating Environment object: %s " % e)
         return e
     
@@ -496,10 +503,10 @@ class VC3ClientAPI(object):
         environment.store(self.ic)
     
     def listEnvironments(self):
-        return self._listEntities('Environment')
+        return self.ic.listentities(Environment)
        
     def getEnvironment(self, environmentname):
-        return self._getEntity('Environment', environmentname)
+        return self.ic.getentity('Environment', environmentname)
 
     ################################################################################
     #                        Request-related calls
@@ -542,6 +549,7 @@ class VC3ClientAPI(object):
                     docurl = docurl,
                     organization = organization
                     )
+        r.storenew = True
         self.log.debug("Creating Request object: %s " % r)
         return r
     
@@ -553,10 +561,10 @@ class VC3ClientAPI(object):
         return self._listEntities('Request')
        
     def getRequest(self, requestname):
-        return self._getEntity('Request', requestname)
+        return self.ic.getentity( Request, requestname)
 
     def terminateRequest(self, requestname):
-        r = self._getEntity('Request', requestname)
+        r = self.ic.getentity( Request, requestname)
         if r is not None:
             self.log.debug("Setting request action to terminate...")
             r.action = 'terminate'
@@ -566,19 +574,18 @@ class VC3ClientAPI(object):
             self.log.info("Request is None.")
 
     def getRequestStatus(self, requestname):
-        r = self._getEntity('Request', requestname)
+        r = self.ic.getentity( Request, requestname)
         out = (None, None)
         if r is not None:
             out = (r.statusraw, r.statusinfo)
         return out
 
     def getRequestState(self, requestname):
-        r = self._getEntity('Request', requestname)
+        r = self.ic.getentity( Request, requestname)
         out = (None, None)
         if r is not None:
             out = (r.state, r.state_reason)
-        return out
-        
+        return out      
 
     def saveRequestAsBlueprint(self, requestid, newlabel):
         '''
@@ -593,11 +600,11 @@ class VC3ClientAPI(object):
     def getQueuesConf(self, requestname, queuename):
         '''
         Get the queues.conf sections for the specified request and queuename
+        
+        May raise InfoMissingEntityException if Request doesn't exist. 
+        
         '''
         r = self.getRequest(requestname)
-
-        if not r:
-            raise MissingDependencyException(name = requestname, entityclass = 'Request')
 
         if not r.queuesconf:
             raise Exception('Request %s does not have a queues.conf defined' % requestname)
@@ -618,9 +625,6 @@ class VC3ClientAPI(object):
         Get the auth.conf sections for the specified request and queuename
         '''
         r = self.getRequest(requestname)
-
-        if not r:
-            raise MissingDependencyException(name = requestname, entityclass = 'Request')
 
         if not r.authconf:
             raise Exception('Request %s does not have a auth.conf defined' % requestname)
@@ -674,43 +678,6 @@ class VC3ClientAPI(object):
         (cert, key) = self.ic.getPairing(pairingcode)
         return (cert, key)
 
-##############################################
-#          Private generic object methods.
-#          To make code shorter.  
-##############################################
-    def _listEntities(self, entityclass ):
-        m = sys.modules[__name__] 
-        klass = getattr(m, entityclass)
-        infokey = klass.infokey
-        self.log.debug("Listing class %s with infokey %s " % (entityclass, infokey))     
-        docobj = self.ic.getdocumentobject(infokey)
-        self.log.debug("Got document object: %s " % docobj)
-        olist = []
-        try:
-            for oname in docobj[infokey].keys():
-                    self.log.debug("Getting objectname %s" % oname)
-                    #s = "{ '%s' : %s }" % (oname, docobj[infokey][oname] )
-                    nd = {}
-                    nd[oname] = docobj[infokey][oname]
-                    eo = klass.objectFromDict(nd)
-                    self.log.debug("Appending eo %s" % eo)
-                    olist.append(eo)
-        except KeyError, e:
-            self.log.warning("Document has no key '%s'", e.args[0])
-        except TypeError, e:
-            self.log.warning("Document object empty.")
-        return olist
-
-
-    def _getEntity(self, entityclass, objectname):
-        eolist = self._listEntities(entityclass)
-        self.log.debug("Got list of %d entity objects, matching entityclass %s..." % (len(eolist), 
-                                                                                     entityclass))
-        for eo in eolist:
-            if eo.name == objectname:
-                self.log.debug("Found object of correct name %s" % objectname)
-                return eo
-        self.log.debug("Didn't find desired objectname %s" % objectname)
 
 ##############################################
 #        External Utility class methods. 
@@ -724,20 +691,24 @@ class VC3ClientAPI(object):
     def decode(self, string):
         return base64.b64decode(string)
         
-    
-class EntityExistsException(Exception):
-    def __init__(self, value):
-        self.value = value
-    def __str__(self):
-        return repr(self.value)
 
-class MissingDependencyException(Exception):
-    '''
-    To be thrown when an API call includes a reference to an entity that doesn't exist. 
-    '''
-    def __init__(self, name, entityclass):
-        self.name        = name
-        self.entityclass = entityclass
-    def __str__(self):
-        return repr(self.name) + '(' + repr(self.entityclass) + ')'
+#
+# These exceptions in infoclient now. 
+#
+    
+#class EntityExistsException(Exception):
+#    def __init__(self, value):
+#        self.value = value
+#    def __str__(self):
+#        return repr(self.value)
+
+#class MissingDependencyException(Exception):
+#    '''
+#    To be thrown when an API call includes a reference to an entity that doesn't exist. 
+#    '''
+#    def __init__(self, name, entityclass):
+#        self.name        = name
+#        self.entityclass = entityclass
+#    def __str__(self):
+#        return repr(self.name) + '(' + repr(self.entityclass) + ')'
 

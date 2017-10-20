@@ -19,7 +19,8 @@ import warnings
 
 from ConfigParser import ConfigParser
 from client import VC3ClientAPI
-from vc3infoservice.infoclient import  InfoMissingPairingException, InfoConnectionFailure
+from vc3infoservice.core import  InfoMissingPairingException, InfoConnectionFailure, InfoEntityExistsException, InfoEntityMissingException
+
 
 class VC3ClientCLI(object):
     '''
@@ -839,334 +840,345 @@ class VC3ClientCLI(object):
 
         capi = VC3ClientAPI(cp)
         
-        # User commands
-        if ns.subcommand == 'user-create':
-            u = capi.defineUser( name = ns.username,
-                                 first = ns.firstname,
-                                 last = ns.lastname,
-                                 email = ns.email,
-                                 organization = ns.organization,
-                                 identity_id = ns.identity_id,
-                                 description = ns.description, 
-                                 displayname = ns.displayname, 
-                                 url = ns.url, 
-                                 docurl = ns.docurl                                  
-                                 )
-            self.log.debug("User is %s" % u)
-            capi.storeUser(u)
+        try:
             
-        elif ns.subcommand == 'user-list' and ns.username is None:
-            ulist = capi.listUsers()
-            for u in ulist:
-                print(u)
-        
-        elif ns.subcommand == 'user-list' and ns.username is not None:
-            uo = capi.getUser(ns.username)
-            print(uo)
-        
-        # Project commands
-        elif ns.subcommand == 'project-create':
-            if ns.members is not None:
-                memberslist = ns.members.split(',')
-            else:
-                memberslist = []
-                
-            p = capi.defineProject( name = ns.projectname,
-                                    owner = ns.owner,
-                                    members = memberslist,
-                                    description = ns.description, 
-                                    displayname = ns.displayname, 
-                                    url = ns.url, 
-                                    docurl = ns.docurl,
-                                    organization = ns.organization
-                                    )
-            self.log.debug("Project is %s" % p)
-            capi.storeUser(p)    
-            
-        elif ns.subcommand == 'project-list' and ns.projectname is None:
-            plist = capi.listProjects()
-            for p in plist:
-                print(p)
-        
-        elif ns.subcommand == 'project-list' and ns.projectname is not None:
-            po = capi.getProject(ns.projectname)
-            print(po)
-
-        elif ns.subcommand == 'project-adduser':
-            capi.addUserToProject(ns.user, ns.projectname)
-
-        elif ns.subcommand == 'project-removeuser':
-            capi.removeUserFromProject(ns.user, ns.projectname)
-        
-        elif ns.subcommand == 'project-addallocation':
-            capi.addAllocationToProject(ns.allocationname, ns.projectname)
-
-        elif ns.subcommand == 'project-removeallocation':
-            capi.removeAllocationFromProject(ns.allocationname, ns.projectname)
-            
-        # Resource commands
-        elif ns.subcommand == 'resource-create':
-            r = capi.defineResource( name = ns.resourcename,
-                                     owner = ns.owner,
-                                     accesstype = ns.accesstype,
-                                     accessmethod = ns.accessmethod,
-                                     accessflavor = ns.accessflavor,
-                                     accesshost = ns.accesshost,
-                                     accessport = ns.accessport,
-                                     gridresource = ns.gridresource,
-                                     mfa = ns.mfa,
+            # User commands
+            if ns.subcommand == 'user-create':
+                u = capi.defineUser( name = ns.username,
+                                     first = ns.firstname,
+                                     last = ns.lastname,
+                                     email = ns.email,
                                      organization = ns.organization,
+                                     identity_id = ns.identity_id,
                                      description = ns.description, 
                                      displayname = ns.displayname, 
                                      url = ns.url, 
-                                     docurl = ns.docurl 
-                                      )
-            self.log.debug("Resource is %s" % r)
-            capi.storeResource(r)    
-            
-        elif ns.subcommand == 'resource-list' and ns.resourcename is None:
-            rlist = capi.listResources()
-            for r in rlist:
-                print(r)
-        
-        elif ns.subcommand == 'resource-list' and ns.resourcename is not None:
-            ro = capi.getResource(ns.resourcename)
-            print(ro)
-        
-        
-        # Allocation commands
-        elif ns.subcommand == 'allocation-create':
-            a = capi.defineAllocation( name = ns.allocationname,
-                                       owner = ns.owner,
-                                       resource = ns.resource,
-                                       accountname = ns.accountname,
-                                       description = ns.description, 
-                                       displayname = ns.displayname, 
-                                       url = ns.url, 
-                                       docurl = ns.docurl 
-                                       )
-            self.log.debug("Allocation is %s" % a)
-            capi.storeAllocation(a)    
-            
-        elif ns.subcommand == 'allocation-list' and ns.allocationname is None:
-            alist = capi.listAllocations()
-            for a in alist:
-                print(a)
-        
-        elif ns.subcommand == 'allocation-list' and ns.allocationname is not None:
-            ao = capi.getAllocation(ns.allocationname)
-            print(ao)
-
-        elif ns.subcommand == 'allocation-getpubtoken':
-            pt = capi.getAllocationPubToken(ns.allocationname)
-            print(pt)
-
-        # Nodeset create, list
-        elif ns.subcommand == 'nodeset-create':
-            n = capi.defineNodeset(name = ns.nodesetname, 
-                                   owner =  ns.owner, 
-                                   node_number = ns.node_number, 
-                                   app_type = ns.app_type, 
-                                   app_role = ns.app_role,
-                                   environment = ns.environment,
-                                   description = ns.description, 
-                                   displayname = ns.displayname, 
-                                   url = ns.url, 
-                                   docurl = ns.docurl                                    
-                                   )
-            capi.storeNodeset(n)
-
-        elif ns.subcommand == 'nodeset-list' and ns.nodesetname is None:
-            nsl = capi.listNodesets()
-            for ns in nsl:
-                print(ns)
+                                     docurl = ns.docurl                                  
+                                     )
+                self.log.debug("User is %s" % u)
+                capi.storeUser(u)
                 
-        elif ns.subcommand == 'nodeset-list' and ns.nodesetname is not None:
-            ns = capi.getNodeset(ns.nodesetname)
-            print(ns)
-                        
-        # Cluster template create, list
-        elif ns.subcommand == 'cluster-create' and ns.nodesets is not None:
-            c = capi.defineCluster( name = ns.clustername,
-                                    owner = ns.owner,
-                                    nodesets=ns.nodesets.split(','),
-                                    description = ns.description, 
-                                    displayname = ns.displayname, 
-                                    url = ns.url, 
-                                    docurl = ns.docurl                                     
-                                    )
-            self.log.debug("Cluster is %s" % c)
-            capi.storeCluster(c)    
-
-        elif ns.subcommand == 'cluster-create' and ns.nodesets is None:
-            c = capi.defineCluster( name = ns.clustername,
-                                    owner = ns.owner,
-                                    description = ns.description, 
-                                    displayname = ns.displayname, 
-                                    url = ns.url, 
-                                    docurl = ns.docurl                                    
-                                  )
-            self.log.debug("Cluster is %s" % c)
-            capi.storeCluster(c)    
-
-        elif ns.subcommand == 'cluster-list' and ns.clustername is None:
-            cl = capi.listClusters()
-            for co in cl:
-                print(co)
-                
-        elif ns.subcommand == 'cluster-list' and ns.clustername is not None:
-            co = capi.getCluster(ns.clustername)
-            print(co)               
-                                        
-        elif ns.subcommand == 'cluster-addnodeset':
-            capi.addNodesetToCluster( ns.nodesetname,
-                                      ns.clustername )
-
-        elif ns.subcommand == 'cluster-removenodeset':
-            capi.removeNodesetFromCluster(ns.nodesetname,
-                                          ns.clustername )
-
-        # Environment create
-        elif ns.subcommand == 'environment-create':
-            # defaults
-            packs = []
-            vars  = {}
-            files = {}
-
-            if ns.packagelist is not None:
-                packs = ns.packagelist.split(',')
-
-            if ns.envmap is not None:
-                for kv in ns.envmap:
-                    (key, value) = kv.split('=', 1)
-                    vars[key] = value
+            elif ns.subcommand == 'user-list' and ns.username is None:
+                ulist = capi.listUsers()
+                for u in ulist:
+                    print(u)
             
-            if ns.filesmap is not None:
-                filemap = ns.filesmap.split(',')
-                for names in filemap:
-                    (local, remote) = names.split('=')
-                    local = os.path.expanduser(local)
-                    self.log.debug("Reading local file %s for remote %s" % (local, remote))
-                    with open(local, 'r') as l_f:
-                        all = l_f.read()
-                        files[remote] = VC3ClientAPI.encode(all)
+            elif ns.subcommand == 'user-list' and ns.username is not None:
+                uo = capi.getUser(ns.username)
+                print(uo)
             
-            e = capi.defineEnvironment( name = ns.environmentname,
+            # Project commands
+            elif ns.subcommand == 'project-create':
+                if ns.members is not None:
+                    memberslist = ns.members.split(',')
+                else:
+                    memberslist = []
+                    
+                p = capi.defineProject( name = ns.projectname,
                                         owner = ns.owner,
-                                        packagelist = packs,
-                                        envmap      = vars,
-                                        files       = files,
-                                        command     = ns.command,
-                                        builder_extra_args = ns.builder_extra_args,
+                                        members = memberslist,
                                         description = ns.description, 
                                         displayname = ns.displayname, 
                                         url = ns.url, 
-                                        docurl = ns.docurl                                        
+                                        docurl = ns.docurl,
+                                        organization = ns.organization
                                         )
+                self.log.debug("Project is %s" % p)
+                capi.storeUser(p)    
+                
+            elif ns.subcommand == 'project-list' and ns.projectname is None:
+                plist = capi.listProjects()
+                for p in plist:
+                    print(p)
             
-            self.log.debug("Environment is %s" % e)
-            capi.storeEnvironment(e)
-        
-        elif ns.subcommand == 'environment-list' and ns.environmentname is None:
-            elist = capi.listEnvironments()
-            for e in elist:
-                print(e)
-        
-        elif ns.subcommand == 'environment-list' and ns.environmentname is not None:
-            eo = capi.getEnvironment(ns.environmentname)
-            print(eo)
-        
-        # Request commands
-       
-        elif ns.subcommand == 'request-create':
-            # Handle list args...    
-            allocationslist = []
-            if ns.allocations is not None:
-                allocationlist = ns.allocations.split(',')
-            environmentlist = []
-            if ns.environments is not None:
-                environmentlist = ns.environments.split(',')
+            elif ns.subcommand == 'project-list' and ns.projectname is not None:
+                po = capi.getProject(ns.projectname)
+                print(po)
     
-            r = capi.defineRequest( name=ns.requestname,
-                                    owner = ns.owner,
-                                    cluster=ns.cluster,
-                                    allocations=allocationlist,
-                                    environments=environmentlist,
-                                    policy= ns.policy,
-                                    expiration=None,
-                                    organization = ns.organization,
-                                    description = ns.description, 
-                                    displayname = ns.displayname, 
-                                    url = ns.url, 
-                                    docurl = ns.docurl                                    
-                                     )
-            self.log.debug("Request is %s" % r)
-            capi.storeRequest(r)    
-        
-        elif ns.subcommand == 'request-list' and ns.requestname is None:
-            rlist = capi.listRequests()
-            for r in rlist:
-                print(r)
-        
-        elif ns.subcommand == 'request-list' and ns.requestname is not None:
-            ro = capi.getRequest(ns.requestname)
-            print(ro)
-        
-        elif ns.subcommand == 'request-getconfstring':
-            cs = capi.getConfString(ns.conftype, ns.requestname)
-            print(cs)
-        
-        elif ns.subcommand == 'request-terminate':
-            capi.terminateRequest(ns.requestname)
-        
-        elif ns.subcommand == 'request-status':
-            (raw, info) =  capi.getRequestStatus(ns.requestname)
-            if ns.raw:
-                print(raw)
-            else:
-                print(info)
-
-        elif ns.subcommand == 'request-state':
-            (state, reason) =  capi.getRequestState(ns.requestname)
-            print((str(state), str(reason)))
-        
-        # Pairing commands
-        elif ns.subcommand == 'pairing-create':
-            code = capi.requestPairing(ns.commonname)
-            print(code)        
-        
-        elif ns.subcommand == 'pairing-retrieve':
-            try:
-                (cert, key) = capi.getPairing(ns.pairingcode)
-                if ns.certfile is not None and ns.keyfile is not None:
-                    certpath = os.path.expanduser(ns.certfile)
-                    keypath = os.path.expanduser(ns.keyfile)
-                    cf = open(certpath, 'w')
-                    cf.write(cert)
-                    cf.close()
-                    
-                    # Necessary to avoid security issues with world or group writable key file. 
-                    if os.path.isfile(keypath):
-                        os.remove(keypath)
-                    original_umask = os.umask(0o177)  # 0o777 ^ 0o600
-                    try:
-                        kf = os.fdopen(os.open(keypath, os.O_WRONLY | os.O_CREAT, 0o600), 'w')
-                    finally:
-                        os.umask(original_umask)
-                    kf.write(key)
-                    kf.close()                
-                    
-                else:
-                    # print cert, key to stdout  
-                    print(cert)
-                    print("")
-                    print(key)
-            except InfoMissingPairingException:
-                print("Invalid pairing code or not satisfied yet. Try in 30 seconds.")   
-        else:
-            self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)
-            sys.exit(1)
+            elif ns.subcommand == 'project-adduser':
+                capi.addUserToProject(ns.user, ns.projectname)
+    
+            elif ns.subcommand == 'project-removeuser':
+                capi.removeUserFromProject(ns.user, ns.projectname)
             
+            elif ns.subcommand == 'project-addallocation':
+                capi.addAllocationToProject(ns.allocationname, ns.projectname)
+    
+            elif ns.subcommand == 'project-removeallocation':
+                capi.removeAllocationFromProject(ns.allocationname, ns.projectname)
+                
+            # Resource commands
+            elif ns.subcommand == 'resource-create':
+                r = capi.defineResource( name = ns.resourcename,
+                                         owner = ns.owner,
+                                         accesstype = ns.accesstype,
+                                         accessmethod = ns.accessmethod,
+                                         accessflavor = ns.accessflavor,
+                                         accesshost = ns.accesshost,
+                                         accessport = ns.accessport,
+                                         gridresource = ns.gridresource,
+                                         mfa = ns.mfa,
+                                         organization = ns.organization,
+                                         description = ns.description, 
+                                         displayname = ns.displayname, 
+                                         url = ns.url, 
+                                         docurl = ns.docurl 
+                                          )
+                self.log.debug("Resource is %s" % r)
+                capi.storeResource(r)    
+                
+            elif ns.subcommand == 'resource-list' and ns.resourcename is None:
+                rlist = capi.listResources()
+                for r in rlist:
+                    print(r)
+            
+            elif ns.subcommand == 'resource-list' and ns.resourcename is not None:
+                ro = capi.getResource(ns.resourcename)
+                print(ro)
+            
+            
+            # Allocation commands
+            elif ns.subcommand == 'allocation-create':
+                a = capi.defineAllocation( name = ns.allocationname,
+                                           owner = ns.owner,
+                                           resource = ns.resource,
+                                           accountname = ns.accountname,
+                                           description = ns.description, 
+                                           displayname = ns.displayname, 
+                                           url = ns.url, 
+                                           docurl = ns.docurl 
+                                           )
+                self.log.debug("Allocation is %s" % a)
+                capi.storeAllocation(a)    
+                
+            elif ns.subcommand == 'allocation-list' and ns.allocationname is None:
+                alist = capi.listAllocations()
+                for a in alist:
+                    print(a)
+            
+            elif ns.subcommand == 'allocation-list' and ns.allocationname is not None:
+                ao = capi.getAllocation(ns.allocationname)
+                print(ao)
+    
+            elif ns.subcommand == 'allocation-getpubtoken':
+                pt = capi.getAllocationPubToken(ns.allocationname)
+                print(pt)
+    
+            # Nodeset create, list
+            elif ns.subcommand == 'nodeset-create':
+                n = capi.defineNodeset(name = ns.nodesetname, 
+                                       owner =  ns.owner, 
+                                       node_number = ns.node_number, 
+                                       app_type = ns.app_type, 
+                                       app_role = ns.app_role,
+                                       environment = ns.environment,
+                                       description = ns.description, 
+                                       displayname = ns.displayname, 
+                                       url = ns.url, 
+                                       docurl = ns.docurl                                    
+                                       )
+                capi.storeNodeset(n)
+    
+            elif ns.subcommand == 'nodeset-list' and ns.nodesetname is None:
+                nsl = capi.listNodesets()
+                for ns in nsl:
+                    print(ns)
+                    
+            elif ns.subcommand == 'nodeset-list' and ns.nodesetname is not None:
+                ns = capi.getNodeset(ns.nodesetname)
+                print(ns)
+                            
+            # Cluster template create, list
+            elif ns.subcommand == 'cluster-create' and ns.nodesets is not None:
+                c = capi.defineCluster( name = ns.clustername,
+                                        owner = ns.owner,
+                                        nodesets=ns.nodesets.split(','),
+                                        description = ns.description, 
+                                        displayname = ns.displayname, 
+                                        url = ns.url, 
+                                        docurl = ns.docurl                                     
+                                        )
+                self.log.debug("Cluster is %s" % c)
+                capi.storeCluster(c)    
+    
+            elif ns.subcommand == 'cluster-create' and ns.nodesets is None:
+                c = capi.defineCluster( name = ns.clustername,
+                                        owner = ns.owner,
+                                        description = ns.description, 
+                                        displayname = ns.displayname, 
+                                        url = ns.url, 
+                                        docurl = ns.docurl                                    
+                                      )
+                self.log.debug("Cluster is %s" % c)
+                capi.storeCluster(c)    
+    
+            elif ns.subcommand == 'cluster-list' and ns.clustername is None:
+                cl = capi.listClusters()
+                for co in cl:
+                    print(co)
+                    
+            elif ns.subcommand == 'cluster-list' and ns.clustername is not None:
+                co = capi.getCluster(ns.clustername)
+                print(co)               
+                                            
+            elif ns.subcommand == 'cluster-addnodeset':
+                capi.addNodesetToCluster( ns.nodesetname,
+                                          ns.clustername )
+    
+            elif ns.subcommand == 'cluster-removenodeset':
+                capi.removeNodesetFromCluster(ns.nodesetname,
+                                              ns.clustername )
+    
+            # Environment create
+            elif ns.subcommand == 'environment-create':
+                # defaults
+                packs = []
+                vars  = {}
+                files = {}
+    
+                if ns.packagelist is not None:
+                    packs = ns.packagelist.split(',')
+    
+                if ns.envmap is not None:
+                    for kv in ns.envmap:
+                        (key, value) = kv.split('=', 1)
+                        vars[key] = value
+                
+                if ns.filesmap is not None:
+                    filemap = ns.filesmap.split(',')
+                    for names in filemap:
+                        (local, remote) = names.split('=')
+                        local = os.path.expanduser(local)
+                        self.log.debug("Reading local file %s for remote %s" % (local, remote))
+                        with open(local, 'r') as l_f:
+                            all = l_f.read()
+                            files[remote] = VC3ClientAPI.encode(all)
+                
+                e = capi.defineEnvironment( name = ns.environmentname,
+                                            owner = ns.owner,
+                                            packagelist = packs,
+                                            envmap      = vars,
+                                            files       = files,
+                                            command     = ns.command,
+                                            builder_extra_args = ns.builder_extra_args,
+                                            description = ns.description, 
+                                            displayname = ns.displayname, 
+                                            url = ns.url, 
+                                            docurl = ns.docurl                                        
+                                            )
+                
+                self.log.debug("Environment is %s" % e)
+                capi.storeEnvironment(e)
+            
+            elif ns.subcommand == 'environment-list' and ns.environmentname is None:
+                elist = capi.listEnvironments()
+                for e in elist:
+                    print(e)
+            
+            elif ns.subcommand == 'environment-list' and ns.environmentname is not None:
+                eo = capi.getEnvironment(ns.environmentname)
+                print(eo)
+            
+            # Request commands
+           
+            elif ns.subcommand == 'request-create':
+                # Handle list args...    
+                allocationslist = []
+                if ns.allocations is not None:
+                    allocationlist = ns.allocations.split(',')
+                environmentlist = []
+                if ns.environments is not None:
+                    environmentlist = ns.environments.split(',')
+        
+                r = capi.defineRequest( name=ns.requestname,
+                                        owner = ns.owner,
+                                        cluster=ns.cluster,
+                                        allocations=allocationlist,
+                                        environments=environmentlist,
+                                        policy= ns.policy,
+                                        expiration=None,
+                                        organization = ns.organization,
+                                        description = ns.description, 
+                                        displayname = ns.displayname, 
+                                        url = ns.url, 
+                                        docurl = ns.docurl                                    
+                                         )
+                self.log.debug("Request is %s" % r)
+                capi.storeRequest(r)    
+            
+            elif ns.subcommand == 'request-list' and ns.requestname is None:
+                rlist = capi.listRequests()
+                for r in rlist:
+                    print(r)
+            
+            elif ns.subcommand == 'request-list' and ns.requestname is not None:
+                ro = capi.getRequest(ns.requestname)
+                print(ro)
+            
+            elif ns.subcommand == 'request-getconfstring':
+                cs = capi.getConfString(ns.conftype, ns.requestname)
+                print(cs)
+            
+            elif ns.subcommand == 'request-terminate':
+                capi.terminateRequest(ns.requestname)
+            
+            elif ns.subcommand == 'request-status':
+                (raw, info) =  capi.getRequestStatus(ns.requestname)
+                if ns.raw:
+                    print(raw)
+                else:
+                    print(info)
+    
+            elif ns.subcommand == 'request-state':
+                (state, reason) =  capi.getRequestState(ns.requestname)
+                print((str(state), str(reason)))
+            
+            # Pairing commands
+            elif ns.subcommand == 'pairing-create':
+                code = capi.requestPairing(ns.commonname)
+                print(code)        
+            
+            elif ns.subcommand == 'pairing-retrieve':
+                try:
+                    (cert, key) = capi.getPairing(ns.pairingcode)
+                    if ns.certfile is not None and ns.keyfile is not None:
+                        certpath = os.path.expanduser(ns.certfile)
+                        keypath = os.path.expanduser(ns.keyfile)
+                        cf = open(certpath, 'w')
+                        cf.write(cert)
+                        cf.close()
+                        
+                        # Necessary to avoid security issues with world or group writable key file. 
+                        if os.path.isfile(keypath):
+                            os.remove(keypath)
+                        original_umask = os.umask(0o177)  # 0o777 ^ 0o600
+                        try:
+                            kf = os.fdopen(os.open(keypath, os.O_WRONLY | os.O_CREAT, 0o600), 'w')
+                        finally:
+                            os.umask(original_umask)
+                        kf.write(key)
+                        kf.close()                
+                        
+                    else:
+                        # print cert, key to stdout  
+                        print(cert)
+                        print("")
+                        print(key)
+                except InfoMissingPairingException:
+                    print("Invalid pairing code or not satisfied yet. Try in 30 seconds.")   
+            else:
+                self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)
+                sys.exit(1)
+                               
+        except InfoEntityMissingException, e: 
+            print("Error: Attempt to retrieve or update a non-existent entity.")
+        except InfoEntityExistsException, e:
+            print("Error: Attempt to create/POST an entity that already exists.")
+        except Exception, e:
+            print("Error: Got exception %s"% e)
+        
+        
+
 
 if __name__ == '__main__':
     
