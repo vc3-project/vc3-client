@@ -19,7 +19,7 @@ import warnings
 
 from ConfigParser import ConfigParser
 from client import VC3ClientAPI
-from vc3infoservice.core import  InfoMissingPairingException, InfoConnectionFailure, InfoEntityExistsException, InfoEntityMissingException
+from vc3infoservice.core import  InfoMissingPairingException, InfoConnectionFailure, InfoEntityExistsException, InfoEntityMissingException, InfoEntityUpdateMissingException
 
 
 class VC3ClientCLI(object):
@@ -1256,15 +1256,19 @@ class VC3ClientCLI(object):
                 self.log.warning('Unrecognized subcommand is %s' % ns.subcommand)
                 sys.exit(1)
                                
-        except InfoEntityMissingException, e: 
-            print("Error: Attempt to retrieve or update a non-existent entity.")
+        except InfoEntityUpdateMissingException, e:
+            print("Error: Attempt to update/PUT a non-existent entity.")
+            sys.exit(2)
         except InfoEntityExistsException, e:
             print("Error: Attempt to create/POST an entity that already exists.")
+            sys.exit(2)
+        except InfoEntityMissingException, e: 
+            print("Error: Attempt to retrieve/GET or delete/DELETE a non-existent entity.")
+            sys.exit(3)
         except Exception, e:
-            print("Error: Got exception %s"% e)
+            print("Error: Got unexpected exception %s"% e)
+            sys.exit(1)
         
-        
-
 
 if __name__ == '__main__':
     

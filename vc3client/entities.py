@@ -188,13 +188,14 @@ class Project(InfoEntity):
         '''
             Adds provided user (string label) to this project.
         '''
-
         if self.members is None:
             self.members = []
 
         self.log.debug("Adding user %s to project" % user)
         if user not in self.members:
-            self.members.append(user)
+            ulist = self.members
+            ulist.append(user)
+            self.members = ulist
         self.log.debug("Members now %s" % self.members)
         
 
@@ -202,7 +203,6 @@ class Project(InfoEntity):
         '''
             Removes provided user (string label) from this project.
         '''
-
         if self.members is None:
             self.members = []
 
@@ -210,20 +210,23 @@ class Project(InfoEntity):
         if user not in self.members:
             self.log.debug("User %s did not belong to project")
         else:
-            self.members.remove(user)
+            ulist = self.members
+            ulist.remove(user)
+            self.members = ulist
             self.log.debug("Members now %s" % self.members)
 
     def addAllocation(self, allocation):
         '''
             Adds provided allocation (string label) to this project.
         '''
-
         if self.allocations is None:
             self.allocations = []
 
         self.log.debug("Adding allocation %s to project" % allocation)
         if allocation not in self.allocations:
-            self.allocations.append(allocation)
+            alist = self.allocations
+            alist.append(allocation)
+            self.allocations = alist
         self.log.debug("Allocations now %s" % self.allocations)
         
 
@@ -231,15 +234,16 @@ class Project(InfoEntity):
         '''
             Removes provided allocation (string label) from this project.
         '''
-
         if self.allocations is None:
             self.allocations = []
 
-        self.log.debug("Removing allocation %s to project" % allocation)
+        self.log.debug("Removing allocation %s from project" % allocation)
         if allocation not in self.allocations:
             self.log.debug("Allocation %s did not belong to project")
         else:
-            self.allocations.remove(allocation)
+            alist = self.allocations
+            alist.remove(allocation)
+            self.allocations = alist
             self.log.debug("Allocations now %s" % self.allocations)
 
 class Resource(InfoEntity):
@@ -493,7 +497,6 @@ class Nodeset(InfoEntity):
                        state,
                        owner, 
                        acl, 
-                       
                        node_number, 
                        app_type, 
                        app_role,

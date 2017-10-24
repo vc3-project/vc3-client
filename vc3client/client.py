@@ -20,7 +20,7 @@ import ConfigParser
 
 from entities import User, Project, Resource, Allocation, Nodeset, Request, Cluster, Environment
 from vc3infoservice import infoclient
-from vc3infoservice.core import  InfoMissingPairingException, InfoConnectionFailure, InfoEntityExistsException, InfoEntityMissingException
+from vc3infoservice.core import  InfoMissingPairingException, InfoConnectionFailure, InfoEntityExistsException, InfoEntityMissingException, InfoEntityUpdateMissingException
 
 class VC3ClientAPI(object):
     '''
