@@ -3,7 +3,7 @@
 # VC3 Client Test 
 #
 
-set -xe
+set -x
 
 export PATH=$PATH:~/.local/bin
 
