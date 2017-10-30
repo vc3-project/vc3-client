@@ -265,6 +265,8 @@ class Resource(InfoEntity):
                      'accesshost',
                      'accessport',
                      'gridresource',
+                     'cloudspotprice',
+                     'cloudinstancetype',
                      'mfa',
                      'description',
                      'displayname',
@@ -288,6 +290,8 @@ class Resource(InfoEntity):
                  accesshost,   # hostname
                  accessport,   # port
                  gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCondor CE hostname[:port]              
+                 cloudspotprice=None,
+                 cloudinstancetype=None,
                  mfa = False,
                  description=None,
                  displayname=None,
@@ -316,6 +320,8 @@ class Resource(InfoEntity):
         self.accesshost = accesshost
         self.accessport = accessport
         self.gridresource = gridresource
+        self.cloudspotprice    = cloudspotprice
+        self.cloudinstancetype = cloudinstancetype
         self.mfa = mfa
         self.description = description
         self.displayname = displayname

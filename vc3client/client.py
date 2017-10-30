@@ -255,6 +255,8 @@ class VC3ClientAPI(object):
                        accesshost, 
                        accessport,  
                        gridresource, 
+                       cloudspotprice,
+                       cloudinstancetype,
                        mfa,
                        description = None,
                        displayname = None,

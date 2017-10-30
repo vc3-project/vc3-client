@@ -84,7 +84,7 @@ class VC3ClientCLI(object):
         parser_usercreate.add_argument('--identity_id', 
                                      action="store", 
                                      dest="identity_id", 
-                                     default=None)   
+                                     default=None)
         
         
         # description, displayname,url, docurl 
@@ -292,6 +292,20 @@ class VC3ClientCLI(object):
                                      action="store", 
                                      dest="gridresource",
                                      help="e.g. http://cldext02.usatlas.bnl.gov:8773/services/Cloud, corigrid.nersc.gov/jobmanager-slurm ",  
+                                     default=None
+                                     )
+
+        parser_resourcecreate.add_argument('--cloudspotprice', 
+                                     action="store", 
+                                     dest="cloudspotprice",
+                                     help="spot price",
+                                     default=None
+                                     )
+
+        parser_resourcecreate.add_argument('--cloudinstancetype', 
+                                     action="store", 
+                                     dest="cloudinstancetype",
+                                     help="instance type",
                                      default=None
                                      )
 
@@ -981,6 +995,8 @@ class VC3ClientCLI(object):
                                          accesshost = ns.accesshost,
                                          accessport = ns.accessport,
                                          gridresource = ns.gridresource,
+                                         cloudspotprice = ns.cloudspotprice,
+                                         cloudinstancetype = ns.cloudinstancetype,
                                          mfa = ns.mfa,
                                          organization = ns.organization,
                                          description = ns.description, 
