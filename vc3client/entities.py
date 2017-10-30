@@ -607,11 +607,22 @@ class Cluster(InfoEntity):
             self.nodesets = []
 
         if nodesetname not in self.nodesets:
-            self.nodesets.append(nodesetname)
+            nlist = self.nodesets
+            nlist.append(nodesetname)
+            self.nodesets = nlist
+
 
     def removeNodeset(self, nodesetname):
         if self.nodesets is None:
             self.nodesets = []
+
+
+        if nodesetname not in self.nodesets:
+            self.log.debug("Nodeset %s did not belong to Cluster" % nodesetname)
+        else:
+            nlist = self.nodesets
+            nlist.remove(nodesetname)
+            self.nodesets = nlist
 
         if nodesetname in self.nodesets:
             self.nodesets.remove(nodesetname)
