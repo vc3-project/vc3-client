@@ -188,12 +188,9 @@ class VC3ClientAPI(object):
         '''
         self.log.debug("Looking up user %s project %s " % (user, project))
         po = self.getProject(project)
-        if po is None:
-            self.log.warning("Could not find project object %s " % (po,))
-        else:
-            self.log.debug("Removing user %s from project object %s " % (user, po))
-            po.addUser(user)
-            self.storeProject(po)        
+        self.log.debug("Removing user %s from project object %s " % (user, po))
+        po.removeUser(user)
+        self.storeProject(po)        
 
     def addAllocationToProject(self, allocation, projectname):
         '''
