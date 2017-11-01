@@ -278,6 +278,9 @@ class VC3ClientAPI(object):
 
             po.removeUser(user)
             self.storeProject(po)        
+        self.log.debug("Removing user %s from project object %s " % (user, po))
+        po.removeUser(user)
+        self.storeProject(po)        
 
     def addAllocationToProject(self, allocation, projectname, policy_user=None):
         '''
