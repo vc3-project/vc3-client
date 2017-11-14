@@ -739,7 +739,7 @@ class Request(InfoEntity):
     validvalues = {
                     'state' : ['new', 
                               'validated', 
-                              'initializing',
+                              'initialized',
                               'pending', 
                               'running', 
                               'terminating', 
