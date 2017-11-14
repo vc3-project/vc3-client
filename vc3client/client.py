@@ -558,8 +558,6 @@ class VC3ClientAPI(object):
                     owner=owner,
                     action='new',
                     state_reason='new',
-                    cluster_state='new',          # state of virtual cluster this Request represents 
-                    cluster_state_reason='new',
                     cluster = cluster,           # name of abstract cluster specification
                     allocations  = allocations,   # list of allocation names
                     environments = environments,   # list of environments names

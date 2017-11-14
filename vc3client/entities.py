@@ -720,11 +720,10 @@ class Request(InfoEntity):
                      'owner',
                      'action',        # Command from webportal (run, terminate, etc.)
                      'state_reason',
-                     'cluster_state', # State of virtual cluster this Request represents.
-                     'cluster_state_reason',
                      'expiration',
                      'queuesconf',    # base64-encoded contents of factory queues.conf sections. 
                      'authconf',      # base64-encoded contents of factory auth.conf sections. 
+                     'headnode',      # ip for the headnode associated with this request
                      'policy',        # name of policy to use to satisfy request
                      'allocations',   # list of allocations to satisfy this request
                      'environments',  # list of environments to satisfy this request
@@ -740,11 +739,10 @@ class Request(InfoEntity):
     validvalues = {
                     'state' : ['new', 
                               'validated', 
-                              'configured', 
+                              'configured',
+                              'initializing',
                               'pending', 
-                              'growing', 
                               'running', 
-                              'shrinking', 
                               'terminating', 
                               'cleanup', 
                               'terminated'],
@@ -759,12 +757,11 @@ class Request(InfoEntity):
                  owner,
                  action = None,    # run | terminate
                  state_reason = None,
-                 cluster_state = "new",
-                 cluster_state_reason = None,
                  expiration = None,
                  queuesconf = None,
                  authconf = None, 
-                 cluster=None, 
+                 headnode = None,
+                 cluster =None, 
                  policy = None, 
                  allocations  = [],
                  environments = [],
@@ -783,8 +780,6 @@ class Request(InfoEntity):
         :param str state:         State of request
         :param str state_reason:  Error reporting for state
         :param str action:        Command from webportal (e.g. run, terminate, etc.)
-        :param str cluster_state: State of virtual cluster
-        :param str cluster_state_reason:  Primarily for error reporting.
         :param str allocations:   List of allocations that the request shoud utilize.
         :param str policy:        Policy for utilizing the allocations. 
         :param str expiration:    Date YYYY-MM-DD,HH:MM:SS when this cluster expires and should be unconditionally terminated.    
@@ -802,12 +797,11 @@ class Request(InfoEntity):
         self.action = action
         self.state_reason = state_reason
         self.expiration   = expiration
-        self.cluster_state = cluster_state
-        self.cluster_state_reason = cluster_state_reason
         self.queuesconf = queuesconf
         self.authconf = authconf
         self.statusraw = statusraw
         self.statusinfo = statusinfo
+        self.headnode = headnode
         
         # Composite attributes from other entities. 
         self.cluster = cluster
