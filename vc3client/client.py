@@ -259,7 +259,7 @@ class VC3ClientAPI(object):
                     raise PermissionDenied(err_msg)
 
             po.removeUser(user)
-            self.storeProject(po)        
+            self.storeProject(po)
 
     def addAllocationToProject(self, allocation, projectname, policy_user=None):
         '''
