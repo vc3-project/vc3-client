@@ -59,24 +59,6 @@ class VC3ClientAPI(object):
     #                           Policy related checks
     ################################################################################
 
-    @staticmethod
-    def is_owner(user=None, entity=None):
-        """
-        Check to see if user specified is the owner of the entity
-
-        :param user: name from User object (e.g. User.name)
-        :param entity: a infoservice entity to check for ownership
-        :return: True if user is owner, False otherwise
-        """
-        if user is None or entity is None:
-            return False
-        try:
-            if user == entity.owner:
-                return True
-        except AttributeError:
-            # no owner so return False by default
-            return False
-
     def __has_validated_allocation(self, user=None):
         """
         Check to see if the
