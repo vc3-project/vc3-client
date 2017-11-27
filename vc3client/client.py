@@ -709,6 +709,7 @@ class VC3ClientAPI(object):
                       url = None,
                       docurl = None,
                       organization = None,
+                      project = None,
                       policy_user=None
                        ):
         '''
@@ -748,6 +749,13 @@ class VC3ClientAPI(object):
             request_obj = self.getRequest(request)
             if request_obj is not None and request_obj.owner != policy_user:
                 raise PermissionDenied(policy_user + "is not the request owner")
+            project_obj = self.getProject(request_obj.project)
+            project_allocations = project_obj.allocations
+            for alloc in request_obj.allocations:
+                if alloc not in project_allocations:
+                    raise PermissionDenied("{0} must be in project {1}".format(alloc,
+                                                                               project_obj.name))
+
         request.store(self.ic)
 
 
