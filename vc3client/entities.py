@@ -699,6 +699,7 @@ class Request(InfoEntity):
                      'action',        # Command from webportal (run, terminate, etc.)
                      'state_reason',
                      'expiration',
+                     'project',       # project this request is on behalf of 
                      'queuesconf',    # base64-encoded contents of factory queues.conf sections. 
                      'authconf',      # base64-encoded contents of factory auth.conf sections. 
                      'headnode',      # ip for the headnode associated with this request
@@ -734,6 +735,7 @@ class Request(InfoEntity):
                  action = None,    # run | terminate
                  state_reason = None,
                  expiration = None,
+                 project = None,
                  queuesconf = None,
                  authconf = None, 
                  headnode = None,
@@ -755,6 +757,7 @@ class Request(InfoEntity):
         :param str name:          Label for this request. 
         :param str state:         State of request
         :param str state_reason:  Error reporting for state
+        :param str project:       Name of project the Request is on behalf of
         :param str action:        Command from webportal (e.g. run, terminate, etc.)
         :param str allocations:   List of allocations that the request shoud utilize.
         :param str policy:        Policy for utilizing the allocations. 
@@ -772,6 +775,7 @@ class Request(InfoEntity):
         self.action = action
         self.state_reason = state_reason
         self.expiration   = expiration
+        self.project = project
         self.queuesconf = queuesconf
         self.authconf = authconf
         self.statusraw = statusraw

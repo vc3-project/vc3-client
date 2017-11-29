@@ -733,6 +733,13 @@ class VC3ClientCLI(object):
                 help='Policy for using the allocations',
                 default='static-balanced')
 
+        parser_requestcreate.add_argument('--project', 
+                action='store', 
+                dest='project', 
+                help='Project this request is for',
+                default=None
+                )
+
         parser_requestcreate.add_argument('--allocations', 
                 action='store', 
                 dest='allocations', 
@@ -1194,6 +1201,7 @@ class VC3ClientCLI(object):
                                         allocations=allocationlist,
                                         environments=environmentlist,
                                         policy= ns.policy,
+                                        project = ns.project,
                                         expiration=None,
                                         organization = ns.organization,
                                         description = ns.description, 

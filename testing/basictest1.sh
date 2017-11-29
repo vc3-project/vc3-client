@@ -116,7 +116,7 @@ $CLIENT $DEBUGS -c $CONFIG cluster-removenodeset htcondor-scn-10workers htcondor
 
 
 
-$CLIENT $DEBUGS -c $CONFIG request-create --owner jhover --cluster htcondor-scn-10workers --allocations jhover.sdcc-ic jhover.request1
+$CLIENT $DEBUGS -c $CONFIG request-create --owner jhover --cluster htcondor-scn-10workers --project jhoverproject --allocations jhover.sdcc-ic jhover.request1
 
 $CLIENT $DEBUGS -c $CONFIG request-list
 

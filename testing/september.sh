@@ -88,7 +88,7 @@ $CLIENT $DEBUGS -c $CONFIG cluster-addnodeset htcondor-10workers htcondor-worker
 
 
 # Create request
-$CLIENT $DEBUGS -c $CONFIG request-create --owner lincolnb --cluster htcondor-10workers --allocations lincolnb.uchicago-midway,lincolnb.uchicago-coreos september-demo-request
+$CLIENT $DEBUGS -c $CONFIG request-create --project SPT --owner lincolnb --cluster htcondor-10workers --allocations lincolnb.uchicago-midway,lincolnb.uchicago-coreos september-demo-request
 
 # Terminate a request
 # $CLIENT $DEBUGS -c $CONFIG request-terminate --requestname september-demo-request

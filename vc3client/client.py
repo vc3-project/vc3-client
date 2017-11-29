@@ -533,6 +533,7 @@ class VC3ClientAPI(object):
                       environments,
                       policy,
                       expiration,
+                      project,
                       description = None,
                       displayname = None,
                       url = None,
@@ -554,6 +555,7 @@ class VC3ClientAPI(object):
                     environments = environments,   # list of environments names
                     policy = policy, 
                     expiration = expiration,       # string representation of UTC time when request should be terminated. 
+                    project = project,
                     description = description,
                     displayname = displayname,
                     url = url,
