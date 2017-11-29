@@ -34,6 +34,7 @@ RUN_CHECK_CLIENT () {
 
     set -x
     $CLIENT $DEBUGS -c $CONFIG "$@"
+    status=$?
     set +x
 
     # if error, and entity does not already exist, exit:
