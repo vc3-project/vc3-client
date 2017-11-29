@@ -1287,13 +1287,14 @@ class VC3ClientCLI(object):
         
 
 if __name__ == '__main__':
-    
+
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        
+
     vc3cli = VC3ClientCLI()
     try:
         vc3cli.run()
     except Exception:
-            print(traceback.format_exc(None))
-            sys.exit(1) 
+        print(traceback.format_exc(None))
+        sys.exit(1)
+
