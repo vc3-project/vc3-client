@@ -74,7 +74,6 @@ class VC3ClientAPI(object):
         '''
         u = User( name=name, 
                   state='new', 
-                  acl=None, 
                   first=first, 
                   last=last, 
                   email=email, 
@@ -139,7 +138,6 @@ class VC3ClientAPI(object):
         '''
         p = Project( name=name, 
                      state='new', 
-                     acl=None, 
                      owner=owner, 
                      members=members,
                      allocations=[],
@@ -279,7 +277,6 @@ class VC3ClientAPI(object):
         '''
         r = Resource( name, 
                       state='new', 
-                      acl=None, 
                       owner=owner, 
                       accesstype=accesstype, 
                       accessmethod=accessmethod, 
@@ -329,7 +326,6 @@ class VC3ClientAPI(object):
         '''
         ao = Allocation(name, 
                         state='new', 
-                        acl=None, 
                         owner=owner, 
                         resource=resource, 
                         accountname=accountname,
@@ -393,7 +389,6 @@ class VC3ClientAPI(object):
         c = Cluster(name=name, 
                     state='new',
                     owner=owner,
-                    acl=None,
                     nodesets=nodesets, # list of names of nodesets in this cluster definition.
                     description = description,
                     displayname = displayname,
@@ -450,8 +445,6 @@ class VC3ClientAPI(object):
         ns = Nodeset( name=name, 
                       state='new',
                       owner=owner, 
-                      acl=None, 
-
                       node_number=node_number, 
                       app_type=app_type, 
                       app_role=app_role,
@@ -501,7 +494,6 @@ class VC3ClientAPI(object):
                           ):
         e = Environment(name, 
                         state='new', 
-                        acl=None, 
                         owner = owner, 
                         packagelist = packagelist, 
                         envmap = envmap,
@@ -554,7 +546,6 @@ class VC3ClientAPI(object):
         '''
         r = Request(name, 
                     state='new', 
-                    acl=None,
                     owner=owner,
                     action='new',
                     state_reason='new',

@@ -21,7 +21,6 @@ class User(InfoEntity):
     '''
     infoattributes = ['name',
                      'state',
-                     'acl',
                      'first',
                      'last',
                      'email',
@@ -29,6 +28,7 @@ class User(InfoEntity):
                      'identity_id',
                      'description',
                      'displayname',
+                     'sshpubstring',
                      'url',
                      'docurl'                  
                      ] 
@@ -39,7 +39,6 @@ class User(InfoEntity):
     def __init__(self,
                    name,
                    state,
-                   acl,
                    first,
                    last,
                    email,
@@ -47,6 +46,7 @@ class User(InfoEntity):
                    identity_id=None,
                    description=None,
                    displayname=None,
+                   sshpubstring=None,
                    url=None,
                    docurl=None
                 ):
@@ -68,7 +68,6 @@ class User(InfoEntity):
         '''
         self.log = logging.getLogger()
         self.state = state
-        self.acl = acl
         self.name = name
         self.first = first
         self.last = last
@@ -78,6 +77,7 @@ class User(InfoEntity):
         self.allocations = []
         self.description = description
         self.displayname = displayname
+        self.sshpubstring = sshpubstring
         self.url = url
         self.docurl = docurl
         self.log.debug("Entity created: %s" % self)
@@ -121,7 +121,6 @@ class Project(InfoEntity):
     infokey = 'project'
     infoattributes = ['name',
                      'state',
-                     'acl',
                      'owner',
                      'members', 
                      'allocations',
@@ -138,7 +137,6 @@ class Project(InfoEntity):
     def __init__(self, 
                    name,
                    state,
-                   acl,
                    owner,
                    members,   # list
                    allocations=[],  # list of names 
@@ -169,7 +167,6 @@ class Project(InfoEntity):
         self.log = logging.getLogger()
         self.name = name
         self.state = state
-        self.acl = acl
         self.owner = owner
         self.members = []
         for m in members:
@@ -257,7 +254,6 @@ class Resource(InfoEntity):
     infokey = 'resource'
     infoattributes = ['name',
                      'state',
-                     'acl',
                      'owner',
                      'accesstype', 
                      'accessmethod',
@@ -282,7 +278,6 @@ class Resource(InfoEntity):
     def __init__(self,
                  name,
                  state,
-                 acl,
                  owner,
                  accesstype,   # grid, batch, cloud
                  accessmethod, # ssh, gsissh
@@ -310,7 +305,6 @@ class Resource(InfoEntity):
         self.log = logging.getLogger()
         self.name = name
         self.state = state
-        self.acl = acl
         self.owner = owner
         
         # Entity-specific attriutes
@@ -345,7 +339,6 @@ class Allocation(InfoEntity):
     infokey = 'allocation'
     infoattributes = ['name',
                      'state',
-                     'acl',
                      'owner',
                      'resource',
                      'type',        # unlimited, quota, cumulative
@@ -368,7 +361,6 @@ class Allocation(InfoEntity):
     def __init__(self, 
                  name, 
                  state, 
-                 acl, 
                  owner,
                  resource, 
                  accountname,
@@ -395,7 +387,6 @@ class Allocation(InfoEntity):
         self.log = logging.getLogger()
         self.name = name
         self.state = state
-        self.acl = acl
         self.owner = owner
         self.resource = resource
         self.accountname = accountname     # unix username, or cloud tenant, 
@@ -421,7 +412,6 @@ class Policy(InfoEntity):
     infoattributes = ['name',
                      'state',
                      'owner',
-                     'acl',
                      'pluginname',
                      'description',
                      'displayname',
@@ -436,7 +426,6 @@ class Policy(InfoEntity):
                  name, 
                  state, 
                  owner, 
-                 acl, 
                  pluginname,
                  description=None,
                  displayname=None,
@@ -453,7 +442,6 @@ class Policy(InfoEntity):
         self.log = logging.getLogger()
         self.name = name
         self.owner = owner
-        self.acl = acl
         self.pluginname = pluginname
         self.description = description
         self.displayname = displayname
@@ -471,7 +459,6 @@ class Nodeset(InfoEntity):
     infoattributes = ['name',
                      'state',
                      'owner',
-                     'acl',
                      
                      'node_number',
                      'app_type',
@@ -502,7 +489,6 @@ class Nodeset(InfoEntity):
     def __init__(self, name, 
                        state,
                        owner, 
-                       acl, 
                        node_number, 
                        app_type, 
                        app_role,
@@ -533,7 +519,6 @@ class Nodeset(InfoEntity):
         self.name = name
         self.state = state
         self.owner = owner
-        self.acl = acl
         self.node_number = node_number
         self.app_type = app_type
         self.app_role = app_role
@@ -568,7 +553,6 @@ class Cluster(InfoEntity):
     infoattributes = [ 'name',
                         'state',
                         'owner',
-                        'acl',
                         'nodesets',
                         'description',
                         'displayname',
@@ -582,7 +566,6 @@ class Cluster(InfoEntity):
                  name, 
                  state, 
                  owner, 
-                 acl, 
                  nodesets,
                  description=None,
                  displayname=None,
@@ -600,7 +583,6 @@ class Cluster(InfoEntity):
         self.name = name
         self.state = state
         self.owner = owner
-        self.acl = acl
         self.nodesets = nodesets # ordered list of nodeset labels
         self.description = description
         self.displayname = displayname
@@ -644,7 +626,6 @@ class Environment(InfoEntity):
     infoattributes = ['name',
                      'state',
                      'owner',
-                     'acl',
                      'packagelist',
                      'envmap',
                      'files',
@@ -662,7 +643,6 @@ class Environment(InfoEntity):
                  name, 
                  state, 
                  owner, 
-                 acl,
                  description=None,
                  displayname=None,
                  url=None,
@@ -692,7 +672,6 @@ class Environment(InfoEntity):
         self.log = logging.getLogger()
         self.name  = name
         self.state = state
-        self.acl   = acl
         self.owner = owner
         self.packagelist = packagelist
         self.envmap = envmap
@@ -716,7 +695,6 @@ class Request(InfoEntity):
     infokey = 'request'
     infoattributes = ['name',
                      'state',
-                     'acl',
                      'owner',
                      'action',        # Command from webportal (run, terminate, etc.)
                      'state_reason',
@@ -752,7 +730,6 @@ class Request(InfoEntity):
     def __init__(self, 
                  name, 
                  state, 
-                 acl,
                  owner,
                  action = None,    # run | terminate
                  state_reason = None,
@@ -788,7 +765,6 @@ class Request(InfoEntity):
         self.log = logging.getLogger()
         self.name = name
         self.state = state
-        self.acl = acl
         self.owner = owner
 
 
@@ -829,7 +805,6 @@ class Provisioner(InfoEntity):
     infokey = 'provisioner'
     infoattributes = ['name',
                      'state',
-                     'acl',
                      'owner',
                      'type', # autopyfactory, kubernetes
                      'authconfig',
@@ -845,7 +820,6 @@ class Provisioner(InfoEntity):
     def __init__(self, 
                  name, 
                  state, 
-                 acl, 
                  provtype='autopyfactory', 
                  authconfig=None, 
                  queuesconfig=None,
@@ -868,7 +842,6 @@ class Provisioner(InfoEntity):
         self.log = logging.getLogger()
         self.name  = name  # i.e. factory-id
         self.state = state
-        self.acl   = acl
         self.owner = owner
         self.type = provtype
         self.authconfig = authconfig
@@ -878,8 +851,53 @@ class Provisioner(InfoEntity):
         self.url = url
         self.docurl = docurl
         self.log.debug("Entity created: %s" % self)
-                
-        
+
+class PrivateToken(InfoEntity):
+    '''
+    Holder for private security tokens, so that read access can be controlled at
+    a fine-grained level.
+
+    '''
+    infokey = 'privatetoken'
+    infoattributes = ['name',
+                     'state',
+                     'data', # String representation of the token
+                     'type', # cloud private key, ssh private key, proxy?
+                     'displayname',
+                     'url',
+                     'docurl',
+                     ]
+    validvalues = {}
+    intattributes = []
+
+    def __init__(self,
+                 name,
+                 state,
+                 data,
+                 type,
+                 displayname=None,
+                 url=None,
+                 docurl=None,
+                  ):
+        '''
+        Creates a new PrivateToken object.
+
+        :param str name: The unique object name.
+        :param str state: State of token (new|validated)
+        :param str type:  What sort of token?
+        :rtype: PrivateToken
+        :return: Valid PrivateToken object.
+        '''
+        self.log = logging.getLogger()
+        self.name  = name  # i.e. factory-id
+        self.state = state
+        self.data = data
+        self.type = type
+        self.displayname = displayname
+        self.url = url
+        self.docurl = docurl
+        self.log.debug("Entity created: %s" % self)
+
         
 if __name__ == '__main__':
     pass
