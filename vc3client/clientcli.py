@@ -102,6 +102,13 @@ class VC3ClientCLI(object):
                                      default=None
                                      )        
 
+        parser_usercreate.add_argument('--sshpubstring', 
+                                     action="store", 
+                                     dest="sshpubstring",
+                                     required=False,
+                                     default=None
+                                     )        
+
         parser_usercreate.add_argument('--url', 
                                      action="store", 
                                      dest="url",
@@ -919,9 +926,12 @@ class VC3ClientCLI(object):
         capi = VC3ClientAPI(cp)
         
         try:
-            
             # User commands
             if ns.subcommand == 'user-create':
+                if ns.sshpubstring and not capi.validate_ssh_pub_key(ns.sshpubstring):
+                    self.log.error('ssh pub key is not a valid key.')
+                    sys.exit(1)
+
                 u = capi.defineUser( name = ns.username,
                                      first = ns.firstname,
                                      last = ns.lastname,
@@ -930,6 +940,7 @@ class VC3ClientCLI(object):
                                      identity_id = ns.identity_id,
                                      description = ns.description, 
                                      displayname = ns.displayname, 
+                                     sshpubstring = ns.sshpubstring, 
                                      url = ns.url, 
                                      docurl = ns.docurl                                  
                                      )

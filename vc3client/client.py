@@ -14,6 +14,8 @@ import json
 import logging
 import os
 import sys
+import subprocess
+import tempfile
 import yaml
 import StringIO
 import ConfigParser
@@ -48,7 +50,7 @@ class VC3ClientAPI(object):
     ################################################################################
     #                           User-related calls
     ################################################################################
-    def defineUser(self,   
+    def defineUser(self,
                    name,
                    first,
                    last,
@@ -57,6 +59,7 @@ class VC3ClientAPI(object):
                    identity_id = None,
                    description = None,
                    displayname = None,
+                   sshpubstring = None,
                    url = None,
                    docurl = None,
                    ):           
@@ -77,10 +80,11 @@ class VC3ClientAPI(object):
                   first=first, 
                   last=last, 
                   email=email, 
-                  organization=organization,
-                  identity_id=identity_id,
-                  description = description,
-                  displayname = displayname,
+                  organization = organization,
+                  identity_id  = identity_id,
+                  description  = description,
+                  displayname  = displayname,
+                  sshpubstring = sshpubstring,
                   url = url,
                   docurl = docurl
                   )
@@ -707,3 +711,20 @@ class VC3ClientAPI(object):
     def decode(self, string):
         return base64.b64decode(string)
        
+
+    @classmethod
+    def validate_ssh_pub_key(self, keystr):
+        fh = tempfile.NamedTemporaryFile(prefix = "client-key", delete = False)
+        try:
+            fh.write(keystr)
+            fh.close()
+
+            with open(os.devnull) as fnull:
+                status   = subprocess.call(['ssh-keygen', '-l', '-f', fh.name], stdout=fnull, stderr=fnull)
+                return status == 0
+        except Exception, e:
+            raise e
+        finally:
+            os.remove(fh.name)
+
+
