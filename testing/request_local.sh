@@ -62,7 +62,7 @@ $CLIENT $DEBUGS -c $CONFIG cluster-create --owner btovar wq-10workers
 $CLIENT $DEBUGS -c $CONFIG cluster-addnodeset wq-10workers wq-workers-1
 
 # Create request
-$CLIENT $DEBUGS -c $CONFIG request-create --owner btovar --cluster wq-10workers --project NDWQ --allocations btovar.condor-schedd-local request_local
+$CLIENT $DEBUGS -c $CONFIG request-create --owner btovar --cluster wq-10workers --project ndccl --allocations btovar.condor-schedd-local request_local
 
 # Terminate a request
 # $CLIENT $DEBUGS -c $CONFIG request-terminate --requestname september-demo-request

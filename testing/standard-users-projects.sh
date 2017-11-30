@@ -30,4 +30,6 @@ RUN_CHECK_CLIENT project-create --owner rwg --members rwg rwg
 
 # New group project
 RUN_CHECK_CLIENT project-create --owner lincolnb --members lincolnb,briedel SouthPoleTelescope
+RUN_CHECK_CLIENT project-create --owner btovar --members btovar,dthain ndccl
+RUN_CHECK_CLIENT project-create --owner khurtado --members khurtado lobster
 

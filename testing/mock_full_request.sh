@@ -25,7 +25,7 @@ vc3-client -c ${config} nodeset-create --owner ${owner} --node_number 1 --app_ty
 
 vc3-client -c ${config} cluster-create --owner ${owner} --nodesets NODESET_1 CLUSTER_1
 
-vc3-client -c ${config} request-create --owner ${owner} --cluster CLUSTER_1 --project jhover --allocations ALLOCATION_1,ALLOCATION_2 ${requestid}
+vc3-client -c ${config} request-create --owner ${owner} --cluster CLUSTER_1 --project ${owner} --allocations ALLOCATION_1,ALLOCATION_2 ${requestid}
 
 
 vc3-client -c ${config} allocation-list
