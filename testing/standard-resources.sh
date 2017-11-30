@@ -17,3 +17,7 @@ RUN_CHECK_CLIENT resource-create  --owner lincolnb  --accesstype batch  --access
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost uct2-gk.mwt2.org --accessport 22 --description "University of Chicago Computing Cooperative"  --displayname "UC3" --url ""  --docurl ""  --organization "University of Chicago" uchicago-uc3
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh  --accessflavor condor  --accesshost stampede-redirect.virtualclusters.org --accessport 22 --description "Stampede 2 Super Computer"  --displayname "Stampede 2" --url ""  --docurl ""  --organization "Texas Advanced Computing Center (TACC)" tacc-stampede2
+
+RUN_CHECK_CLIENT resource-create --owner btovar --accesstype batch --accessmethod ssh  --accessflavor condor  --accesshost disc01.crc.nd.edu --accessport 22 --description "Notre Dame CRC DISC"  --displayname "ND-DISC" --url ""  --docurl ""  --organization "University of Notre Dame" nd-crcdisc
+
+
