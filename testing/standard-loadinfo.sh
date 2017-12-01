@@ -1,6 +1,7 @@
 #!/bin/bash -e
 
-./standard-users-projects.sh "$@"
+# ./standard-users.sh "$@"
+./standard-projects.sh "$@"
 ./standard-resources.sh "$@"
 ./standard-environments.sh "$@"
 ./standard-clusters.sh "$@"
