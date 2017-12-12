@@ -10,35 +10,41 @@ import os
 from vc3client import VC3ClientAPI
 
 
+vc3_client = None
+
+def setupMpodule():
+    """
+    Create
+    :return:
+    """
+    global vc3_client
+
+    c = ConfigParser.SafeConfigParser()
+    if 'VC3_CLIENT_CONFIG' in os.environ:
+        c.readfp(open(os.environ['VC3_CLIENT_CONFIG']))
+    else:
+        c.readfp(open('./vc3-client.ini'))
+
+    try:
+        vc3_client = VC3ClientAPI.VC3ClientAPI(c)
+    except Exception as e:
+        sys.stderr.write("Couldn't get vc3 client: {0}".format(e))
+        raise e
+
+
 class TestUserPolicy(unittest.TestCase):
     """
     Class to test policy related to user operations
     """
 
-    def setUp(self):
-        """
-        Setup vc3 client for subsequent tests
-        :return:  None
-        """
-        c = ConfigParser.SafeConfigParser()
-        if 'VC3_CLIENT_CONFIG' in os.environ:
-            c.readfp(open(os.environ['VC3_CLIENT_CONFIG']))
-        else:
-            c.readfp(open('./vc3-client.ini'))
 
-        try:
-            client = VC3ClientAPI.VC3ClientAPI(c)
-            self.__vc3_client = client
-        except Exception as e:
-            sys.stderr.write("Couldn't get vc3 client: {0}".format(e))
-            raise
 
     def testViewProfile(self):
         """
         Test viewing profile operations
         :return:  None
         """
-        new_user = self.__vc3_client.defineUser(identity_id='test_id',
+        new_user = vc3_client.defineUser(identity_id='test_id',
                                                 name='vc3name1',
                                                 first='First',
                                                 last='Last',
@@ -46,9 +52,9 @@ class TestUserPolicy(unittest.TestCase):
                                                 organization='Computation Institute',
                                                 displayname='test1')
 
-        self.__vc3_client.storeUser(new_user)
+        vc3_client.storeUser(new_user)
 
-        new_user2 = self.__vc3_client.defineUser(identity_id='test_id2',
+        new_user2 = vc3_client.defineUser(identity_id='test_id2',
                                                  name='vc3name2',
                                                  first='First2',
                                                  last='Last2',
@@ -56,9 +62,7 @@ class TestUserPolicy(unittest.TestCase):
                                                  organization='Computation Institute',
                                                  displayname='test2')
 
-        self.__vc3_client.get
 
-        `
 
 
 class TestAllocationPolicy(unittest.TestCase):
@@ -71,20 +75,8 @@ class TestAllocationPolicy(unittest.TestCase):
         Setup vc3 client for subsequent tests
         :return:  None
         """
-        c = ConfigParser.SafeConfigParser()
-        if 'VC3_CLIENT_CONFIG' in os.environ:
-            c.readfp(open(os.environ['VC3_CLIENT_CONFIG']))
-        else:
-            c.readfp(open('./vc3-client.ini'))
 
-        try:
-            client = VC3ClientAPI.VC3ClientAPI(c)
-            self.__vc3_client = client
-        except Exception as e:
-            sys.stderr.write("Couldn't get vc3 client: {0}".format(e))
-            raise
-
-        new_user = self.__vc3_client.defineUser(identity_id='test_id',
+        new_user = vc3_client.defineUser(identity_id='test_id',
                                                 name='vc3name1',
                                                 first='First',
                                                 last='Last',
@@ -92,10 +84,10 @@ class TestAllocationPolicy(unittest.TestCase):
                                                 organization='Computation Institute',
                                                 displayname='test1')
 
-        self.__vc3_client.storeUser(new_user)
+        vc3_client.storeUser(new_user)
         self.__stored_user = new_user
 
-        new_user2 = self.__vc3_client.defineUser(identity_id='test_id2',
+        new_user2 = vc3_client.defineUser(identity_id='test_id2',
                                                  name='vc3name2',
                                                  first='First2',
                                                  last='Last2',
@@ -104,7 +96,7 @@ class TestAllocationPolicy(unittest.TestCase):
                                                  displayname='test2')
         self.__unstored_user = new_user2
 
-        resource = self.__vc3_client.defineResource(name='resource',
+        resource = vc3_client.defineResource(name='resource',
                                                     owner=new_user.name,
                                                     accesstype='remote-batch',
                                                     accessmethod='ssh',
@@ -121,9 +113,17 @@ class TestAllocationPolicy(unittest.TestCase):
                                                     docurl='docurl',
                                                     organization='Computation Institute',
                                                     )
-        self.__vc3_client.storeResource(resource)
+        vc3_client.storeResource(resource)
         self.__resource = resource
 
+    def tearDown(self):
+        """
+        Remove entities created for tests
+        :return:
+        """
+
+        vc3_client.deleteUser(self.__stored_user)
+        vc3_client.deleteResource(self.__resource)
 
     def testAllocationCreation(self):
         """
@@ -132,7 +132,7 @@ class TestAllocationPolicy(unittest.TestCase):
         """
 
         # test allocation with user not in infosystem
-        test_allocation = self.__vc3_client.defineAllocation(
+        test_allocation = vc3_client.defineAllocation(
             name='testallocation1',
             owner=self.__unstored_user.name,
             resource=self.__resource.name,
@@ -141,12 +141,12 @@ class TestAllocationPolicy(unittest.TestCase):
             description='test allocation 1')
 
         self.assertRaises(vc3client.PermissionDenied,
-                          self.__vc3_client.storeAllocation,
+                          vc3_client.storeAllocation,
                           [test_allocation],
                           {'policyuser': self.__unstored_user.name})
 
         # test allocation creation with fake resource
-        test_allocation = self.__vc3_client.defineAllocation(
+        test_allocation = vc3_client.defineAllocation(
             name='testallocation1',
             owner=self.__stored_user.name,
             resource='fakeresource',
@@ -154,19 +154,19 @@ class TestAllocationPolicy(unittest.TestCase):
             displayname='testalloc1',
             description='test allocation 1')
         self.assertRaises(vc3client.PermissionDenied,
-                          self.__vc3_client.storeAllocation,
+                          vc3_client.storeAllocation,
                           [test_allocation],
                           {'policyuser': self.__stored_user.name})
 
         # verify allocation can be created with right policies
-        test_allocation = self.__vc3_client.defineAllocation(
+        test_allocation = vc3_client.defineAllocation(
             name='testallocation1',
             owner=self.__stored_user.name,
             resource=self.__resource.name,
             accountname='dummy',
             displayname='testalloc1',
             description='test allocation 1')
-        self.__vc3_client.storeAllocation(test_allocation,
+        vc3_client.storeAllocation(test_allocation,
                                           policy_user=self.__stored_user.name)
 
     def testAllocationEdit(self):
@@ -175,26 +175,26 @@ class TestAllocationPolicy(unittest.TestCase):
         :return: None
         """
         # verify allocation can be created with right policies
-        test_allocation = self.__vc3_client.defineAllocation(
+        test_allocation = vc3_client.defineAllocation(
             name='testallocation2',
             owner=self.__stored_user.name,
             resource=self.__resource.name,
             accountname='dummy',
             displayname='testalloc2',
             description='test allocation 2')
-        self.__vc3_client.storeAllocation(test_allocation,
+        vc3_client.storeAllocation(test_allocation,
                                           policy_user=self.__stored_user.name)
 
         # test editing displayname and description
         test_allocation.displayname = 'newtestalloc2'
         test_allocation.description = 'newdescription'
-        self.__vc3_client.storeAllocation(test_allocation,
+        vc3_client.storeAllocation(test_allocation,
                                           policy_user=self.__stored_user.name)
 
         # test editing invalid stuff
         test_allocation.name = 'newvc3name'
         self.assertRaises(vc3client.PermissionDenied,
-                          self.__vc3_client.storeAllocation,
+                          vc3_client.storeAllocation,
                           [test_allocation],
                           {'policyuser': self.__stored_user.name})
 
@@ -204,26 +204,26 @@ class TestAllocationPolicy(unittest.TestCase):
         :return: None
         """
 
-        test_allocation = self.__vc3_client.defineAllocation(
+        test_allocation = vc3_client.defineAllocation(
             name='testallocation3',
             owner=self.__stored_user.name,
             resource=self.__resource.name,
             accountname='dummy',
             displayname='testalloc3',
             description='test allocation 3')
-        self.__vc3_client.storeAllocation(test_allocation,
+        vc3_client.storeAllocation(test_allocation,
                                           policy_user=self.__stored_user.name)
 
 
 
         # test deletion by non-owner
         self.assertRaises(vc3client.PermissionDenied,
-                          self.__vc3_client.deleteAllocation,
+                          vc3_client.deleteAllocation,
                           [test_allocation],
                           {'policyuser': self.__unstored_user.name})
 
         # test deletion by valid owner
-        self.__vc3_client.deleteAllocation(test_allocation,
+        vc3_client.deleteAllocation(test_allocation,
                                            policy_user=self.__stored_user.name)
 
 
@@ -237,20 +237,8 @@ class TestProjectPolicy(unittest.TestCase):
         Setup vc3 client for subsequent tests
         :return:  None
         """
-        c = ConfigParser.SafeConfigParser()
-        if 'VC3_CLIENT_CONFIG' in os.environ:
-            c.readfp(open(os.environ['VC3_CLIENT_CONFIG']))
-        else:
-            c.readfp(open('./vc3-client.ini'))
 
-        try:
-            client = VC3ClientAPI.VC3ClientAPI(c)
-            self.__vc3_client = client
-        except Exception as e:
-            sys.stderr.write("Couldn't get vc3 client: {0}".format(e))
-            raise
-
-        new_user = self.__vc3_client.defineUser(identity_id='test_id',
+        new_user = vc3_client.defineUser(identity_id='test_id',
                                                 name='vc3name1',
                                                 first='First',
                                                 last='Last',
@@ -258,21 +246,21 @@ class TestProjectPolicy(unittest.TestCase):
                                                 organization='Computation Institute',
                                                 displayname='test1')
 
-        self.__vc3_client.storeUser(new_user)
+        vc3_client.storeUser(new_user)
         self.__stored_user = new_user
 
-        new_user2 = self.__vc3_client.defineUser(identity_id='test_id2',
+        new_user2 = vc3_client.defineUser(identity_id='test_id2',
                                                  name='vc3name2',
                                                  first='First2',
                                                  last='Last2',
                                                  email='test2@test.edu',
                                                  organization='Computation Institute',
                                                  displayname='test2')
-        self.__vc3_client.storeUser(new_user2)
+        vc3_client.storeUser(new_user2)
         self.__stored_user2 = new_user2
 
 
-        new_user3 = self.__vc3_client.defineUser(identity_id='test_id2',
+        new_user3 = vc3_client.defineUser(identity_id='test_id2',
                                                  name='vc3name2',
                                                  first='First2',
                                                  last='Last2',
@@ -281,7 +269,7 @@ class TestProjectPolicy(unittest.TestCase):
                                                  displayname='test2')
         self.__unstored_user = new_user3
 
-        resource = self.__vc3_client.defineResource(name='resource',
+        resource = vc3_client.defineResource(name='resource',
                                                     owner=new_user.name,
                                                     accesstype='remote-batch',
                                                     accessmethod='ssh',
@@ -298,10 +286,10 @@ class TestProjectPolicy(unittest.TestCase):
                                                     docurl='docurl',
                                                     organization='Computation Institute',
                                                     )
-        self.__vc3_client.storeResource(resource)
+        vc3_client.storeResource(resource)
         self.__resource = resource
 
-        user_allocation = self.__vc3_client.defineAllocation(
+        user_allocation = vc3_client.defineAllocation(
             name='testallocation3',
             owner=self.__stored_user.name,
             resource=self.__resource.name,
@@ -309,7 +297,18 @@ class TestProjectPolicy(unittest.TestCase):
             displayname='testalloc3',
             description='test allocation 3')
         self.__user_allocation = user_allocation
-        self.__vc3_client.storeAllocation(user_allocation)
+        vc3_client.storeAllocation(user_allocation)
+
+    def tearDown(self):
+        """
+        Remove entities created for tests
+        :return:
+        """
+
+        vc3_client.deleteUser(self.__stored_user)
+        vc3_client.deleteUser(self.__stored_user2)
+        vc3_client.deleteResource(self.__resource)
+        vc3_client.deleteAllocation(self.__user_allocation)
 
     def testProjectCreation(self):
         """
@@ -320,7 +319,7 @@ class TestProjectPolicy(unittest.TestCase):
 
         # verify users without allocation can't create
         self.assertRaises(vc3client.PermissionDenied,
-                          self.__vc3_client.defineProject,
+                          vc3_client.defineProject,
                           [],
                           {'name': 'testname',
                            'owner': self.__stored_user2.name,
@@ -333,7 +332,7 @@ class TestProjectPolicy(unittest.TestCase):
                            'policyuser': self.__stored_user2.name})
 
         # verify creation with valid user
-        test_proj1 = self.__vc3_client.defineProject(name='testname1',
+        test_proj1 = vc3_client.defineProject(name='testname1',
                                                      owner=self.__stored_user.name,
                                                      members=[],
                                                      description=None,
@@ -342,7 +341,7 @@ class TestProjectPolicy(unittest.TestCase):
                                                      docurl=None,
                                                      organization=None,
                                                      policy_user=self.__stored_user.name)
-        self.__vc3_client.storeProject(test_proj1,
+        vc3_client.storeProject(test_proj1,
                                        policy_user=self.__stored_user.name)
 
 
@@ -355,12 +354,12 @@ class TestProjectPolicy(unittest.TestCase):
 
         # verify view with invalid user
         self.assertRaises(vc3client.PermissionDenied,
-                          self.__vc3_client.listProjects,
+                          vc3_client.listProjects,
                           [],
                           {'policyuser': self.__unstored_user.name}
 
         # verify view with valid user
-        self.__vc3_client.listProjects(policy_user=self.__stored_user.name)
+        vc3_client.listProjects(policy_user=self.__stored_user.name)
 
 
     def testProjectEdit(self):
@@ -369,7 +368,7 @@ class TestProjectPolicy(unittest.TestCase):
 
         :return: None
         """
-        test_proj1 = self.__vc3_client.defineProject(name='testname1',
+        test_proj1 = vc3_client.defineProject(name='testname1',
                                                      owner=self.__stored_user.name,
                                                      members=[],
                                                      description=None,
@@ -379,54 +378,54 @@ class TestProjectPolicy(unittest.TestCase):
                                                      organization=None,
                                                      policy_user=self.__stored_user.name)
 
-        self.__vc3_client.storeProject(test_proj1,
+        vc3_client.storeProject(test_proj1,
                                        policy_user=self.__stored_user.name)
 
 
         # verify non-owner can't edit
         test_proj1.displayname = 'invalidname'
         self.assertRaises(vc3client.PermissionDenied,
-                          self.__vc3_client.storeProjects,
+                          vc3_client.storeProjects,
                           [test_proj1],
                           {'policyuser': self.__stored_user.name2}
 
         # verify that owner can edit
         test_proj1.displayname = 'newname'
-        self.__vc3_client.storeProject(test_proj1,
+        vc3_client.storeProject(test_proj1,
                                        policy_user=self.__stored_user.name)
 
         # verify owner can add members
-        self.__vc3_client.addUserToProject(self.__stored_user2.name,
+        vc3_client.addUserToProject(self.__stored_user2.name,
                                            test_proj1,
                                            policy_user=self.__stored_user.name)
 
         # verify owner can remove members
-        self.__vc3_client.removeUserToProject(self.__stored_user2.name,
+        vc3_client.removeUserToProject(self.__stored_user2.name,
                                               test_proj1,
                                               policy_user=self.__stored_user.name)
 
         # verify non-owner can't add members
         self.assertRaises(vc3client.PermissionDenied,
-                          self.__vc3_client.addUserToProject,
+                          vc3_client.addUserToProject,
                           [self.__stored_user2.name,
                                            test_proj1],
                           {'policyuser': self.__unstored_user2.name})
 
         # verify members can remove themselves
-        self.__vc3_client.addUserToProject(self.__stored_user2.name,
+        vc3_client.addUserToProject(self.__stored_user2.name,
                                            test_proj1,
                                            policy_user=self.__stored_user.name)
-        self.__vc3_client.removeUserToProject(self.__stored_user2.name,
+        vc3_client.removeUserToProject(self.__stored_user2.name,
                                               test_proj1,
                                               policy_user=self.__stored_user2.name)
 
         # verify members can add their allocations
-        self.__vc3_client.addAllocationToProject(self.__user_allocation,
+        vc3_client.addAllocationToProject(self.__user_allocation,
                                                  test_proj1,
                                                  policy_user=self.__stored_user.name
 
         # verify members can remove their allocations
-        self.__vc3_client.removeAllocationToProject(self.__user_allocation,
+        vc3_client.removeAllocationToProject(self.__user_allocation,
                                                     test_proj1,
                                                     policy_user=self.__stored_user.name
 
@@ -436,7 +435,7 @@ class TestProjectPolicy(unittest.TestCase):
             :return: None
             """
 
-            test_proj1 = self.__vc3_client.defineProject(name='testname1',
+            test_proj1 = vc3_client.defineProject(name='testname1',
                                                          owner=self.__stored_user.name,
                                                          members=[],
                                                          description=None,
@@ -446,43 +445,31 @@ class TestProjectPolicy(unittest.TestCase):
                                                          organization=None,
                                                          policy_user=self.__stored_user.name)
 
-            self.__vc3_client.storeProject(test_proj1,
+            vc3_client.storeProject(test_proj1,
                                            policy_user=self.__stored_user.name)
 
             # test deletion by non-owner
             self.assertRaises(vc3client.PermissionDenied,
-                              self.__vc3_client.deleteProject,
+                              vc3_client.deleteProject,
                               [test_proj1],
                               {'policyuser': self.__stored_user2.name})
 
             # test deletion by valid owner
-            self.__vc3_client.deleteProject(test_proj1,
+            vc3_client.deleteProject(test_proj1,
                                                policy_user=self.__stored_user.name)
 
 
-class TestRequestPolicy(unittest.TestCase):
+class TestTemplatePolicy(unittest.TestCase):
     """
-    Class to test policy related to cluster request operations
+    Class to test policy related to cluster template operations
     """
     def setUp(self):
         """
         Setup vc3 client for subsequent tests
         :return:  None
         """
-        c = ConfigParser.SafeConfigParser()
-        if 'VC3_CLIENT_CONFIG' in os.environ:
-            c.readfp(open(os.environ['VC3_CLIENT_CONFIG']))
-        else:
-            c.readfp(open('./vc3-client.ini'))
 
-        try:
-            client = VC3ClientAPI.VC3ClientAPI(c)
-            self.__vc3_client = client
-        except Exception as e:
-            sys.stderr.write("Couldn't get vc3 client: {0}".format(e))
-            raise
-
-        new_user = self.__vc3_client.defineUser(identity_id='test_id',
+        new_user = vc3_client.defineUser(identity_id='test_id',
                                                 name='vc3name1',
                                                 first='First',
                                                 last='Last',
@@ -490,19 +477,30 @@ class TestRequestPolicy(unittest.TestCase):
                                                 organization='Computation Institute',
                                                 displayname='test1')
 
-        self.__vc3_client.storeUser(new_user)
+        vc3_client.storeUser(new_user)
         self.__stored_user = new_user
 
-        new_user2 = self.__vc3_client.defineUser(identity_id='test_id2',
+        new_user2 = vc3_client.defineUser(identity_id='test_id2',
                                                  name='vc3name2',
                                                  first='First2',
                                                  last='Last2',
                                                  email='test2@test.edu',
                                                  organization='Computation Institute',
                                                  displayname='test2')
-        self.__unstored_user = new_user2
+        vc3_client.storeUser(new_user2)
+        self.__stored_user2 = new_user2
 
-        resource = self.__vc3_client.defineResource(name='resource',
+
+        new_user3 = vc3_client.defineUser(identity_id='test_id2',
+                                                 name='vc3name2',
+                                                 first='First2',
+                                                 last='Last2',
+                                                 email='test2@test.edu',
+                                                 organization='Computation Institute',
+                                                 displayname='test2')
+        self.__unstored_user = new_user3
+
+        resource = vc3_client.defineResource(name='resource',
                                                     owner=new_user.name,
                                                     accesstype='remote-batch',
                                                     accessmethod='ssh',
@@ -519,5 +517,78 @@ class TestRequestPolicy(unittest.TestCase):
                                                     docurl='docurl',
                                                     organization='Computation Institute',
                                                     )
-        self.__vc3_client.storeResource(resource)
+        vc3_client.storeResource(resource)
         self.__resource = resource
+
+        user_allocation = vc3_client.defineAllocation(
+            name='testallocation3',
+            owner=self.__stored_user.name,
+            resource=self.__resource.name,
+            accountname='dummy',
+            displayname='testalloc3',
+            description='test allocation 3')
+        self.__user_allocation = user_allocation
+        vc3_client.storeAllocation(user_allocation)
+
+
+
+class TestRequestPolicy(unittest.TestCase):
+    """
+    Class to test policy related to cluster request operations
+    """
+    def setUp(self):
+        """
+        Setup vc3 client for subsequent tests
+        :return:  None
+        """
+
+        new_user = vc3_client.defineUser(identity_id='test_id',
+                                                name='vc3name1',
+                                                first='First',
+                                                last='Last',
+                                                email='test@test.edu',
+                                                organization='Computation Institute',
+                                                displayname='test1')
+
+        vc3_client.storeUser(new_user)
+        self.__stored_user = new_user
+
+        new_user2 = vc3_client.defineUser(identity_id='test_id2',
+                                                 name='vc3name2',
+                                                 first='First2',
+                                                 last='Last2',
+                                                 email='test2@test.edu',
+                                                 organization='Computation Institute',
+                                                 displayname='test2')
+        self.__unstored_user = new_user2
+
+        resource = vc3_client.defineResource(name='resource',
+                                                    owner=new_user.name,
+                                                    accesstype='remote-batch',
+                                                    accessmethod='ssh',
+                                                    accessflavor='slurm',
+                                                    accesshost='login.host',
+                                                    accessport='3890',
+                                                    gridresource='gridresource',
+                                                    cloudspotprice='spotprice',
+                                                    cloudinstancetype='instance_type',
+                                                    mfa='mfa',
+                                                    description='testresource',
+                                                    displayname='displayname',
+                                                    url='url',
+                                                    docurl='docurl',
+                                                    organization='Computation Institute',
+                                                    )
+        vc3_client.storeResource(resource)
+        self.__resource = resource
+
+    def tearDown(self):
+        """
+        Remove entities created for tests
+        :return:
+        """
+
+        vc3_client.deleteUser(self.__stored_user)
+        vc3_client.deleteUser(self.__stored_user2)
+        vc3_client.deleteResource(self.__resource)
+        vc3_client.deleteAllocation(self.__user_allocation)
