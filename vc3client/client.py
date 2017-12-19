@@ -706,7 +706,6 @@ class VC3ClientAPI(object):
                       url = None,
                       docurl = None,
                       organization = None,
-                      project = None,
                       policy_user=None
                        ):
         '''
