@@ -189,7 +189,7 @@ class VC3ClientAPI(object):
         :return: Project  A valid Project object
         :rtype: Project        
         '''
-        if user is not None and not self.__has_validated_allocation(owner):
+        if policy_user is not None and not self.__has_validated_allocation(owner):
             raise PermissionDenied("{0} doesn't have a validated allocation".format(user))
         p = Project( name=name,
                      state='new', 
@@ -217,7 +217,7 @@ class VC3ClientAPI(object):
         :return: None
         '''
         self.log.debug("Storing project %s" % project)
-        if user is not None and user != project.owner:
+        if policy_user is not None and policy_user != project.owner:
             raise PermissionDenied("{0} is not the project owner".format(policy_user))
         project.store(self.ic)
         self.log.debug("Done.")
