@@ -207,7 +207,7 @@ class VC3ClientAPI(object):
                      organization = organization                     
                      )
 
-        self.addUser(owner)
+        p.addUser(owner)
 
         p.storenew = True
         self.log.debug("Created project object: %s " % p)
