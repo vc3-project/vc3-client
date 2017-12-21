@@ -206,6 +206,9 @@ class VC3ClientAPI(object):
                      docurl = docurl,
                      organization = organization                     
                      )
+
+        self.addUser(owner)
+
         p.storenew = True
         self.log.debug("Created project object: %s " % p)
         return p
