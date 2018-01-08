@@ -17,7 +17,7 @@ RUN_CHECK_CLIENT user-create --firstname Jeremy --lastname Van \
                              --displayname "Jeremy Van" \
                              --identity_id 05e05adf-e9d4-487f-8771-b6b8a25e84d3 \
                              --institution UChicago \
-                             rwg
+                             jvan
 RUN_CHECK_CLIENT user-create --firstname Robert --lastname Gardner  \
                              --email rwg@uchicago.edu \
                              --displayname "Robert Gardner" \
