@@ -7,8 +7,8 @@ source ./standard-common-config.sh
 #RUN_CHECK_CLIENT user-create --firstname Charlie --lastname Root --email root@localhost.tld --institution BellLabs --identity_id="356E5D96-B058-41F2-AD06-B59FC5BE9931" charlie
 
 RUN_CHECK_CLIENT user-create --firstname Lincoln --lastname Bryant \
-                             --email lincolnb@uchicago.edu \ 
-                             --displayname "Lincoln Bryant" \  
+                             --email lincolnb@uchicago.edu \
+                             --displayname "Lincoln Bryant" \
                              --identity_id c887eb90-d274-11e5-bf28-779c8998e810 \
                              --institution UChicago \
                              lincolnb 
