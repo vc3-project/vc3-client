@@ -13,7 +13,7 @@ import vc3client
 vc3_client = None
 
 
-def setupMpodule():
+def setupModule():
     """
     Create
     :return:
