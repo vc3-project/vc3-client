@@ -30,3 +30,15 @@ RUN_CHECK_CLIENT user-create --firstname Kenyi --lastname Hurtado \
                              --identity_id a877729e-d274-11e5-a5d2-2f448d5a1c26 \
                              --institution "University of Notre Dame" \
                              khurtado
+RUN_CHECK_CLIENT user-create --firstname Suchandra --lastname Thapa \
+                             --email sthapa@ci.uchicago.edu \
+                             --displayname "Suchandra Thapa" \
+                             --identity_id c444a294-d274-11e5-b7f1-e3782ed16687 \
+                             --institution "Computation Institute" \
+                             sthapa
+RUN_CHECK_CLIENT user-create --firstname Benjamin --lastname Tovar \
+                             --email btovar@nd.edu \
+                             --displayname "Benjamin Tovar" \
+                             --identity_id c4686d14-d274-11e5-b866-0febeb7fd79e \
+                             --institution "University of Notre Dame" \
+                             btovar
