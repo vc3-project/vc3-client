@@ -27,7 +27,7 @@ def setupModule():
         c.readfp(open('./vc3-client.ini'))
 
     try:
-        vc3_client = vc3client.client.VC3ClientAPI.VC3ClientAPI(c)
+        vc3_client = vc3client.client.VC3ClientAPI(c)
     except Exception as e:
         sys.stderr.write("Couldn't get vc3 client: {0}".format(e))
         raise e
