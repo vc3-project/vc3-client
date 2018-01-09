@@ -7,7 +7,7 @@ import ConfigParser
 import sys
 import os
 
-import vc3client
+import vc3client.client
 
 
 vc3_client = None
@@ -27,7 +27,7 @@ def setupModule():
         c.readfp(open('./vc3-client.ini'))
 
     try:
-        vc3_client = vc3client.VC3ClientAPI.VC3ClientAPI(c)
+        vc3_client = vc3client.client.VC3ClientAPI.VC3ClientAPI(c)
     except Exception as e:
         sys.stderr.write("Couldn't get vc3 client: {0}".format(e))
         raise e
@@ -137,7 +137,7 @@ class TestAllocationPolicy(unittest.TestCase):
             displayname='testalloc1',
             description='test allocation 1')
 
-        self.assertRaises(vc3client.PermissionDenied,
+        self.assertRaises(vc3client.client.PermissionDenied,
                           vc3_client.storeAllocation,
                           [test_allocation],
                           {'policyuser': self.__unstored_user.name})
@@ -150,7 +150,7 @@ class TestAllocationPolicy(unittest.TestCase):
             accountname='dummy',
             displayname='testalloc1',
             description='test allocation 1')
-        self.assertRaises(vc3client.PermissionDenied,
+        self.assertRaises(vc3client.client.PermissionDenied,
                           vc3_client.storeAllocation,
                           [test_allocation],
                           {'policyuser': self.__stored_user.name})
@@ -190,7 +190,7 @@ class TestAllocationPolicy(unittest.TestCase):
 
         # test editing invalid stuff
         test_allocation.name = 'newvc3name'
-        self.assertRaises(vc3client.PermissionDenied,
+        self.assertRaises(vc3client.client.PermissionDenied,
                           vc3_client.storeAllocation,
                           [test_allocation],
                           {'policyuser': self.__stored_user.name})
@@ -212,7 +212,7 @@ class TestAllocationPolicy(unittest.TestCase):
                                    policy_user=self.__stored_user.name)
 
         # test deletion by non-owner
-        self.assertRaises(vc3client.PermissionDenied,
+        self.assertRaises(vc3client.client.PermissionDenied,
                           vc3_client.deleteAllocation,
                           [test_allocation],
                           {'policyuser': self.__unstored_user.name})
@@ -312,7 +312,7 @@ class TestProjectPolicy(unittest.TestCase):
         """
 
         # verify users without allocation can't create
-        self.assertRaises(vc3client.PermissionDenied,
+        self.assertRaises(vc3client.client.PermissionDenied,
                           vc3_client.defineProject,
                           [],
                           {'name': 'testname',
@@ -346,7 +346,7 @@ class TestProjectPolicy(unittest.TestCase):
         """
 
         # verify view with invalid user
-        self.assertRaises(vc3client.PermissionDenied,
+        self.assertRaises(vc3client.client.PermissionDenied,
                           vc3_client.listProjects,
                           [],
                           {'policyuser': self.__unstored_user.name})
@@ -375,7 +375,7 @@ class TestProjectPolicy(unittest.TestCase):
 
         # verify non-owner can't edit
         test_proj1.displayname = 'invalidname'
-        self.assertRaises(vc3client.PermissionDenied,
+        self.assertRaises(vc3client.client.PermissionDenied,
                           vc3_client.storeProjects,
                           [test_proj1],
                           {'policyuser': self.__stored_user.name2})
@@ -396,7 +396,7 @@ class TestProjectPolicy(unittest.TestCase):
                                        policy_user=self.__stored_user.name)
 
         # verify non-owner can't add members
-        self.assertRaises(vc3client.PermissionDenied,
+        self.assertRaises(vc3client.client.PermissionDenied,
                           vc3_client.addUserToProject,
                           [self.__stored_user2.name,
                                            test_proj1],
@@ -440,7 +440,7 @@ class TestProjectPolicy(unittest.TestCase):
                                     policy_user=self.__stored_user.name)
 
             # test deletion by non-owner
-            self.assertRaises(vc3client.PermissionDenied,
+            self.assertRaises(vc3client.client.PermissionDenied,
                               vc3_client.deleteProject,
                               [test_proj1],
                               {'policyuser': self.__stored_user2.name})
