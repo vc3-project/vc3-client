@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# ./standard-users.sh "$@"
+./standard-users.sh "$@"
 ./standard-projects.sh "$@"
 ./standard-resources.sh "$@"
 ./standard-environments.sh "$@"
