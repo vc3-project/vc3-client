@@ -93,8 +93,11 @@ class VC3ClientAPI(object):
         :param user: name from User object (e.g. User.name)
         :return: True if user is in the info system, False otherwise
         """
-        user_obj = self.getUser(user)
-        if user_obj is None:
+        try:
+            user_obj = self.getUser(user)
+            if user_obj is None:
+                return False
+        except InfoEntityMissingException:
             return False
         return True
 
@@ -193,7 +196,7 @@ class VC3ClientAPI(object):
         :rtype: Project        
         '''
         if policy_user is not None and not self.__has_validated_allocation(owner):
-            raise PermissionDenied("{0} doesn't have a validated allocation".format(user))
+            raise PermissionDenied("{0} doesn't have a validated allocation".format(policy_user))
         p = Project( name=name,
                      state='new', 
                      owner=owner, 
@@ -257,7 +260,7 @@ class VC3ClientAPI(object):
         else:
             self.log.debug("Removing user %s from project object %s " % (user, po))
             if policy_user is not None:
-                if po.owner != policy_user and user not in project.members:
+                if po.owner != policy_user and user not in po.members:
                     err_msg = "{0} is not allowed ".format(policy_user)
                     err_msg += "to remove {0} from {1}".format(user.displayname,
                                                                project)
@@ -456,14 +459,36 @@ class VC3ClientAPI(object):
         self.log.debug("Creating Allocation object: %s " % ao)
         return ao
 
-    def storeAllocation(self, allocation, policy_user = None):
+    def storeAllocation(self, allocation, policy_user=None):
         """
         :param str policy_user: The VC3 user name of the user trying this operation
         """
-        if policy_user is not None and not self.__valid_user(policy_user):
-            raise PermissionDenied(policy_user + "is not a valid user")
+        if policy_user is not None:
+            if not self.__valid_user(policy_user):
+                raise PermissionDenied(policy_user + "is not a valid user")
+
+            # verify allocation is referencing a valid resource
+            try:
+                resource = self.getResource(allocation.resource)
+                if resource is None:
+                    raise PermissionDenied(policy_user + "is not a valid resource")
+            except InfoEntityMissingException:
+                raise PermissionDenied(policy_user + "is not a valid resource")
+
+            # verify only displayname or description is being changed
+            try:
+                tmp = self.getAllocation(allocation.name)
+                if (tmp.owner != allocation.owner or
+                    tmp.resource != allocation.resource or
+                    tmp.accountname != allocation.accountname or
+                    tmp.url != allocation.url):
+                    raise PermissionDenied("Trying to modify protected " +
+                                           "allocation attributes")
+            except InfoEntityMissingException:
+                # if allocation isn't in infoservice, check not needed
+                pass
         allocation.store(self.ic)
-        
+
     def listAllocations(self):
         return self.ic.listentities( Allocation )
        
@@ -533,9 +558,24 @@ class VC3ClientAPI(object):
         """
         :param str policy_user: The VC3 user name of the user trying this operation
         """
-        if policy_user is not None and \
-                not self.__has_validated_allocation(policy_user):
-            raise PermissionDenied(policy_user + "needs a valid allocation")
+        if policy_user is not None:
+            if cluster.owner != policy_user:
+                raise PermissionDenied(policy_user +
+                                       "is not owner of entity")
+
+            if not self.__valid_user(policy_user):
+                raise PermissionDenied(policy_user +
+                                       "is not a valid user")
+
+            if (self.__has_validated_allocation(policy_user) or
+                    self.__has_project(policy_user)):
+                pass
+            else:
+                # user needs a validated allocation or to be a project member to
+                # store a template
+                raise PermissionDenied(policy_user +
+                                       "needs a valid allocation or " +
+                                       "be a project member")
         cluster.store(self.ic)
     
     def listClusters(self, policy_user=None):
@@ -543,12 +583,19 @@ class VC3ClientAPI(object):
         :param str policy_user: The VC3 user name of the user trying this operation
         """
         if policy_user is not None:
-            if not self.__valid_user(policy_user) and \
-                    (self.__has_validated_allocation(policy_user) or
-                     self.__has_project(policy_user)):
+            if not self.__valid_user(policy_user):
                 raise PermissionDenied(policy_user +
-                                       "needs a valid allocation or project "
-                                       "membership")
+                                       "is not a valid user")
+
+            if (self.__has_validated_allocation(policy_user) or
+                    self.__has_project(policy_user)):
+                pass
+            else:
+                # user needs a validated allocation or to be a project member to
+                # store a template
+                raise PermissionDenied(policy_user +
+                                       "needs a valid allocation or " +
+                                       "be a project member")
         return self.ic.listentities(Cluster)
        
     def getCluster(self, clustername):
@@ -743,15 +790,14 @@ class VC3ClientAPI(object):
         :param str policy_user: The VC3 user name of the user trying this operation
         """
         if policy_user is not None:
-            request_obj = self.getRequest(request)
-            if request_obj is not None and request_obj.owner != policy_user:
+            if request is not None and request.owner != policy_user:
                 raise PermissionDenied(policy_user + "is not the request owner")
-            project_obj = self.getProject(request_obj.project)
-            project_allocations = project_obj.allocations
-            for alloc in request_obj.allocations:
+            project = self.getProject(request.project)
+            project_allocations = project.allocations
+            for alloc in request.allocations:
                 if alloc not in project_allocations:
                     raise PermissionDenied("{0} must be in project {1}".format(alloc,
-                                                                               project_obj.name))
+                                                                               project.name))
 
         request.store(self.ic)
 
@@ -759,7 +805,14 @@ class VC3ClientAPI(object):
     def listRequests(self):
         return self.ic.listentities(Request)
        
-    def getRequest(self, requestname):
+    def getRequest(self, requestname, policy_user=None):
+        """
+        :param str policy_user: The VC3 user name of the user trying this operation
+        """
+        if policy_user is not None:
+            request = self.ic.getentity(Request, requestname)
+            if request is not None and request.owner != policy_user:
+                raise PermissionDenied(policy_user + "is not the request owner")
         return self.ic.getentity( Request, requestname)
 
     def deleteRequest(self, requestname, policy_user=None):
