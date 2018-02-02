@@ -16,7 +16,7 @@ RUN_CHECK_CLIENT resource-create  --owner lincolnb  --accesstype batch  --access
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost uct2-gk.mwt2.org --accessport 22 --description "University of Chicago Computing Cooperative"  --displayname "UC3" --url ""  --docurl ""  --organization "University of Chicago" uchicago-uc3
 
-RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh  --accessflavor condor  --accesshost stampede-redirect.virtualclusters.org --accessport 22 --description "Stampede 2 Super Computer"  --displayname "Stampede 2" --url ""  --docurl ""  --organization "Texas Advanced Computing Center (TACC)" tacc-stampede2
+RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh  --accessflavor slurm --accesshost login4.stampede2.tacc.utexas.edu --accessport 22 --description "Stampede 2 Super Computer"  --displayname "Stampede 2" --url ""  --docurl ""  --organization "Texas Advanced Computing Center (TACC)" tacc-stampede2
 
 RUN_CHECK_CLIENT resource-create --owner btovar --accesstype batch --accessmethod ssh --accessflavor condor --accesshost cclvm05.crc.nd.edu --accessport 22 --description "ND-CCL login none" --displayname "ND CCL" --url "" --docurl "" --organization "University of Notre Dame Cooperative Computing Lab" ndccl
 
