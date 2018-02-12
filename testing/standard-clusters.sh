@@ -11,3 +11,7 @@ RUN_CHECK_CLIENT cluster-create --owner lincolnb --description "HTCondor with 10
 
 # Add the nodeset to the cluster
 RUN_CHECK_CLIENT cluster-addnodeset lincolnb-htcondor-10-workers lincolnb-htcondor-10-workers
+
+
+RUN_CHECK_CLIENT nodeset-create --owner btovar --node_number 51 --app_type htcondor --app_role worker-nodes --displayname="htcondor-51-workers-nodeset" btovar-htcondor-51-workers
+
