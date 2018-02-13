@@ -722,7 +722,8 @@ class Request(InfoEntity):
                               'running', 
                               'terminating', 
                               'cleanup', 
-                              'terminated'],
+                              'terminated',
+                              'failure'],
                      'action' : [ 'new', 'run', 'terminate' ]
                     } 
     intattributes = []
