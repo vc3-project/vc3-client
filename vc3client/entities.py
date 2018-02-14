@@ -264,11 +264,12 @@ class Resource(InfoEntity):
                      'cloudspotprice',
                      'cloudinstancetype',
                      'mfa',
+                     'public',
                      'description',
                      'displayname',
                      'url',
                      'docurl',
-                     'organization'                      
+                     'organization',
                      ]
     validvalues = {
         'accesstype' : ['batch','cloud']
@@ -288,6 +289,7 @@ class Resource(InfoEntity):
                  cloudspotprice=None,
                  cloudinstancetype=None,
                  mfa = False,
+                 public = False, # should this resource be shown to all users? Default: No.
                  description=None,
                  displayname=None,
                  url=None,
@@ -317,11 +319,13 @@ class Resource(InfoEntity):
         self.cloudspotprice    = cloudspotprice
         self.cloudinstancetype = cloudinstancetype
         self.mfa = mfa
+        self.public = public
         self.description = description
         self.displayname = displayname
         self.url = url
         self.docurl = docurl
         self.organization = organization
+
         self.log.debug("Entity created: %s" % self)
 
 

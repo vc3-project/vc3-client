@@ -375,6 +375,7 @@ class VC3ClientAPI(object):
                        cloudspotprice,
                        cloudinstancetype,
                        mfa,
+                       public = False,
                        description = None,
                        displayname = None,
                        url = None,
@@ -393,6 +394,7 @@ class VC3ClientAPI(object):
         :param str accessport,    # 22 , 6918, 8773
         :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud  | HTCondorCE hostname             
         :param Boolean mfa        # Does site need head-node factory?     
+        :param Boolean public     # Should it be shown to all users?
         :return: Resource          A valid Project object
         :rtype: Resource        
         
@@ -407,6 +409,7 @@ class VC3ClientAPI(object):
                       accessport = accessport,
                       gridresource=gridresource, 
                       mfa=mfa,
+                      public = public,
                       description = description,
                       displayname = displayname,
                       url = url,

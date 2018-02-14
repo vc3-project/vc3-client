@@ -322,6 +322,14 @@ class VC3ClientCLI(object):
                                      help="requires multi-factor/OTP authentication",
                                      default=False, 
                                      )
+
+        parser_resourcecreate.add_argument('--public', 
+                                     action="store_true",
+                                     dest="public",
+                                     help="set visible to all users",
+                                     default=False, 
+                                     )
+
         parser_resourcecreate.add_argument('--description', 
                                      action="store", 
                                      dest="description",
@@ -1016,6 +1024,7 @@ class VC3ClientCLI(object):
                                          cloudspotprice = ns.cloudspotprice,
                                          cloudinstancetype = ns.cloudinstancetype,
                                          mfa = ns.mfa,
+                                         public = ns.public,
                                          organization = ns.organization,
                                          description = ns.description, 
                                          displayname = ns.displayname, 
