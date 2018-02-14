@@ -20,7 +20,7 @@ done
 
 
 # remove everything else except users
-for j in environment cluster nodeset allocation project resource; do
+for j in environment cluster nodeset allocation project resource request; do
    for i in $(vc3-client --conf /etc/vc3/vc3-client.conf $j-list | awk '{print $2}' | cut -d'=' -f2); do
      vc3-client --conf /etc/vc3/vc3-client.conf $j-delete $i
    done
