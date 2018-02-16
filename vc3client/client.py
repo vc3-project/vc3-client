@@ -531,6 +531,7 @@ class VC3ClientAPI(object):
         :param str name: The unique name of this cluster description.
         :param str owner:  The user name of the owner of this project
         :param [str]:   List of strings, names of nodesets in this cluster    
+        :param Boolean public     Should it be shown to all users?
         :return: Cluster          A valid Cluster object
         :rtype: Cluster        
         
@@ -539,6 +540,7 @@ class VC3ClientAPI(object):
                       name, 
                       owner, 
                       nodesets=[],
+                      public=False,
                       description = None,
                       displayname = None,
                       url = None,
@@ -549,6 +551,7 @@ class VC3ClientAPI(object):
                     state='new',
                     owner=owner,
                     nodesets=nodesets, # list of names of nodesets in this cluster definition.
+                    public=public,     # visible to all users?
                     description = description,
                     displayname = displayname,
                     url = url,

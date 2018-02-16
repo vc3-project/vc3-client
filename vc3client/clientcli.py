@@ -577,6 +577,13 @@ class VC3ClientCLI(object):
                                      default=None 
                                      ) 
 
+        parser_clustercreate.add_argument('--public', 
+                                     action="store_true",
+                                     dest="public",
+                                     help="set visible to all users",
+                                     default=False, 
+                                     )
+
         parser_clusterlist = subparsers.add_parser('cluster-list', 
                                                 help='list vc3 cluster(s)')
 
@@ -1111,22 +1118,12 @@ class VC3ClientCLI(object):
                 c = capi.defineCluster( name = ns.clustername,
                                         owner = ns.owner,
                                         nodesets=ns.nodesets.split(','),
+                                        public = ns.public,
                                         description = ns.description, 
                                         displayname = ns.displayname, 
                                         url = ns.url, 
                                         docurl = ns.docurl                                     
                                         )
-                self.log.debug("Cluster is %s" % c)
-                capi.storeCluster(c)    
-    
-            elif ns.subcommand == 'cluster-create' and ns.nodesets is None:
-                c = capi.defineCluster( name = ns.clustername,
-                                        owner = ns.owner,
-                                        description = ns.description, 
-                                        displayname = ns.displayname, 
-                                        url = ns.url, 
-                                        docurl = ns.docurl                                    
-                                      )
                 self.log.debug("Cluster is %s" % c)
                 capi.storeCluster(c)    
     

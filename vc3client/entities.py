@@ -558,6 +558,7 @@ class Cluster(InfoEntity):
                         'state',
                         'owner',
                         'nodesets',
+                        'public',
                         'description',
                         'displayname',
                         'url',
@@ -571,6 +572,7 @@ class Cluster(InfoEntity):
                  state, 
                  owner, 
                  nodesets,
+                 public=False,
                  description=None,
                  displayname=None,
                  url=None,
@@ -588,6 +590,7 @@ class Cluster(InfoEntity):
         self.state = state
         self.owner = owner
         self.nodesets = nodesets # ordered list of nodeset labels
+        self.public = public
         self.description = description
         self.displayname = displayname
         self.url = url
