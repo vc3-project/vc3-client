@@ -1126,7 +1126,19 @@ class VC3ClientCLI(object):
                                         )
                 self.log.debug("Cluster is %s" % c)
                 capi.storeCluster(c)    
-    
+
+            elif ns.subcommand == 'cluster-create' and ns.nodesets is None:
+                c = capi.defineCluster( name = ns.clustername,
+                                        owner = ns.owner,
+                                        public = ns.public,
+                                        description = ns.description, 
+                                        displayname = ns.displayname, 
+                                        url = ns.url, 
+                                        docurl = ns.docurl
+                                        )
+                self.log.debug("Cluster is %s" % c)
+                capi.storeCluster(c)
+
             elif ns.subcommand == 'cluster-list' and ns.clustername is None:
                 cl = capi.listClusters()
                 for co in cl:
