@@ -46,5 +46,5 @@ RUN_CHECK_CLIENT user-create --firstname Benjamin --lastname Tovar \
                              --displayname "Benjamin Tovar" \
                              --identity_id c4686d14-d274-11e5-b866-0febeb7fd79e \
                              --institution "University of Notre Dame" \
-                             --sshpubstring "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6D5wsfrniKZ40FIA9ojHi1JZPyaBjf+ysmxwJY75YFa8ygItpJHNXcCYWE0r2qsd9DeKHY0RV772OFuL0E7zXWlmj0WUvje0VLXJJphWe710gT5BpukUNzXpyBfGIdfteiK3vpSUXtkmh2liEsZsTPNYfFUHZAyTffJ0UATajeTyylErmDADMY2BSoGs7fKH5NSBNz2qeePb657A6AKMlOAK49fGaIkNvRoAa4T5LtGyal61tGTrzc1bxKK9vjG6wAYzPE/Klb1Lt20DkcIYX3gRPENv2BlcKZdQZaUFFYj9ERdtMg5/l8eFmzMKorDvpFxm8Awe6VrMIuybyRcVlQ== btovar@stats.crc.nd.edu" \
+                             --sshpubstring "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAtQ+UMDTGWe36Egol+6c6yy/WWoJRSryu25dNss2BtbygpVu4o+UVOHsYB+oQizSd364KSoeC4QiQOXgf7sBywdOuTaV81deKP1ipfdo0K23eOAA0xhJL2e3XabH31ENgtBiQxw5QO8nxnZyhUKO+mFH64E1T0ChNEnaB1YLsVQ6aOpmFf+3psMEhICuCKXGz6iAc97n0xqQqjMFoMlmpPlHskOJfd2GVbvJObID5pkXo88cmzZHTLn8Kf3H1q2ywEOyMSm00uLOkEKPtduRazGxXKPqsXjSS7ZwqQpx4mG5olGNPMp9Gqm2T1BfRCZZYBRdX1Zc6Bl2Ad5flyB3I+Q== btovar@cclws16" \
                              btovar
