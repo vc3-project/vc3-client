@@ -16,7 +16,7 @@ RUN_CHECK_CLIENT resource-create  --owner lincolnb  --accesstype batch  --access
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost uct2-gk.mwt2.org --accessport 22 --description "ATLAS Midwest Tier 2 Center job gateway (UChicago)"  --displayname "MWT2" --url "http://twiki.mwt2.org"  --docurl "http://twiki.mwt2.org"  --organization "Midwest Tier 2" uchicago-mwt2 --public
 
-RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost uct3-s1.mwt2.org --accessport 22 --description "UChicago ATLAS Tier 3"  --displayname "UCT3" --url "https://hep.uchicago.edu/atlas/"  --docurl "http://twiki.mwt2.org"  --organization "University of Chicago" uchicago-uct3
+RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost uct3-s1.mwt2.org --accessport 22 --description "UChicago ATLAS Tier 3"  --displayname "UCT3" --url "https://hep.uchicago.edu/atlas/"  --docurl "http://twiki.mwt2.org"  --organization "University of Chicago" uchicago-uct3 --public
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh  --accessflavor slurm --accesshost login4.stampede2.tacc.utexas.edu --accessport 22 --description "Stampede 2 Super Computer"  --displayname "Stampede 2" --url ""  --docurl ""  --organization "Texas Advanced Computing Center (TACC)" tacc-stampede2
 
@@ -24,4 +24,4 @@ RUN_CHECK_CLIENT resource-create --owner btovar --accesstype batch --accessmetho
 
 RUN_CHECK_CLIENT resource-create --owner briedel --accesstype batch --accessmethod ssh --accessflavor sge --accesshost login1.hoffman2.idre.ucla.edu --accessport 22 --description "UCLA Hoffman2" --displayname "UCLA Hoffman2" --url "https://idre.ucla.edu/resources/hpc/hoffman2-cluster" --organization "University of California,  Los Angeles" ucla
 
-RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor condor --accesshost login03.osgconnect.net --accessport 22 --description "Open Science Grid (SL7)" --displayname "OSG Connect" --url "https://support.opensciencegrid.org" --organization "Open Science Grid" osg-connect
+RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor condor --accesshost login03.osgconnect.net --accessport 22 --description "Open Science Grid (SL7)" --displayname "OSG Connect" --url "https://support.opensciencegrid.org" --organization "Open Science Grid" osg-connect --public
