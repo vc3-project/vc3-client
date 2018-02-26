@@ -462,6 +462,7 @@ class Nodeset(InfoEntity):
     infokey = 'nodes'
     infoattributes = ['name',
                      'state',
+                     'state_reason',
                      'owner',
                      
                      'node_number',
@@ -497,6 +498,7 @@ class Nodeset(InfoEntity):
                        app_type, 
                        app_role,
                        resource_type='allocation',   # external, managed, allocation
+                       state_reason=None,
                        cores=1, 
                        memory_mb=None, 
                        storage_mb=None, 
@@ -522,6 +524,7 @@ class Nodeset(InfoEntity):
         self.log = logging.getLogger()
         self.name = name
         self.state = state
+        self.state_reason = state_reason
         self.owner = owner
         self.node_number = node_number
         self.app_type = app_type

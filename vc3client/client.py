@@ -667,6 +667,7 @@ class VC3ClientAPI(object):
                       ):
         ns = Nodeset( name=name, 
                       state='new',
+                      state_reason='new',
                       owner=owner, 
                       node_number=node_number, 
                       app_type=app_type, 
