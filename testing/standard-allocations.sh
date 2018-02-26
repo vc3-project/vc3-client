@@ -8,4 +8,4 @@ RUN_CHECK_CLIENT allocation-create --owner lincolnb --resource uchicago-midway -
 
 RUN_CHECK_CLIENT allocation-create --owner btovar --resource ndccl --accountname btovar --description "ND CCL" --displayname btovar-ndccl btovar.ndccl
 
-RUN_CHECK_CLIENT allocation-create --owner khurtado --resource osg-connect --accountname khurtado --description "OSG Connect" --displayname khurtado-osgconnect khurtado.osgconnect
+RUN_CHECK_CLIENT allocation-create --owner khurtado --resource osg-connect --accountname khurtado --description "OSG Connect" --displayname khurtado-osgconnect khurtado.osg-connect
