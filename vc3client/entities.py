@@ -348,6 +348,7 @@ class Allocation(InfoEntity):
                      'type',        # unlimited, quota, cumulative
                      'accountname',
                      'action',
+                     'state_reason',
                      'quantity',
                      'units',       # corehours, su, nodes, 
                      'sectype',     # ssh-rsa, ssh-dsa, pki, x509, local
