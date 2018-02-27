@@ -347,6 +347,7 @@ class Allocation(InfoEntity):
                      'resource',
                      'type',        # unlimited, quota, cumulative
                      'accountname',
+                     'action',
                      'quantity',
                      'units',       # corehours, su, nodes, 
                      'sectype',     # ssh-rsa, ssh-dsa, pki, x509, local
@@ -368,6 +369,7 @@ class Allocation(InfoEntity):
                  owner,
                  resource, 
                  accountname,
+                 action='new',
                  description=None,
                  displayname=None,
                  url=None,
@@ -394,6 +396,7 @@ class Allocation(InfoEntity):
         self.owner = owner
         self.resource = resource
         self.accountname = accountname     # unix username, or cloud tenant, 
+        self.action = action               # None | new | validate
         self.description = description
         self.displayname = displayname
         self.url = url
