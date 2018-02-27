@@ -454,6 +454,15 @@ class VC3ClientCLI(object):
         parser_allocationdelete.add_argument('allocationname', 
                                      action="store")
 
+        parser_allocationvalidate = subparsers.add_parser('allocation-validate', 
+                                                help='Validate allocation.')
+
+        parser_allocationvalidate.add_argument('--allocationname', 
+                                        action="store",
+                                        required=True,
+                                        help='specify allocation')
+
+        
 
         ########################### Nodeset  ##########################################
         parser_nodesetcreate = subparsers.add_parser('nodeset-create',
@@ -1084,6 +1093,10 @@ class VC3ClientCLI(object):
             elif ns.subcommand == 'allocation-delete':
                 capi.deleteAllocation(ns.allocationname)
 
+            elif ns.subcommand == 'allocation-validate':
+                ao = capi.getAllocation(ns.allocationname)
+                ao.action = 'validate'
+                capi.storeAllocation(ao)
     
             # Nodeset create, list
             elif ns.subcommand == 'nodeset-create':
