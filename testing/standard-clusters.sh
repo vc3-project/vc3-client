@@ -15,10 +15,10 @@ RUN_CHECK_CLIENT cluster-addnodeset lincolnb-htcondor-10-workers lincolnb-htcond
 
 RUN_CHECK_CLIENT nodeset-create --owner btovar --node_number 1 --app_type htcondor --app_role worker-nodes --displayname="htcondor-1-worker-nodeset" btovar-htcondor-1-worker
 RUN_CHECK_CLIENT cluster-create --owner btovar --description "HTCondor with 1 Worker" --displayname="htcondor-1-worker" btovar-htcondor-1-worker --public
-RUN_CHECK_CLIENT cluster-addnodeset btovar-htcondor-1-worker-cluster btovar-htcondor-1-worker
+RUN_CHECK_CLIENT cluster-addnodeset btovar-htcondor-1-worker btovar-htcondor-1-worker
 
-RUN_CHECK_CLIENT nodeset-create --owner btovar --node_number 50 --app_type htcondor --app_role worker-nodes --displayname="htcondor-50-workers-nodeset" btovar-htcondor-50-workers-nodeset
-RUN_CHECK_CLIENT cluster-create --owner btovar --description "HTCondor with 50 Workers" --displayname="htcondor-50-workers" btovar-htcondor-50-workers-cluster --public
+RUN_CHECK_CLIENT nodeset-create --owner btovar --node_number 50 --app_type htcondor --app_role worker-nodes --displayname="htcondor-50-workers-nodeset" btovar-htcondor-50-workers
+RUN_CHECK_CLIENT cluster-create --owner btovar --description "HTCondor with 50 Workers" --displayname="htcondor-50-workers" btovar-htcondor-50-workers --public
 RUN_CHECK_CLIENT cluster-addnodeset btovar-htcondor-50-workers btovar-htcondor-50-workers
 
 RUN_CHECK_CLIENT nodeset-create --owner btovar --node_number 1 --app_type workqueue --app_role worker-nodes --displayname="wq-1-worker-nodeset" btovar-wq-1-worker
