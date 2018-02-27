@@ -370,6 +370,7 @@ class Allocation(InfoEntity):
                  resource, 
                  accountname,
                  action='new',
+                 state_reason=None,
                  description=None,
                  displayname=None,
                  url=None,
@@ -397,6 +398,7 @@ class Allocation(InfoEntity):
         self.resource = resource
         self.accountname = accountname     # unix username, or cloud tenant, 
         self.action = action               # None | new | validate
+        state_reason = state_reason
         self.description = description
         self.displayname = displayname
         self.url = url
