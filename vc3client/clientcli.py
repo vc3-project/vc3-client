@@ -35,7 +35,7 @@ class VC3ClientCLI(object):
         parser.add_argument('-c', '--config', 
                             action="store", 
                             dest='configpath', 
-                            default=','.join(['/etc/vc3/vc3-client.conf', os.path.expanduser('~/.local/etc/vc3-client.conf'), os.path.expanduser('~/.local/etc/vc3-client-local.conf')])
+                            default=','.join(['/etc/vc3/vc3-client.conf', os.path.expanduser('~/.local/etc/vc3-client.conf'), os.path.expanduser('~/.local/etc/vc3-client-local.conf')]),
                             help='configuration file path.')
         
         parser.add_argument('-d', '--debug', 
