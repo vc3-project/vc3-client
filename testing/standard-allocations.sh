@@ -14,6 +14,8 @@ RUN_CHECK_CLIENT allocation-create --owner btovar --resource ndccl --accountname
 
 RUN_CHECK_CLIENT allocation-validate --allocationname btovar.ndccl
 
+RUN_CHECK_CLIENT project-addallocation btovar btovar.ndccl
+
 
 
 RUN_CHECK_CLIENT allocation-create --owner khurtado --resource osg-connect --accountname khurtado --description "OSG Connect" --displayname khurtado-osgconnect khurtado.osg-connect
