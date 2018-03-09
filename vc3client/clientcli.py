@@ -437,7 +437,12 @@ class VC3ClientCLI(object):
                                      default=None 
                                      )        
         
-    
+        parser_allocationcreate.add_argument('--pubtokendocurl', 
+                                     action="store", 
+                                     dest="pubtokendocurl",
+                                     required=False,
+                                     default=None 
+                                     )
         
         parser_allocationlist = subparsers.add_parser('allocation-list', 
                                                 help='list vc3 allocation(s)')
@@ -1081,7 +1086,8 @@ class VC3ClientCLI(object):
                                            description = ns.description, 
                                            displayname = ns.displayname, 
                                            url = ns.url, 
-                                           docurl = ns.docurl 
+                                           docurl = ns.docurl,
+                                           pubtokendocurl = ns.pubtokendocurl
                                            )
                 self.log.debug("Allocation is %s" % a)
                 capi.storeAllocation(a)    
