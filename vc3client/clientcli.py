@@ -354,8 +354,8 @@ class VC3ClientCLI(object):
         parser_resourcecreate.add_argument('--docurl', 
                                      action="store", 
                                      dest="docurl",
-                                     required=false,
-                                     default=none 
+                                     required=False,
+                                     default=None 
                                      )
 
         parser_resourcecreate.add_argument('--pubtokendocurl', 
