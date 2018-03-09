@@ -354,9 +354,17 @@ class VC3ClientCLI(object):
         parser_resourcecreate.add_argument('--docurl', 
                                      action="store", 
                                      dest="docurl",
+                                     required=false,
+                                     default=none 
+                                     )
+
+        parser_resourcecreate.add_argument('--pubtokendocurl', 
+                                     action="store", 
+                                     dest="pubtokendocurl",
                                      required=False,
                                      default=None 
-                                     )        
+                                     )
+
         parser_resourcecreate.add_argument('--organization', 
                                      action="store", 
                                      dest="organization",
@@ -1045,7 +1053,8 @@ class VC3ClientCLI(object):
                                          description = ns.description, 
                                          displayname = ns.displayname, 
                                          url = ns.url, 
-                                         docurl = ns.docurl 
+                                         docurl = ns.docurl,
+                                         pubtokendocurl = ns.pubtokendocurl
                                           )
                 self.log.debug("Resource is %s" % r)
                 capi.storeResource(r)    

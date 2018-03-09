@@ -380,6 +380,7 @@ class VC3ClientAPI(object):
                        displayname = None,
                        url = None,
                        docurl = None,
+                       pubtokendocurl = None,
                        organization = None,
                        ):
         '''
@@ -395,6 +396,7 @@ class VC3ClientAPI(object):
         :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud  | HTCondorCE hostname             
         :param Boolean mfa        # Does site need head-node factory?     
         :param Boolean public     # Should it be shown to all users?
+        :param str pubtokendocurl # # Used when special intructions for using ssh public keys exist
         :return: Resource          A valid Project object
         :rtype: Resource        
         
@@ -414,6 +416,7 @@ class VC3ClientAPI(object):
                       displayname = displayname,
                       url = url,
                       docurl = docurl,
+                      pubtokendocurl = pubtokendocurl,
                       organization = organization                      
                        )
         r.storenew = True
