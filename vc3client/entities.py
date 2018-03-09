@@ -269,6 +269,7 @@ class Resource(InfoEntity):
                      'displayname',
                      'url',
                      'docurl',
+                     'pubtokendocurl',
                      'organization',
                      ]
     validvalues = {
@@ -293,7 +294,8 @@ class Resource(InfoEntity):
                  description=None,
                  displayname=None,
                  url=None,
-                 docurl=None, 
+                 docurl=None,
+                 pubtokendocurl=None, # special instructions for ssh public keys.
                  organization = None,
                  ):
         '''
@@ -324,6 +326,7 @@ class Resource(InfoEntity):
         self.displayname = displayname
         self.url = url
         self.docurl = docurl
+        self.pubtokendocurl = pubtokendocurl
         self.organization = organization
 
         self.log.debug("Entity created: %s" % self)
@@ -358,7 +361,8 @@ class Allocation(InfoEntity):
                      'displayname',
                      'url',
                      'docurl',
-                    ]   
+                     'pubtokendocurl',
+                    ]
     validvalues = {
         'sectype' : [ None, 'ssh-rsa', 'ssh-dsa' , 'x509' ],
         }
@@ -375,7 +379,8 @@ class Allocation(InfoEntity):
                  description=None,
                  displayname=None,
                  url=None,
-                 docurl=None,  
+                 docurl=None,
+                 pubtokendocurl=None,
                  type='unlimited', 
                  quantity=None, 
                  units=None,
@@ -404,6 +409,7 @@ class Allocation(InfoEntity):
         self.displayname = displayname
         self.url = url
         self.docurl = docurl
+        self.pubtokendocurl = pubtokendocurl
         self.type = type           # quota | unlimited | limited 
         self.quantity = quantity   # 
         self.units = units         #
