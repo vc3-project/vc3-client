@@ -652,6 +652,7 @@ class Environment(InfoEntity):
                      'envmap',
                      'files',
                      'command',
+                     'required_os',
                      'builder_extra_args',
                      'description',
                      'displayname',
@@ -672,7 +673,8 @@ class Environment(InfoEntity):
                  packagelist=[], 
                  envmap={}, 
                  files={}, 
-                 command = None, 
+                 command = None,
+                 required_os = None,
                  builder_extra_args = None):
         '''
         Defines a new Environment object. 
@@ -683,6 +685,7 @@ class Environment(InfoEntity):
         :param Dict str->str envmap: 
         :param Dict str->str files: remote-name->contents files. Files to be included in the environment. (Files will be base64 encoded.)
         :param str command: command to execute the environment inside the builder. (e.g., vc3-glidein -c ...)
+        :param str required_os: operating system to use inside the builder (natively or via container solutions, as needed)
         :param List builder_extra_args: extra arguments to pass to the builder.
         :param str description: Long-form description
         :param str displayname: Pretty human-readable name/short description
@@ -699,6 +702,7 @@ class Environment(InfoEntity):
         self.envmap = envmap
         self.files = files
         self.command = command
+        self.required_os = required_os
         self.builder_extra_args = builder_extra_args
         self.description = description
         self.displayname = displayname

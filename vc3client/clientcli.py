@@ -690,6 +690,13 @@ class VC3ClientCLI(object):
                 help='Command to execute the environment. No two environments in a request may define a command.'
                 )
 
+        parser_environcreate.add_argument('--require-os', 
+                action='store', 
+                dest='required_os', 
+                default=None,
+                help='Operating System to use. The builder checks for the native OS first and tries container solutions otherwise.'
+                )
+
         parser_environcreate.add_argument('--extra-args', 
                 action='append', 
                 dest='builder_extra_args', 
@@ -1219,6 +1226,7 @@ class VC3ClientCLI(object):
                                             envmap      = vars,
                                             files       = files,
                                             command     = ns.command,
+                                            required_os = ns.required_os,
                                             builder_extra_args = ns.builder_extra_args,
                                             description = ns.description, 
                                             displayname = ns.displayname, 
