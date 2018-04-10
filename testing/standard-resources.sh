@@ -18,7 +18,7 @@ RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessme
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost uct3-s1.mwt2.org --accessport 22 --description "UChicago ATLAS Tier 3"  --displayname "UCT3" --url "https://hep.uchicago.edu/atlas/"  --docurl "http://twiki.mwt2.org"  --organization "University of Chicago" uchicago-uct3 --public
 
-RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh  --accessflavor slurm --accesshost login4.stampede2.tacc.utexas.edu --accessport 22 --description "Stampede 2 Super Computer"  --displayname "Stampede 2" --url ""  --docurl ""  --organization "Texas Advanced Computing Center (TACC)" tacc-stampede2 --public
+RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh  --accessflavor slurm --accesshost login5.stampede2.tacc.utexas.edu --accessport 22 --description "Stampede 2 Super Computer"  --displayname "Stampede 2" --url ""  --docurl ""  --organization "Texas Advanced Computing Center (TACC)" tacc-stampede2 --public
 
 RUN_CHECK_CLIENT resource-create --owner btovar --accesstype batch --accessmethod ssh --accessflavor condor --accesshost cclvm05.crc.nd.edu --accessport 22 --description "ND-CCL login none" --displayname "ND CCL" --url "https://ccl.cse.nd.edu/" --docurl "https://ccl.cse.nd.edu/" --organization "University of Notre Dame Cooperative Computing Lab" ndccl --public
 
