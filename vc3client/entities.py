@@ -787,7 +787,7 @@ class Request(InfoEntity):
         :param str action:        Command from webportal (e.g. run, terminate, etc.)
         :param str allocations:   List of allocations that the request shoud utilize.
         :param str policy:        Policy for utilizing the allocations. 
-        :param str expiration:    Date YYYY-MM-DD,HH:MM:SS when this cluster expires and should be unconditionally terminated.    
+        :param str expiration:    Date YYYY-MM-DDTHH:MM:SS when this cluster expires and should be unconditionally terminated. (UTC)
                 
         '''
         # Common attributes
