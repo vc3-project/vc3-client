@@ -293,7 +293,7 @@ class Resource(InfoEntity):
                  cloudspotprice=None,
                  cloudinstancetype=None,
                  mfa = False,
-                 features,     # list of strings of fetaures this resource has (e.g. 'singularity', and 'cvmfs')
+                 features = [],     # list of strings of fetaures this resource has (e.g. 'singularity', and 'cvmfs')
                  public = False, # should this resource be shown to all users? Default: No.
                  description=None,
                  displayname=None,
