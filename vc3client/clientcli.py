@@ -294,6 +294,12 @@ class VC3ClientCLI(object):
                                      dest="accessport",
                                      help="22|9618|8773|etc..",  
                                      )
+
+        parser_resourcecreate.add_argument('--node', 
+                                     action="store", 
+                                     dest="nodes",
+                                     help="nodeset name with the size of nodes for this resource.",  
+                                     )
         
         parser_resourcecreate.add_argument('--gridresource', 
                                      action="store", 
@@ -497,6 +503,21 @@ class VC3ClientCLI(object):
 
         parser_nodesetcreate.add_argument('--app_role', 
                                           help='general middleware type of node',
+                                          action="store")
+
+        parser_nodesetcreate.add_argument('--cores', 
+                                          help='number of cores per node',
+                                          default=1,       # default assume 1 core
+                                          action="store")
+
+        parser_nodesetcreate.add_argument('--memory_mb', 
+                                          help='RAM in MB available per node',
+                                          default=1024,    # default assume 1GB
+                                          action="store")
+
+        parser_nodesetcreate.add_argument('--storage_mb', 
+                                          help='Storage in MB available per node',
+                                          default=1024,    # default assume 1GB
                                           action="store")
 
         parser_nodesetcreate.add_argument('--environment', 
@@ -1127,6 +1148,9 @@ class VC3ClientCLI(object):
                                        node_number = ns.node_number, 
                                        app_type = ns.app_type, 
                                        app_role = ns.app_role,
+                                       cores      = ns.cores,
+                                       memory_mb  = ns.memory_mb,
+                                       storage_mb = ns.storage_mb,
                                        environment = ns.environment,
                                        description = ns.description, 
                                        displayname = ns.displayname, 

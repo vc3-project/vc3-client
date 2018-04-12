@@ -260,6 +260,7 @@ class Resource(InfoEntity):
                      'accessflavor',
                      'accesshost',
                      'accessport',
+                     'nodes',
                      'gridresource',
                      'cloudspotprice',
                      'cloudinstancetype',
@@ -287,6 +288,7 @@ class Resource(InfoEntity):
                  accesshost,   # hostname
                  accessport,   # port
                  gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCondor CE hostname[:port]              
+                 node,         # name of the Nodeset encoding the size of the nodes in this resource
                  cloudspotprice=None,
                  cloudinstancetype=None,
                  mfa = False,
@@ -317,6 +319,7 @@ class Resource(InfoEntity):
         self.accessflavor = accessflavor
         self.accesshost = accesshost
         self.accessport = accessport
+        self.node = node
         self.gridresource = gridresource
         self.cloudspotprice    = cloudspotprice
         self.cloudinstancetype = cloudinstancetype
@@ -481,9 +484,9 @@ class Nodeset(InfoEntity):
                      'app_type',
                      'app_role',
                      
-                     'cores',
-                     'memory_mb',
-                     'storage_mb',
+                     'cores',             # per node
+                     'memory_mb',         # per node
+                     'storage_mb',        # per node
                      'app_host',
                      'app_port',
                      'app_sectoken',            
@@ -494,7 +497,7 @@ class Nodeset(InfoEntity):
                      'docurl', 
                      ]
     validvalues = {
-        'app_type' : ['htcondor' , 'workqueue', 'spark' ],
+        'app_type' : ['htcondor' , 'workqueue', 'spark', 'generic' ],
         'app_role' : ['head-node' , 'worker-nodes' ]
         }
     intattributes = [ 'node_number',
@@ -509,7 +512,7 @@ class Nodeset(InfoEntity):
                        node_number, 
                        app_type, 
                        app_role,
-                       resource_type='allocation',   # external, managed, allocation
+                       resource_type='allocation',   # external, managed, allocation, resource-info
                        state_reason=None,
                        cores=1, 
                        memory_mb=None, 
