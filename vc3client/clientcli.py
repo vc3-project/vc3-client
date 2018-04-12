@@ -1077,6 +1077,7 @@ class VC3ClientCLI(object):
                                          accessflavor = ns.accessflavor,
                                          accesshost = ns.accesshost,
                                          accessport = ns.accessport,
+                                         node       = ns.node,
                                          gridresource = ns.gridresource,
                                          cloudspotprice = ns.cloudspotprice,
                                          cloudinstancetype = ns.cloudinstancetype,
