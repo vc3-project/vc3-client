@@ -297,7 +297,7 @@ class VC3ClientCLI(object):
 
         parser_resourcecreate.add_argument('--node', 
                                      action="store", 
-                                     dest="nodes",
+                                     dest="node",
                                      help="nodeset name with the size of nodes for this resource.",  
                                      )
         
