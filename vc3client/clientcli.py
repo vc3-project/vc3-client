@@ -507,16 +507,19 @@ class VC3ClientCLI(object):
 
         parser_nodesetcreate.add_argument('--cores', 
                                           help='number of cores per node',
+                                          dest="cores",
                                           default=1,       # default assume 1 core
                                           action="store")
 
         parser_nodesetcreate.add_argument('--memory_mb', 
                                           help='RAM in MB available per node',
+                                          dest="memory_mb",
                                           default=1024,    # default assume 1GB
                                           action="store")
 
         parser_nodesetcreate.add_argument('--storage_mb', 
                                           help='Storage in MB available per node',
+                                          dest="storage_mb",
                                           default=1024,    # default assume 1GB
                                           action="store")
 

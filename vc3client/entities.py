@@ -260,7 +260,7 @@ class Resource(InfoEntity):
                      'accessflavor',
                      'accesshost',
                      'accessport',
-                     'nodes',
+                     'node',
                      'gridresource',
                      'cloudspotprice',
                      'cloudinstancetype',
