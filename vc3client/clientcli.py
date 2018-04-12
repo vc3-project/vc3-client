@@ -329,6 +329,13 @@ class VC3ClientCLI(object):
                                      default=False, 
                                      )
 
+        parser_resourcecreate.add_argument('--features', 
+                                     action="store", 
+                                     dest="features",
+                                     default='',
+                                     help="Comma-separated list of features this resource has (e.g., 'singularity', 'cvmfs', etc.).",  
+                                     )
+
         parser_resourcecreate.add_argument('--public', 
                                      action="store_true",
                                      dest="public",
@@ -1085,6 +1092,7 @@ class VC3ClientCLI(object):
                                          cloudspotprice = ns.cloudspotprice,
                                          cloudinstancetype = ns.cloudinstancetype,
                                          mfa = ns.mfa,
+                                         features = [x for x in ns.features.split(',') if x],
                                          public = ns.public,
                                          organization = ns.organization,
                                          description = ns.description, 
