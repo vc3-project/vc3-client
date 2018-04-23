@@ -3,8 +3,7 @@
 source ./standard-common-config.sh
 
 # Generic node size:
-generic_node_params='--owner btovar --node_number -1 --app_type generic --app_role worker-nodes --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000'
-RUN_CHECK_CLIENT nodeset-create $generic_node_params generic-nodesize
+RUN_CHECK_CLIENT nodeset-create --owner btovar --node_number -1 --app_type generic --app_role worker-nodes --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 generic-nodesize
 
 # Create resource midway
 RUN_CHECK_CLIENT nodeset-create --owner lincolnb --node_number -1 --app_type generic --app_role worker-nodes --displayname="Node size for uchicago-midway (amd partition)" --cores 64 --memory_mb 4000 --storage_mb 10000 --native_os "scientificlinux:v6.7" uchicago-midway-nodesize
@@ -17,13 +16,13 @@ RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmet
 
 
 # Create resource CoreOS
-RUN_CHECK_CLIENT nodeset-create $generic_node_params --native_os "scientificlinux:v6.9" coreos-nodesize
+RUN_CHECK_CLIENT nodeset-create --owner btovar --node_number -1 --app_type generic --app_role worker-nodes --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 --native_os "scientificlinux:v6.9" coreos-nodesize
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost condor.grid.uchicago.edu --accessport 22 --node coreos-nodesize --description "CoreOS Cluster"  --displayname "CoreOS"  --url ""  --docurl ""  --organization "University of Chicago" uchicago-coreos --public --features singularity
 
 
 # Create resource VC3 test pool
-RUN_CHECK_CLIENT nodeset-create $generic_node_params --native_os "centos:v6.9" vc3testpool-nodesize
+RUN_CHECK_CLIENT nodeset-create --owner btovar --node_number -1 --app_type generic --app_role worker-nodes --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 --native_os "centos:v6.9" vc3testpool-nodesize
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb  --accesstype batch --accessmethod ssh --accessflavor condor --accesshost pool.virtualclusters.org  --accessport 22 --node vc3testpool-nodesize --description "VC3 Test Pool" --displayname "VC3 Test Pool"  --url "http://www.virtualclusters.org/"  --docurl "https://github.com/vc3-project/vc3-user-guide/blob/master/userguide.md" --organization "VC3"  vc3-test-pool --public
 
@@ -35,12 +34,12 @@ RUN_CHECK_CLIENT resource-create  --owner lincolnb  --accesstype batch  --access
 
 
 # Create resource uct2-gk
-RUN_CHECK_CLIENT nodeset-create $generic_node_params --native_os "scientificlinux:v6.9" uct2gk-nodesize
+RUN_CHECK_CLIENT nodeset-create --owner btovar --node_number -1 --app_type generic --app_role worker-nodes --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 --native_os "scientificlinux:v6.9" uct2gk-nodesize
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost uct2-gk.mwt2.org --accessport 22 --node uct2gk-nodesize --description "ATLAS Midwest Tier 2 Center job gateway (UChicago)"  --displayname "MWT2" --url "http://twiki.mwt2.org"  --docurl "http://twiki.mwt2.org"  --organization "Midwest Tier 2" uchicago-mwt2 --public
 
 # Create resource uct3-s1
-RUN_CHECK_CLIENT nodeset-create $generic_node_params --native_os "scientificlinux:v6.9" uct3s1-nodesize
+RUN_CHECK_CLIENT nodeset-create --owner btovar --node_number -1 --app_type generic --app_role worker-nodes --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 --native_os "scientificlinux:v6.9" uct3s1-nodesize
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost uct3-s1.mwt2.org --accessport 22 --node uct3s1-nodesize --description "UChicago ATLAS Tier 3"  --displayname "UCT3" --url "https://hep.uchicago.edu/atlas/"  --docurl "http://twiki.mwt2.org"  --organization "University of Chicago" uchicago-uct3 --public
 
