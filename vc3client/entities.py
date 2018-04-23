@@ -490,6 +490,7 @@ class Nodeset(InfoEntity):
                      'cores',             # per node
                      'memory_mb',         # per node
                      'storage_mb',        # per node
+                     'native_os',
                      'app_host',
                      'app_port',
                      'app_sectoken',            
@@ -519,7 +520,8 @@ class Nodeset(InfoEntity):
                        state_reason=None,
                        cores=1, 
                        memory_mb=None, 
-                       storage_mb=None, 
+                       storage_mb=None,
+                       native_os=None,
                        app_host = None, 
                        app_port = None,
                        app_sectoken = None,
@@ -552,6 +554,7 @@ class Nodeset(InfoEntity):
         self.cores = cores
         self.memory_mb = memory_mb
         self.storage_mb = storage_mb
+        self.native_os = native_os
         self.app_host = app_host
         self.app_port = app_port
         self.app_sectoken = app_sectoken

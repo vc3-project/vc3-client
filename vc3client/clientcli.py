@@ -530,6 +530,12 @@ class VC3ClientCLI(object):
                                           default=1024,    # default assume 1GB
                                           action="store")
 
+        parser_nodesetcreate.add_argument('--native_os', 
+                                          help='Native Operating System in nodeset',
+                                          dest="native_os",
+                                          default="Unknown",
+                                          action="store")
+
         parser_nodesetcreate.add_argument('--environment', 
                                           help='Environment to be installed per job in the nodeset (e.g. a glidein)',
                                           action="store")
@@ -1163,6 +1169,7 @@ class VC3ClientCLI(object):
                                        cores      = ns.cores,
                                        memory_mb  = ns.memory_mb,
                                        storage_mb = ns.storage_mb,
+                                       native_os = ns.native_os,
                                        environment = ns.environment,
                                        description = ns.description, 
                                        displayname = ns.displayname, 
