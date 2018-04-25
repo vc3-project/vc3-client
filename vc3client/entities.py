@@ -260,7 +260,7 @@ class Resource(InfoEntity):
                      'accessflavor',
                      'accesshost',
                      'accessport',
-                     'node',
+                     'nodeinfo',
                      'gridresource',
                      'cloudspotprice',
                      'cloudinstancetype',
@@ -289,7 +289,7 @@ class Resource(InfoEntity):
                  accesshost,   # hostname
                  accessport,   # port
                  gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCondor CE hostname[:port]              
-                 node,         # name of the Nodeset encoding the size of the nodes in this resource
+                 nodeinfo,     # name of the Nodeinfo describing the size of the nodes in this resource
                  cloudspotprice=None,
                  cloudinstancetype=None,
                  mfa = False,
@@ -321,7 +321,7 @@ class Resource(InfoEntity):
         self.accessflavor = accessflavor
         self.accesshost = accesshost
         self.accessport = accessport
-        self.node = node
+        self.nodeinfo = nodeinfo
         self.gridresource = gridresource
         self.cloudspotprice    = cloudspotprice
         self.cloudinstancetype = cloudinstancetype
@@ -472,6 +472,70 @@ class Policy(InfoEntity):
         self.log.debug("Entity created: %s" % self)
 
 
+class Nodeinfo(InfoEntity):
+    '''
+    Represents the computational resources of a node in a homogenous Nodeset
+
+    '''
+    infokey = 'nodes'
+    infoattributes = ['name',
+                     'state',
+                     'owner',
+                     
+                     'cores',             # per node
+                     'memory_mb',         # per node
+                     'storage_mb',        # per node
+
+                     'native_os',
+
+                     'description',
+                     'displayname',
+                     'url',
+                     'docurl', 
+                     ]
+    intattributes = [ 'cores',
+                      'memory_mb',
+                      'storage_mb'
+                     ]
+    
+    def __init__(self, name, 
+                       state,
+                       owner, 
+                       cores,
+                       memory_mb,
+                       storage_mb,
+                       native_os,
+                       description=None,
+                       displayname=None,
+                       url=None,
+                       docurl=None,  
+                       ):
+        '''
+        Creates a new Nodeinfo object. 
+        
+        :param str description: Long-form description
+        :param str displayname: Pretty human-readable name/short description
+        :param str url: High-level URL reference for this entity. 
+        :param str docurl: Link to how-to/usage documentation for this entity.  
+        :param str environment:  Environment to preload per job (e.g. a glidein)
+            
+        '''
+        self.log = logging.getLogger()
+        self.name = name
+        self.state = state
+        self.owner = owner
+        
+        self.cores = cores
+        self.memory_mb = memory_mb
+        self.storage_mb = storage_mb
+        self.native_os = native_os
+
+        self.description = description
+        self.displayname = displayname
+        self.url = url
+        self.docurl = docurl
+        self.log.debug("Entity created: %s" % self)
+
 class Nodeset(InfoEntity):
     '''
     Represents a set of equivalently provisioned nodes that are part of a Cluster definition. 
@@ -486,11 +550,9 @@ class Nodeset(InfoEntity):
                      'node_number',
                      'app_type',
                      'app_role',
+
+                     'nodeinfo',
                      
-                     'cores',             # per node
-                     'memory_mb',         # per node
-                     'storage_mb',        # per node
-                     'native_os',
                      'app_host',
                      'app_port',
                      'app_sectoken',            
@@ -504,11 +566,7 @@ class Nodeset(InfoEntity):
         'app_type' : ['htcondor' , 'workqueue', 'spark', 'generic' ],
         'app_role' : ['head-node' , 'worker-nodes' ]
         }
-    intattributes = [ 'node_number',
-                      'cores',
-                      'memory_mb',
-                      'storage_mb'
-                     ]
+    intattributes = [ 'node_number' ]
     
     def __init__(self, name, 
                        state,
@@ -518,10 +576,7 @@ class Nodeset(InfoEntity):
                        app_role,
                        resource_type='allocation',   # external, managed, allocation, resource-info
                        state_reason=None,
-                       cores=1, 
-                       memory_mb=None, 
-                       storage_mb=None,
-                       native_os=None,
+                       nodeinfo=None,
                        app_host = None, 
                        app_port = None,
                        app_sectoken = None,
@@ -551,10 +606,8 @@ class Nodeset(InfoEntity):
         self.app_role = app_role
         self.resource_type = resource_type
         
-        self.cores = cores
-        self.memory_mb = memory_mb
-        self.storage_mb = storage_mb
-        self.native_os = native_os
+        self.nodeinfo = nodeinfo
+
         self.app_host = app_host
         self.app_port = app_port
         self.app_sectoken = app_sectoken

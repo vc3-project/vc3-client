@@ -295,10 +295,10 @@ class VC3ClientCLI(object):
                                      help="22|9618|8773|etc..",  
                                      )
 
-        parser_resourcecreate.add_argument('--node', 
+        parser_resourcecreate.add_argument('--nodeinfo', 
                                      action="store", 
-                                     dest="node",
-                                     help="nodeset name with the size of nodes for this resource.",  
+                                     dest="nodeinfo",
+                                     help="nodeinfo name with the size of nodes for this resource.",  
                                      )
         
         parser_resourcecreate.add_argument('--gridresource', 
@@ -488,8 +488,87 @@ class VC3ClientCLI(object):
                                         required=True,
                                         help='specify allocation')
 
-        
+        ########################### Nodeinfo  ##########################################
+        parser_nodeinfocreate = subparsers.add_parser('nodeinfo-create',
+                                                     help='create new nodeinfo specification')
 
+        parser_nodeinfocreate.add_argument('--owner', 
+                                          action="store", 
+                                          dest="owner", 
+                                          )
+
+        parser_nodeinfocreate.add_argument('--cores', 
+                                          help='number of cores per node',
+                                          dest="cores",
+                                          default=1,       # default assume 1 core
+                                          action="store")
+
+        parser_nodeinfocreate.add_argument('--memory_mb', 
+                                          help='RAM in MB available per node',
+                                          dest="memory_mb",
+                                          default=1024,    # default assume 1GB
+                                          action="store")
+
+        parser_nodeinfocreate.add_argument('--storage_mb', 
+                                          help='Storage in MB available per node',
+                                          dest="storage_mb",
+                                          default=1024,    # default assume 1GB
+                                          action="store")
+
+        parser_nodeinfocreate.add_argument('--native_os', 
+                                          help='Native Operating System in nodeinfo',
+                                          dest="native_os",
+                                          default="Unknown",
+                                          action="store")
+
+        parser_nodeinfocreate.add_argument('--description', 
+                                     action="store", 
+                                     dest="description",
+                                     required=False,
+                                     default=None 
+                                     )
+
+        parser_nodeinfocreate.add_argument('--displayname', 
+                                     action="store", 
+                                     dest="displayname",
+                                     required=False,
+                                     default=None 
+                                     )        
+
+        parser_nodeinfocreate.add_argument('--url', 
+                                     action="store", 
+                                     dest="url",
+                                     required=False,
+                                     default=None 
+                                     )         
+
+        parser_nodeinfocreate.add_argument('--docurl', 
+                                     action="store", 
+                                     dest="docurl",
+                                     required=False,
+                                     default=None 
+                                     ) 
+
+        parser_nodeinfocreate.add_argument('nodeinfoname', 
+            help='name of the nodeinfo to be created',
+            action="store")
+      
+        parser_nodeinfolist = subparsers.add_parser('nodeinfo-list', 
+                                                help='list vc3 nodeinfo(s)')
+
+        parser_nodeinfolist.add_argument('--nodeinfoname', 
+                                         action="store",
+                                         required=False, 
+                                         help='list details of specified nodeinfo',
+                                         default=None)
+
+        parser_nodeinfodelete = subparsers.add_parser('nodeinfo-delete',
+                                                     help='delete a nodeinfo specification')
+
+        parser_nodeinfodelete.add_argument('nodeinfoname',
+                                           action="store")
+
+        
         ########################### Nodeset  ##########################################
         parser_nodesetcreate = subparsers.add_parser('nodeset-create',
                                                      help='create new nodeset specification')
@@ -510,30 +589,6 @@ class VC3ClientCLI(object):
 
         parser_nodesetcreate.add_argument('--app_role', 
                                           help='general middleware type of node',
-                                          action="store")
-
-        parser_nodesetcreate.add_argument('--cores', 
-                                          help='number of cores per node',
-                                          dest="cores",
-                                          default=1,       # default assume 1 core
-                                          action="store")
-
-        parser_nodesetcreate.add_argument('--memory_mb', 
-                                          help='RAM in MB available per node',
-                                          dest="memory_mb",
-                                          default=1024,    # default assume 1GB
-                                          action="store")
-
-        parser_nodesetcreate.add_argument('--storage_mb', 
-                                          help='Storage in MB available per node',
-                                          dest="storage_mb",
-                                          default=1024,    # default assume 1GB
-                                          action="store")
-
-        parser_nodesetcreate.add_argument('--native_os', 
-                                          help='Native Operating System in nodeset',
-                                          dest="native_os",
-                                          default="Unknown",
                                           action="store")
 
         parser_nodesetcreate.add_argument('--environment', 
@@ -1093,7 +1148,7 @@ class VC3ClientCLI(object):
                                          accessflavor = ns.accessflavor,
                                          accesshost = ns.accesshost,
                                          accessport = ns.accessport,
-                                         node       = ns.node,
+                                         nodeinfo   = ns.nodeinfo,
                                          gridresource = ns.gridresource,
                                          cloudspotprice = ns.cloudspotprice,
                                          cloudinstancetype = ns.cloudinstancetype,
@@ -1159,6 +1214,33 @@ class VC3ClientCLI(object):
                 ao.action = 'validate'
                 capi.storeAllocation(ao)
     
+            # Nodeinfo create, list
+            elif ns.subcommand == 'nodeinfo-create':
+                n = capi.defineNodeinfo(name = ns.nodeinfoname, 
+                                       owner =  ns.owner, 
+                                       cores      = ns.cores,
+                                       memory_mb  = ns.memory_mb,
+                                       storage_mb = ns.storage_mb,
+                                       native_os = ns.native_os,
+                                       description = ns.description, 
+                                       displayname = ns.displayname, 
+                                       url = ns.url, 
+                                       docurl = ns.docurl                                    
+                                       )
+                capi.storeNodeinfo(n)
+    
+            elif ns.subcommand == 'nodeinfo-list' and ns.nodeinfoname is None:
+                nsl = capi.listNodeinfos()
+                for ns in nsl:
+                    print(ns)
+                    
+            elif ns.subcommand == 'nodeinfo-list' and ns.nodeinfoname is not None:
+                ns = capi.getNodeinfo(ns.nodeinfoname)
+                print(ns)
+
+            elif ns.subcommand == 'nodeinfo-delete':
+                capi.deleteNodeinfo(ns.nodeinfoname)
+
             # Nodeset create, list
             elif ns.subcommand == 'nodeset-create':
                 n = capi.defineNodeset(name = ns.nodesetname, 
@@ -1166,10 +1248,7 @@ class VC3ClientCLI(object):
                                        node_number = ns.node_number, 
                                        app_type = ns.app_type, 
                                        app_role = ns.app_role,
-                                       cores      = ns.cores,
-                                       memory_mb  = ns.memory_mb,
-                                       storage_mb = ns.storage_mb,
-                                       native_os = ns.native_os,
+                                       nodeinfo = ns.node_info,
                                        environment = ns.environment,
                                        description = ns.description, 
                                        displayname = ns.displayname, 

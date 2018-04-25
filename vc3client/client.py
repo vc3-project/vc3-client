@@ -20,7 +20,7 @@ import yaml
 import StringIO
 import ConfigParser
 
-from entities import User, Project, Resource, Allocation, Nodeset, Request, Cluster, Environment
+from entities import User, Project, Resource, Allocation, Nodeinfo, Nodeset, Request, Cluster, Environment
 from vc3infoservice import infoclient
 from vc3infoservice.core import  InfoMissingPairingException, InfoConnectionFailure, InfoEntityExistsException, InfoEntityMissingException, InfoEntityUpdateMissingException
 
@@ -371,7 +371,7 @@ class VC3ClientAPI(object):
                        accessflavor,
                        accesshost, 
                        accessport,  
-                       node,
+                       nodeinfo,
                        gridresource, 
                        cloudspotprice,
                        cloudinstancetype,
@@ -411,7 +411,7 @@ class VC3ClientAPI(object):
                       accessflavor=accessflavor, 
                       accesshost = accesshost,
                       accessport = accessport,
-                      node       = node,
+                      nodeinfo   = nodeinfo,
                       gridresource=gridresource, 
                       mfa=mfa,
                       features   = features,
@@ -658,6 +658,50 @@ class VC3ClientAPI(object):
         else:
             co.removeNodeset(nodesetname)
             self.storeCluster(co, policy_user)
+
+    ################################################################################
+    #                        NodeDescription-related calls
+    ################################################################################ 
+    def defineNodeinfo(self,
+                      name,
+                      owner,
+                      cores      = 1,
+                      memory_mb  = 1024,
+                      storage_mb = 1024,
+                      native_os  = 'unknown',
+                      description = None,
+                      displayname = None,
+                      url = None,
+                      docurl = None,
+                      ):
+
+        ns = Nodeinfo(name=name,
+                      state='new',
+                      owner=owner,
+                      cores      = cores,
+                      memory_mb  = memory_mb,
+                      storage_mb = storage_mb,
+                      native_os = native_os,
+                      description = description,
+                      displayname = displayname,
+                      url = url,
+                      docurl = docurl
+                       )
+        ns.storenew = True
+        self.log.debug("Created Nodeinfo object: %s" % ns)
+        return ns 
+    
+    def listNodeinfos(self):
+        return self.ic.listentities(Nodeinfo)
+       
+    def getNodeinfo(self, nodeinfoName):
+        return self.ic.getentity(Nodeinfo, nodeinfoName)
+
+    def deleteNodeinfo(self, nodeinfoName):
+        self.ic.deleteentity(Nodeinfo, nodeinfoName)
+    
+    def storeNodeinfo(self, nodeinfo):
+        nodeinfo.store(self.ic)
         
 
     ################################################################################
@@ -669,16 +713,14 @@ class VC3ClientAPI(object):
                       node_number, 
                       app_type, 
                       app_role, 
-                      environment,
-                      cores      = 1,
-                      memory_mb  = 1024,
-                      storage_mb = 1024,
-                      native_os = 'Unknown',
+                      nodeinfo = None,
+                      environment = None,
                       description = None,
                       displayname = None,
                       url = None,
                       docurl = None,                      
                       ):
+
         ns = Nodeset( name=name, 
                       state='new',
                       state_reason='new',
@@ -686,13 +728,7 @@ class VC3ClientAPI(object):
                       node_number=node_number, 
                       app_type=app_type, 
                       app_role=app_role,
-                      cores      = cores,
-                      memory_mb  = memory_mb, 
-                      storage_mb = storage_mb, 
-                      native_os = native_os,
-                      app_host = None, 
-                      app_port = None,
-                      app_sectoken = None,
+                      nodeinfo = nodeinfo,
                       environment = environment,
                       description = description,
                       displayname = displayname,
