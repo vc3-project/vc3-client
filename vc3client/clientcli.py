@@ -591,6 +591,13 @@ class VC3ClientCLI(object):
                                           help='general middleware type of node',
                                           action="store")
 
+        parser_nodesetcreate.add_argument('--nodeinfo', 
+                action='store', 
+                dest='nodeinfo',
+                default = None, 
+                help='Invidual node size'
+                )
+
         parser_nodesetcreate.add_argument('--environment', 
                                           help='Environment to be installed per job in the nodeset (e.g. a glidein)',
                                           action="store")
