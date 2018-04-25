@@ -1248,7 +1248,7 @@ class VC3ClientCLI(object):
                                        node_number = ns.node_number, 
                                        app_type = ns.app_type, 
                                        app_role = ns.app_role,
-                                       nodeinfo = ns.node_info,
+                                       nodeinfo = ns.nodeinfo,
                                        environment = ns.environment,
                                        description = ns.description, 
                                        displayname = ns.displayname, 
