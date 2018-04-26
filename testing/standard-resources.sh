@@ -16,9 +16,9 @@ RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmet
 
 
 # Create resource CoreOS
-RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 --native_os "scientificlinux:v6.9" coreos-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 --native_os "scientificlinux:v6.9" --public --features singularity coreos-nodesize
 
-RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost condor.grid.uchicago.edu --accessport 22 --node coreos-nodesize --description "CoreOS Cluster"  --displayname "CoreOS"  --url ""  --docurl ""  --organization "University of Chicago" uchicago-coreos --public --features singularity
+RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost condor.grid.uchicago.edu --accessport 22 --node coreos-nodesize --description "CoreOS Cluster"  --displayname "CoreOS"  --url ""  --docurl ""  --organization "University of Chicago" uchicago-coreos
 
 
 # Create resource VC3 test pool
@@ -28,9 +28,9 @@ RUN_CHECK_CLIENT resource-create --owner lincolnb  --accesstype batch --accessme
 
 
 # Create resource NERSC Cori
-RUN_CHECK_CLIENT nodeinfo-create --owner lincolnb  --displayname="Node size for nersc-cori (Haswell partition)" --cores 32 --memory_mb 4000 --storage_mb 10000 --native_os "suse:v12" nersc-cori-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner lincolnb  --displayname="Node size for nersc-cori (Haswell partition)" --cores 32 --memory_mb 4000 --storage_mb 10000 --native_os "suse:v12" --features shifter nersc-cori-nodesize
 
-RUN_CHECK_CLIENT resource-create  --owner lincolnb  --accesstype batch  --accessmethod ssh --accessflavor slurm   --accesshost cori.nersc.gov  --accessport 22 --node nersc-cori-nodesize --description "Cori Supercomputer at NERSC" --displayname "Cori"  --url "https://www.nersc.gov/users/computational-systems/cori/"  --docurl "http://www.nersc.gov/users/computational-systems/cori/getting-started/" --pubtokendocurl "http://www.nersc.gov/users/connecting-to-nersc/connecting-with-ssh/#toc-anchor-2" --organization "National Energy Research Scientific Computing Center (NERSC)" nersc-cori --public --features shifter
+RUN_CHECK_CLIENT resource-create  --owner lincolnb  --accesstype batch  --accessmethod ssh --accessflavor slurm   --accesshost cori.nersc.gov  --accessport 22 --node nersc-cori-nodesize --description "Cori Supercomputer at NERSC" --displayname "Cori"  --url "https://www.nersc.gov/users/computational-systems/cori/"  --docurl "http://www.nersc.gov/users/computational-systems/cori/getting-started/" --pubtokendocurl "http://www.nersc.gov/users/connecting-to-nersc/connecting-with-ssh/#toc-anchor-2" --organization "National Energy Research Scientific Computing Center (NERSC)" nersc-cori --public
 
 
 # Create resource uct2-gk
@@ -45,15 +45,15 @@ RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessme
 
 
 # Create resource TACC Stampede
-RUN_CHECK_CLIENT nodeinfo-create --owner lincolnb  --displayname="Node size for tacc-stampede2 (SKX partition)" --cores 96 --memory_mb 2000 --storage_mb 10000 --native_os "centos:v7.4" tacc-stampede2-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner lincolnb  --displayname="Node size for tacc-stampede2 (SKX partition)" --cores 96 --memory_mb 2000 --storage_mb 10000 --native_os "centos:v7.4" --features singularity tacc-stampede2-nodesize
 
-RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh  --accessflavor slurm --accesshost login5.stampede2.tacc.utexas.edu --accessport 22 --node tacc-stampede2-nodesize --description "Stampede 2 Super Computer"  --displayname "Stampede 2" --url ""  --docurl ""  --organization "Texas Advanced Computing Center (TACC)" tacc-stampede2 --public --features singularity
+RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh  --accessflavor slurm --accesshost login5.stampede2.tacc.utexas.edu --accessport 22 --node tacc-stampede2-nodesize --description "Stampede 2 Super Computer"  --displayname "Stampede 2" --url ""  --docurl ""  --organization "Texas Advanced Computing Center (TACC)" tacc-stampede2 --public
 
 
 # Create resource ND CCL
-RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Node size for ndccl" --cores 4 --memory_mb 1000 --storage_mb 10000 --native_os "redhat:v7" ndccl-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Node size for ndccl" --cores 4 --memory_mb 1000 --storage_mb 10000 --native_os "redhat:v7" --features singularity ndccl-nodesize
 
-RUN_CHECK_CLIENT resource-create --owner btovar --accesstype batch --accessmethod ssh --accessflavor condor --accesshost cclvm05.crc.nd.edu --accessport 22 --node ndccl-nodesize --description "ND-CCL login none" --displayname "ND CCL" --url "https://ccl.cse.nd.edu/" --docurl "https://ccl.cse.nd.edu/" --organization "University of Notre Dame Cooperative Computing Lab" ndccl --public --features singularity
+RUN_CHECK_CLIENT resource-create --owner btovar --accesstype batch --accessmethod ssh --accessflavor condor --accesshost cclvm05.crc.nd.edu --accessport 22 --node ndccl-nodesize --description "ND-CCL login none" --displayname "ND CCL" --url "https://ccl.cse.nd.edu/" --docurl "https://ccl.cse.nd.edu/" --organization "University of Notre Dame Cooperative Computing Lab" ndccl --public
 
 
 # Create resource UCLA Hoffman2
@@ -67,8 +67,8 @@ RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmet
 
 
 # Create resource bridges
-RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Node size for psc-bridges (RMS partition)" --cores 28 --memory_mb 4000 --storage_mb 35000 --native_os "centos:v7.3" psc-bridges-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Node size for psc-bridges (RMS partition)" --cores 28 --memory_mb 4000 --storage_mb 35000 --native_os "centos:v7.3"  --features singularity psc-bridges-nodesize
 
-RUN_CHECK_CLIENT resource-create --owner khurtado --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost bridges.psc.edu --accessport 22 --node psc-bridges-nodesize --description "Bridges Supercomputer at PSC" --displayname "Bridges" --url "https://www.psc.edu/bridges/" --docurl "https://www.psc.edu/bridges/user-guide/running-jobs" --pubtokendocurl "https://www.psc.edu/bridges/user-guide/connecting-to-bridges#keys" --organization "Pittsburgh Supercomputing Center" psc-bridges --public --features singularity
+RUN_CHECK_CLIENT resource-create --owner khurtado --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost bridges.psc.edu --accessport 22 --node psc-bridges-nodesize --description "Bridges Supercomputer at PSC" --displayname "Bridges" --url "https://www.psc.edu/bridges/" --docurl "https://www.psc.edu/bridges/user-guide/running-jobs" --pubtokendocurl "https://www.psc.edu/bridges/user-guide/connecting-to-bridges#keys" --organization "Pittsburgh Supercomputing Center" psc-bridges --public
 
 

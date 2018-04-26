@@ -265,7 +265,6 @@ class Resource(InfoEntity):
                      'cloudspotprice',
                      'cloudinstancetype',
                      'mfa',
-                     'features',
                      'public',
                      'description',
                      'displayname',
@@ -293,7 +292,6 @@ class Resource(InfoEntity):
                  cloudspotprice=None,
                  cloudinstancetype=None,
                  mfa = False,
-                 features = [],     # list of strings of fetaures this resource has (e.g. 'singularity', and 'cvmfs')
                  public = False, # should this resource be shown to all users? Default: No.
                  description=None,
                  displayname=None,
@@ -326,7 +324,6 @@ class Resource(InfoEntity):
         self.cloudspotprice    = cloudspotprice
         self.cloudinstancetype = cloudinstancetype
         self.mfa = mfa
-        self.features = features
         self.public = public
         self.description = description
         self.displayname = displayname
@@ -487,6 +484,7 @@ class Nodeinfo(InfoEntity):
                      'storage_mb',        # per node
 
                      'native_os',
+                     'features',
 
                      'description',
                      'displayname',
@@ -505,6 +503,7 @@ class Nodeinfo(InfoEntity):
                        memory_mb,
                        storage_mb,
                        native_os,
+                       features = [],     # list of strings of fetaures this resource has (e.g. 'singularity', and 'cvmfs')
                        description=None,
                        displayname=None,
                        url=None,
@@ -529,6 +528,7 @@ class Nodeinfo(InfoEntity):
         self.memory_mb = memory_mb
         self.storage_mb = storage_mb
         self.native_os = native_os
+        self.features = features
 
         self.description = description
         self.displayname = displayname

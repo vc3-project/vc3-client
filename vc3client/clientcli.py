@@ -329,13 +329,6 @@ class VC3ClientCLI(object):
                                      default=False, 
                                      )
 
-        parser_resourcecreate.add_argument('--features', 
-                                     action="store", 
-                                     dest="features",
-                                     default='',
-                                     help="Comma-separated list of features this resource has (e.g., 'singularity', 'cvmfs', etc.).",  
-                                     )
-
         parser_resourcecreate.add_argument('--public', 
                                      action="store_true",
                                      dest="public",
@@ -520,6 +513,14 @@ class VC3ClientCLI(object):
                                           dest="native_os",
                                           default="Unknown",
                                           action="store")
+
+        parser_nodeinfocreate.add_argument('--features', 
+                                     action="store", 
+                                     dest="features",
+                                     default='',
+                                     help="Comma-separated list of features this node type has (e.g., 'singularity', 'cvmfs', etc.).",  
+                                     )
+
 
         parser_nodeinfocreate.add_argument('--description', 
                                      action="store", 
@@ -1160,7 +1161,6 @@ class VC3ClientCLI(object):
                                          cloudspotprice = ns.cloudspotprice,
                                          cloudinstancetype = ns.cloudinstancetype,
                                          mfa = ns.mfa,
-                                         features = [x for x in ns.features.split(',') if x],
                                          public = ns.public,
                                          organization = ns.organization,
                                          description = ns.description, 
@@ -1229,6 +1229,7 @@ class VC3ClientCLI(object):
                                        memory_mb  = ns.memory_mb,
                                        storage_mb = ns.storage_mb,
                                        native_os = ns.native_os,
+                                       features = [x for x in ns.features.split(',') if x],
                                        description = ns.description, 
                                        displayname = ns.displayname, 
                                        url = ns.url, 
