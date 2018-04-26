@@ -63,7 +63,7 @@ RUN_CHECK_CLIENT resource-create --owner briedel --accesstype batch --accessmeth
 
 
 # Create resource osgconnect
-RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor condor --accesshost login03.osgconnect.net --accessport 22 --node generic-nodesize --description "Open Science Grid (SL7)" --displayname "OSG Connect" --url "https://support.opensciencegrid.org" --organization "Open Science Grid" osg-connect --public
+RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor condor --accesshost login03.osgconnect.net --accessport 22 --node generic-nodesize --description "Open Science Grid (SL7)" --displayname "OSG Connect" --url "https://support.opensciencegrid.org" --pubtokendocurl "https://support.opensciencegrid.org/support/solutions/articles/12000027675-generate-ssh-key-pair-and-add-the-public-key-to-your-account#step-2-add-the-public-ssh-key-to-login-node" --organization "Open Science Grid" osg-connect --public
 
 
 # Create resource bridges
