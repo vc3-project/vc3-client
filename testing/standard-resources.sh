@@ -16,9 +16,9 @@ RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmet
 
 
 # Create resource CoreOS
-RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 --native_os "scientificlinux:v6.9" --public --features singularity coreos-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 --native_os "scientificlinux:v6.9" --features singularity coreos-nodesize
 
-RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost condor.grid.uchicago.edu --accessport 22 --node coreos-nodesize --description "CoreOS Cluster"  --displayname "CoreOS"  --url ""  --docurl ""  --organization "University of Chicago" uchicago-coreos
+RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost condor.grid.uchicago.edu --accessport 22 --node coreos-nodesize --description "CoreOS Cluster"  --displayname "CoreOS"  --url ""  --docurl ""  --organization "University of Chicago" uchicago-coreos --public
 
 
 # Create resource VC3 test pool
