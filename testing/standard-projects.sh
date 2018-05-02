@@ -13,4 +13,6 @@ RUN_CHECK_CLIENT project-create --owner btovar --members lincolnb,jvan,rwg,khurt
 
 RUN_CHECK_CLIENT project-addallocation vc3-team btovar.ndccl
 RUN_CHECK_CLIENT project-addallocation vc3-team khurtado.osg-connect
+RUN_CHECK_CLIENT project-addallocation vc3-team lincolnb.uchicago-midway
+
 
