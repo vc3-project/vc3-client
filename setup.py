@@ -41,7 +41,8 @@ data_files      = choose_data_file_locations()
 print(scripts)
 setup(
     name="vc3-client",
-    version=release_version,
+    #version=release_version,
+    version="1.0.0"
     description='vc3-client package',
     long_description='''This package contains vc3 client''',
     license='GPL',
