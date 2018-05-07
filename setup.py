@@ -26,7 +26,8 @@ def choose_data_file_locations():
         return rpm_data_files
 
 current_time = time.gmtime()
-release_version = "{0}.{1:0>2}.{2:0>2}".format(current_time.tm_year, current_time.tm_mon, current_time.tm_mday)
+#release_version = "{0}.{1:0>2}.{2:0>2}".format(current_time.tm_year, current_time.tm_mon, current_time.tm_mday)
+release_version='1.0.0'
 
 scripts   = ['scripts/vc3-client', ]
 etc_files = ['etc/vc3-client.conf']
@@ -41,8 +42,7 @@ data_files      = choose_data_file_locations()
 print(scripts)
 setup(
     name="vc3-client",
-    #version=release_version,
-    version="1.0.0"
+    version=release_version,
     description='vc3-client package',
     long_description='''This package contains vc3 client''',
     license='GPL',
