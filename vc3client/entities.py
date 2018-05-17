@@ -261,6 +261,7 @@ class Resource(InfoEntity):
                      'accesshost',
                      'accessport',
                      'nodeinfo',
+                     'scratchdir',
                      'gridresource',
                      'cloudspotprice',
                      'cloudinstancetype',
@@ -289,6 +290,7 @@ class Resource(InfoEntity):
                  accessport,   # port
                  gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCondor CE hostname[:port]              
                  nodeinfo,     # name of the Nodeinfo describing the size of the nodes in this resource
+                 scratchdir='/home/${USER}', # root dir for vc3-resource-manager to installs stuff.
                  cloudspotprice=None,
                  cloudinstancetype=None,
                  mfa = False,
@@ -320,6 +322,7 @@ class Resource(InfoEntity):
         self.accesshost = accesshost
         self.accessport = accessport
         self.nodeinfo = nodeinfo
+        self.scratchdir = scratchdir
         self.gridresource = gridresource
         self.cloudspotprice    = cloudspotprice
         self.cloudinstancetype = cloudinstancetype

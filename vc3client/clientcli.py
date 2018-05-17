@@ -300,6 +300,13 @@ class VC3ClientCLI(object):
                                      dest="nodeinfo",
                                      help="nodeinfo name with the size of nodes for this resource.",  
                                      )
+
+        parser_resourcecreate.add_argument('--scratchdir', 
+                                     action="store", 
+                                     dest="scratchdir",
+                                     help="root directory to which bosco/vc3-resource-manager writes data",
+                                     default='/home/${USER}'
+                                     )
         
         parser_resourcecreate.add_argument('--gridresource', 
                                      action="store", 
@@ -1157,6 +1164,7 @@ class VC3ClientCLI(object):
                                          accesshost = ns.accesshost,
                                          accessport = ns.accessport,
                                          nodeinfo   = ns.nodeinfo,
+                                         scratchdir = ns.scratchdir,
                                          gridresource = ns.gridresource,
                                          cloudspotprice = ns.cloudspotprice,
                                          cloudinstancetype = ns.cloudinstancetype,
