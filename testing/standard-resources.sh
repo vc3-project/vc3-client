@@ -6,7 +6,7 @@ source ./standard-common-config.sh
 RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 generic-nodesize
 
 # Create resource midway
-RUN_CHECK_CLIENT nodeinfo-create --owner lincolnb  --displayname="Node size for uchicago-midway (amd partition)" --cores 64 --memory_mb 4000 --storage_mb 10000 --native_os "scientificlinux:v6.7" uchicago-midway-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner lincolnb  --displayname="Node size for uchicago-midway (amd partition)" --cores 64 --memory_mb 3800 --storage_mb 10000 --native_os "scientificlinux:v6.7" uchicago-midway-nodesize
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost midway-login1.rcc.uchicago.edu --accessport 22 --node uchicago-midway-nodesize --description "Midway cluster at the University of Chicago Research Computing Center (RCC)" --displayname "Midway" --url "https://rcc.uchicago.edu/" --docurl "https://rcc.uchicago.edu/docs/" --organization "University of Chicago Research Computing Center (RCC)" uchicago-midway --public
 
