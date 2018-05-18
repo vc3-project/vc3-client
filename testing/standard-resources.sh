@@ -51,7 +51,7 @@ RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmet
 
 
 # Create resource ND CCL
-RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Node size for ndccl" --cores 4 --memory_mb 8000 --storage_mb 10000 --native_os "redhat:v7" --features singularity ndccl-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Node size for ndccl" --cores 4 --memory_mb 9000 --storage_mb 10000 --native_os "redhat:v7" --features singularity ndccl-nodesize
 
 RUN_CHECK_CLIENT resource-create --owner btovar --accesstype batch --accessmethod ssh --accessflavor condor --accesshost cclvm05.crc.nd.edu --accessport 22 --node ndccl-nodesize --description "ND-CCL login none" --displayname "ND CCL" --url "https://ccl.cse.nd.edu/" --docurl "https://ccl.cse.nd.edu/" --organization "University of Notre Dame Cooperative Computing Lab" ndccl --public
 
