@@ -33,12 +33,12 @@ RUN_CHECK_CLIENT resource-create  --owner lincolnb  --accesstype batch  --access
 
 
 # Create resource uct2-gk
-RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 --native_os "scientificlinux:v6.9" uct2gk-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1900 --storage_mb 1000 --native_os "scientificlinux:v6.9" uct2gk-nodesize
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost uct2-gk.mwt2.org --accessport 22 --node uct2gk-nodesize --description "ATLAS Midwest Tier 2 Center Job Gateway at UChicago"  --displayname "MWT2" --url "http://twiki.mwt2.org"  --docurl "http://twiki.mwt2.org"  --organization "Midwest Tier 2" uchicago-mwt2 --public
 
 # Create resource uct3-s1
-RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1000 --storage_mb 1000 --native_os "scientificlinux:v6.9" uct3s1-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Generic node size, 1core,1GB,1GB" --cores 4 --memory_mb 1900 --storage_mb 1000 --native_os "scientificlinux:v6.9" uct3s1-nodesize
 
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch  --accessmethod ssh  --accessflavor condor  --accesshost uct3-s1.mwt2.org --accessport 22 --node uct3s1-nodesize --description "UChicago ATLAS Tier 3"  --displayname "UCT3" --url "https://hep.uchicago.edu/atlas/"  --docurl "http://twiki.mwt2.org"  --organization "University of Chicago - Enrico Fermi Institute" uchicago-uct3 --public
 
