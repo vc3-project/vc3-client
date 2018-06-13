@@ -566,7 +566,7 @@ class Nodeset(InfoEntity):
                      'docurl', 
                      ]
     validvalues = {
-        'app_type' : ['htcondor' , 'workqueue', 'spark', 'generic' ],
+        'app_type' : ['htcondor' , 'workqueue', 'spark', 'jupyter', 'generic' ],
         'app_role' : ['head-node' , 'worker-nodes' ]
         }
     intattributes = [ 'node_number' ]
