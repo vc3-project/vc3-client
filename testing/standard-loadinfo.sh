@@ -6,3 +6,5 @@
 ./standard-environments.sh "$@"
 ./standard-clusters.sh "$@"
 ./standard-allocations.sh "$@"
+./standard-headnodes.sh "$@"
+
