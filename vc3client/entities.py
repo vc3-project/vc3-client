@@ -570,6 +570,7 @@ class Nodeset(InfoEntity):
         'app_role' : ['head-node' , 'worker-nodes' ]
         }
     intattributes = [ 'node_number' ]
+    nameattributes = ['owner','displayname']
     
     def __init__(self, name, 
                        state,
@@ -620,7 +621,9 @@ class Nodeset(InfoEntity):
         self.url = url
         self.docurl = docurl
         self.log.debug("Entity created: %s" % self)
-        
+
+   
+      
         
 class Cluster(InfoEntity):
     '''
@@ -646,6 +649,7 @@ class Cluster(InfoEntity):
                       ]
     validvalues = {}
     intattributes = []
+    nameattributes = ['owner','displayname']
 
     def __init__(self, 
                  name, 
@@ -701,6 +705,7 @@ class Cluster(InfoEntity):
 
         if nodesetname in self.nodesets:
             self.nodesets.remove(nodesetname)
+                    
 
 class Environment(InfoEntity):
     '''
