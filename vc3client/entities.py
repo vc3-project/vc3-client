@@ -865,7 +865,7 @@ class Request(InfoEntity):
         # Request-specific attributes
         self.action = action
         self.state_reason = state_reason
-        self.expiration   = expiration
+        self.expiration  = expiration
         self.project = project
         self.queuesconf = queuesconf
         self.authconf = authconf
