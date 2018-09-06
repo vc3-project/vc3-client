@@ -377,6 +377,7 @@ class VC3ClientAPI(object):
                        cloudspotprice,
                        cloudinstancetype,
                        mfa,
+                       accessgateway = None,
                        public = False,
                        description = None,
                        displayname = None,
@@ -395,6 +396,7 @@ class VC3ClientAPI(object):
         :param str accessflavor,  # htcondor-ce, slurm, sge, ec2, nova, gce
         :param str accesshost,    # DNS hostname
         :param str accessport,    # 22 , 6918, 8773
+        :param str accessgateway, # if relevant, gateway to hop through to get to back end. 
         :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud  | HTCondorCE hostname             
         :param Boolean mfa        # Does site need head-node factory?     
         :param Boolean public     # Should it be shown to all users?
@@ -411,6 +413,7 @@ class VC3ClientAPI(object):
                       accessflavor=accessflavor, 
                       accesshost = accesshost,
                       accessport = accessport,
+                      accessgateway = accessgateway,
                       nodeinfo   = nodeinfo,
                       scratchdir = scratchdir,
                       gridresource=gridresource, 
@@ -714,7 +717,10 @@ class VC3ClientAPI(object):
                       owner, 
                       node_number, 
                       app_type, 
-                      app_role, 
+                      app_role,
+                      app_peaceful = True,
+                      app_lingertime = None,
+                      app_killorder = None, 
                       nodeinfo = None,
                       environment = None,
                       description = None,
@@ -730,6 +736,9 @@ class VC3ClientAPI(object):
                       node_number=node_number, 
                       app_type=app_type, 
                       app_role=app_role,
+                      app_peaceful = app_peaceful,
+                      app_lingertime = app_lingertime,
+                      app_killorder = app_killorder,
                       nodeinfo = nodeinfo,
                       environment = environment,
                       description = description,

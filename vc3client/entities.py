@@ -260,6 +260,7 @@ class Resource(InfoEntity):
                      'accessflavor',
                      'accesshost',
                      'accessport',
+                     'accessgateway', 
                      'nodeinfo',
                      'scratchdir',
                      'gridresource',
@@ -291,8 +292,9 @@ class Resource(InfoEntity):
                  gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCondor CE hostname[:port]              
                  nodeinfo,     # name of the Nodeinfo describing the size of the nodes in this resource
                  scratchdir='/home/${USER}', # root dir for vc3-resource-manager to installs stuff.
-                 cloudspotprice=None,
-                 cloudinstancetype=None,
+                 accessgateway = None, # if site has, e.g. SSH gateway which must be traversed.
+                 cloudspotprice = None,
+                 cloudinstancetype = None,
                  mfa = False,
                  public = False, # should this resource be shown to all users? Default: No.
                  description=None,
@@ -323,6 +325,7 @@ class Resource(InfoEntity):
         self.accessport = accessport
         self.nodeinfo = nodeinfo
         self.scratchdir = scratchdir
+        self.accessgateway = accessgateway
         self.gridresource = gridresource
         self.cloudspotprice    = cloudspotprice
         self.cloudinstancetype = cloudinstancetype
@@ -558,7 +561,10 @@ class Nodeset(InfoEntity):
                      
                      'app_host',
                      'app_port',
-                     'app_sectoken',            
+                     'app_sectoken',
+                     'app_peaceful',
+                     'app_lingertime',
+                     'app_killorder',            
                      'environment',
                      'description',
                      'displayname',
@@ -567,7 +573,8 @@ class Nodeset(InfoEntity):
                      ]
     validvalues = {
         'app_type' : ['htcondor' , 'workqueue', 'spark', 'jupyter', 'generic' ],
-        'app_role' : ['head-node' , 'worker-nodes' ]
+        'app_role' : ['head-node' , 'worker-nodes' ],
+        'app_killorder' : ['newest' , 'oldest'],
         }
     intattributes = [ 'node_number' ]
     nameattributes = ['owner','displayname']
@@ -584,6 +591,9 @@ class Nodeset(InfoEntity):
                        app_host = None, 
                        app_port = None,
                        app_sectoken = None,
+                       app_peaceful = True,  
+                       app_lingertime = None, 
+                       app_killorder = None,
                        environment = None,
                        description=None,
                        displayname=None,
@@ -615,6 +625,9 @@ class Nodeset(InfoEntity):
         self.app_host = app_host
         self.app_port = app_port
         self.app_sectoken = app_sectoken
+        self.app_peaceful = app_peaceful  
+        self.app_lingertime = app_lingertime
+        self.app_killorder = app_killorder 
         self.environment = environment
         self.description = description
         self.displayname = displayname

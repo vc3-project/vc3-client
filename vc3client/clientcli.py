@@ -295,6 +295,13 @@ class VC3ClientCLI(object):
                                      help="22|9618|8773|etc..",  
                                      )
 
+        parser_resourcecreate.add_argument('--accessgateway', 
+                                     action="store", 
+                                     dest="accessgateway",
+                                     help="Hostname of intermediate host",  
+                                     )
+
+
         parser_resourcecreate.add_argument('--nodeinfo', 
                                      action="store", 
                                      dest="nodeinfo",
@@ -599,6 +606,30 @@ class VC3ClientCLI(object):
                                           help='general middleware type of node',
                                           action="store")
 
+        parser_nodesetcreate.add_argument('--app_peaceful', 
+                                          help='for workers, job kill policy [True|False]',
+                                          action="store",
+                                          dest="app_peaceful",
+                                          required=False,
+                                          default=None 
+                                         )
+
+        parser_nodesetcreate.add_argument('--app_lingertime', 
+                                          help='for workers, idle suicide time in seconds',
+                                          action="store",
+                                          dest="app_lingertime",
+                                          required=False,
+                                          default=None 
+                                         )
+        
+        parser_nodesetcreate.add_argument('--app_killorder', 
+                                          help='for workers, kill order policy [newest|oldest]',
+                                          action="store",
+                                          dest="app_killorder",
+                                          required=False,
+                                          default=None 
+                                         )        
+        
         parser_nodesetcreate.add_argument('--nodeinfo', 
                 action='store', 
                 dest='nodeinfo',
@@ -1163,6 +1194,7 @@ class VC3ClientCLI(object):
                                          accessflavor = ns.accessflavor,
                                          accesshost = ns.accesshost,
                                          accessport = ns.accessport,
+                                         accessgateway = ns.accessgateway,
                                          nodeinfo   = ns.nodeinfo,
                                          scratchdir = ns.scratchdir,
                                          gridresource = ns.gridresource,
@@ -1265,6 +1297,9 @@ class VC3ClientCLI(object):
                                        app_type = ns.app_type, 
                                        app_role = ns.app_role,
                                        nodeinfo = ns.nodeinfo,
+                                       app_peaceful = ns.peaceful,
+                                       app_lingertime = ns.lingertime,
+                                       app_killorder = ns.killorder,
                                        environment = ns.environment,
                                        description = ns.description, 
                                        displayname = ns.displayname, 
