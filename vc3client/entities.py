@@ -576,7 +576,7 @@ class Nodeset(InfoEntity):
         'app_role' : ['head-node' , 'worker-nodes' ],
         'app_killorder' : ['newest' , 'oldest'],
         }
-    intattributes = [ 'node_number' ]
+    intattributes = [ 'node_number', 'app_lingertime' ]
     nameattributes = ['owner','displayname']
     
     def __init__(self, name, 
