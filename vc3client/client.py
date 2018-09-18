@@ -718,7 +718,7 @@ class VC3ClientAPI(object):
                       node_number, 
                       app_type, 
                       app_role,
-                      app_peaceful = True,
+                      app_peaceful = False,     # THIS SHOULD BE True, CHANGE BACK AFTER 09/30/2018!
                       app_lingertime = None,
                       app_killorder = None, 
                       nodeinfo = None,
