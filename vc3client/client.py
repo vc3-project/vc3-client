@@ -909,10 +909,14 @@ class VC3ClientAPI(object):
         """
         :param str policy_user: The VC3 user name of the user trying this operation
         """
-        if policy_user is not None:
-            request = self.getRequest(requestname)
-            if request is not None and request.owner != policy_user:
+
+        request = self.getRequest(requestname)
+        if request is not None:
+            if policy_user is not None and request.owner != policy_user:
                 raise PermissionDenied(policy_user + "is not the request owner")
+            else:
+                for nodeset in request.nodesets:
+                    self.deleteNodeset(nodeset)
 
         self.ic.deleteentity( Request, requestname)
 
