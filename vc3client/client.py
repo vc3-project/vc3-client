@@ -920,7 +920,7 @@ class VC3ClientAPI(object):
                     if request.cluster:
                         cluster = self.ic.getentity(Cluster, request.cluster)
 
-                    for nodeset in request.nodesets:
+                    for nodeset in cluster.nodesets:
                         try:
                             self.deleteNodeset(nodeset)
                         except Exception, e:
