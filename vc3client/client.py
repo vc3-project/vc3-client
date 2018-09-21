@@ -918,16 +918,17 @@ class VC3ClientAPI(object):
 
                 try:
                     if request.cluster:
-                        self.deleteCluster(request.cluster)
+                        cluster = self.ic.getentity(Cluster, request.cluster)
+
+                    for nodeset in request.nodesets:
+                        try:
+                            self.deleteNodeset(nodeset)
+                        except Exception, e:
+                            self.log.error('Could not delete cloned nodeset %s' % nodeset)
+
+                    self.deleteCluster(request.cluster)
                 except Exception, e:
                     self.log.error('Could not delete cloned cluster %s' % request.cluster)
-
-                for nodeset in request.nodesets:
-                    try:
-                        self.deleteNodeset(nodeset)
-                    except Exception, e:
-                        self.log.error('Could not delete cloned nodeset %s' % request.nodeset)
-
 
         self.ic.deleteentity( Request, requestname)
 
