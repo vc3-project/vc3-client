@@ -925,10 +925,12 @@ class VC3ClientAPI(object):
                             self.deleteNodeset(nodeset)
                         except Exception, e:
                             self.log.error('Could not delete cloned nodeset %s' % nodeset)
+                            raise e
 
                     self.deleteCluster(request.cluster)
                 except Exception, e:
                     self.log.error('Could not delete cloned cluster %s' % request.cluster)
+                    raise e
 
         self.ic.deleteentity( Request, requestname)
 
