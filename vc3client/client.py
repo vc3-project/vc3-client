@@ -915,8 +915,19 @@ class VC3ClientAPI(object):
             if policy_user is not None and request.owner != policy_user:
                 raise PermissionDenied(policy_user + "is not the request owner")
             else:
+
+                try:
+                    if request.cluster:
+                        self.deleteCluster(request.cluster)
+                except Exception, e:
+                    self.log.error('Could not delete cloned cluster %s' % request.cluster)
+
                 for nodeset in request.nodesets:
-                    self.deleteNodeset(nodeset)
+                    try:
+                        self.deleteNodeset(nodeset)
+                    except Exception, e:
+                        self.log.error('Could not delete cloned nodeset %s' % request.nodeset)
+
 
         self.ic.deleteentity( Request, requestname)
 
