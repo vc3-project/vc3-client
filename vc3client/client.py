@@ -920,10 +920,12 @@ class VC3ClientAPI(object):
 
                 try:
                     if request.cluster:
+                        self.log.debug('Deleting cloned cluster template %s' % request.cluster)
                         cluster = self.ic.getentity(Cluster, request.cluster)
 
                     for nodeset in cluster.nodesets:
                         try:
+                            self.log.debug('Deleting cloned nodeset %s' % nodeset)
                             self.deleteNodeset(nodeset)
                         except Exception, e:
                             self.log.error('Could not delete cloned nodeset %s' % nodeset)
