@@ -835,24 +835,26 @@ class VC3ClientAPI(object):
         :return Request
         
         '''
-        self.log.debug("Cloning constituent Cluster object: %s " % cluster)
-        cobj = self.ic.getentity(Cluster, cluster)
-        nslist = cobj.nodesets
-        newnslist = []
-        for ns in nslist:
-            self.log.debug("Cloning constituent Nodeset object: %s " % ns)
-            nsobj = self.ic.getentity(Nodeset, ns)
-            newnsobj = nsobj.getClone()
-            self.storeNodeset(newnsobj)
-            newnslist.append(newnsobj.name)
-            self.log.debug("New Nodeset object name: %s " % newnsobj.name)
-        self.log.debug("Cloned nodest list done. Cloning cluster object...")
-        newcobj = cobj.getClone()
-        self.log.debug("Cluster object cloned. Setting nodeset list...")
-        newcobj.nodesets = newnslist
-        self.storeCluster(newcobj)
-        cluster = newcobj.name
-        self.log.debug("New Cluster object name: %s " % cluster)         
+
+        # FIX: CLONING ONLY AFTER WEBSITE STOPS DEFININT THE CLUSTERS
+        # self.log.debug("Cloning constituent Cluster object: %s " % cluster)
+        # cobj = self.ic.getentity(Cluster, cluster)
+        # nslist = cobj.nodesets
+        # newnslist = []
+        # for ns in nslist:
+        #     self.log.debug("Cloning constituent Nodeset object: %s " % ns)
+        #     nsobj = self.ic.getentity(Nodeset, ns)
+        #     newnsobj = nsobj.getClone()
+        #     self.storeNodeset(newnsobj)
+        #     newnslist.append(newnsobj.name)
+        #     self.log.debug("New Nodeset object name: %s " % newnsobj.name)
+        # self.log.debug("Cloned nodest list done. Cloning cluster object...")
+        # newcobj = cobj.getClone()
+        # self.log.debug("Cluster object cloned. Setting nodeset list...")
+        # newcobj.nodesets = newnslist
+        # self.storeCluster(newcobj)
+        # cluster = newcobj.name
+        # self.log.debug("New Cluster object name: %s " % cluster)         
         
         r = Request(name, 
                     state='new', 
@@ -925,10 +927,12 @@ class VC3ClientAPI(object):
                             self.deleteNodeset(nodeset)
                         except Exception, e:
                             self.log.error('Could not delete cloned nodeset %s' % nodeset)
+                            raise e
 
                     self.deleteCluster(request.cluster)
                 except Exception, e:
                     self.log.error('Could not delete cloned cluster %s' % request.cluster)
+                    raise e
 
         self.ic.deleteentity( Request, requestname)
 
