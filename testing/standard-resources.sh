@@ -65,7 +65,9 @@ RUN_CHECK_CLIENT resource-create --owner briedel --accesstype batch --accessmeth
 RUN_CHECK_CLIENT resource-create --owner lincolnb --accesstype batch --accessmethod ssh --accessflavor condor --accesshost vc3-gateway.osgconnect.net --accessport 22 --node generic-nodesize --description "Open Science Grid" --displayname "OSG Connect" --url "https://support.opensciencegrid.org" --pubtokendocurl "https://support.opensciencegrid.org/support/solutions/articles/12000027675-generate-ssh-key-pair-and-add-the-public-key-to-your-account#step-2-add-the-public-ssh-key-to-login-node" --organization "Open Science Grid" osg-connect --public
 
 # Create resource cmsconnect
-RUN_CHECK_CLIENT resource-create --owner khurtado --accesstype batch --accessmethod ssh --accessflavor condor --accesshost login.uscms.org --accessport 22 --node generic-nodesize --description "CMS Connect" --displayname "CMS Connect" --url "http://docs.uscms.org" --pubtokendocurl "http://docs.uscms.org/Generate+SSH+key+pair+and+add+the+public+key+to+your+account" --organization "CMS" cms-connect --public
+RUN_CHECK_CLIENT nodeinfo-create --owner khurtado --displayname="Node size for CMS Connect" --cores 4 --memory_mb 2000 --storage_mb 4000 cmsconnect-nodesize
+
+RUN_CHECK_CLIENT resource-create --owner khurtado --accesstype batch --accessmethod ssh --accessflavor condor --accesshost login.uscms.org --accessport 22 --node cmsconnect-nodesize --description "CMS Connect" --displayname "CMS Connect" --url "http://docs.uscms.org" --pubtokendocurl "http://docs.uscms.org/Generate+SSH+key+pair+and+add+the+public+key+to+your+account" --organization "CMS" cms-connect --public
 
 # Create resource bridges
 RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Node size for psc-bridges (RMS partition)" --cores 28 --memory_mb 4000 --storage_mb 35000 --native_os "centos:v7.3"  --features singularity psc-bridges-nodesize
