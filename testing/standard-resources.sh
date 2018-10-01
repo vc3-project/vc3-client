@@ -56,9 +56,9 @@ RUN_CHECK_CLIENT resource-create --owner btovar --accesstype batch --accessmetho
 
 
 # Create resource UCLA Hoffman2
-RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Node size for ucla-hoffman2" --cores 8 --memory_mb 1000 --storage_mb 10000 --native_os "centos:v6.9" ucla-hoffman2-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Node size for ucla-hoffman2" --cores 8 --memory_mb 3000 --storage_mb 10000 --native_os "centos:v6.9" ucla-hoffman2-nodesize
 
-RUN_CHECK_CLIENT resource-create --owner briedel --accesstype batch --accessmethod ssh --accessflavor sge --accesshost login1.hoffman2.idre.ucla.edu --accessport 22 --node ucla-hoffman2-nodesize --description "UCLA Hoffman2 Cluster" --displayname "Hoffman2" --url "https://idre.ucla.edu/resources/hpc/hoffman2-cluster" --organization "University of California,  Los Angeles" ucla-hoffman2
+RUN_CHECK_CLIENT resource-create --owner briedel --accesstype batch --accessmethod ssh --accessflavor sge --accesshost login1.hoffman2.idre.ucla.edu --accessport 22 --node ucla-hoffman2-nodesize --description "UCLA Hoffman2 Cluster" --displayname "Hoffman2" --url "https://idre.ucla.edu/resources/hpc/hoffman2-cluster" --organization "University of California,  Los Angeles" ucla-hoffman2 --public
 
 
 # Create resource osgconnect
