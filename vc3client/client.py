@@ -456,6 +456,7 @@ class VC3ClientAPI(object):
                                url=None,
                                docurl=None,  
                                pubtokendocurl=None,
+                               privtoken=None,
                                ):
         '''
           
@@ -470,6 +471,7 @@ class VC3ClientAPI(object):
                         url=url,
                         docurl=docurl,
                         pubtokendocurl=pubtokendocurl,
+                        privtoken=privtoken,
                         )
         ao.storenew = True
         self.log.debug("Creating Allocation object: %s " % ao)
