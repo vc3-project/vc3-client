@@ -464,7 +464,7 @@ class VC3ClientAPI(object):
         # we want to base64 encode the private token since it will essentially
         # just be an uploaded file from the cli or the web
         if privtoken is not None:
-            p = encode(privtoken)
+            p = self.encode(privtoken)
         else:
             p = privtoken
 
