@@ -1242,7 +1242,8 @@ class VC3ClientCLI(object):
                                            displayname = ns.displayname, 
                                            url = ns.url, 
                                            docurl = ns.docurl,
-                                           pubtokendocurl = ns.pubtokendocurl
+                                           pubtokendocurl = ns.pubtokendocurl,
+                                           privtoken = ns.privtoken
                                            )
                 self.log.debug("Allocation is %s" % a)
                 capi.storeAllocation(a)    
