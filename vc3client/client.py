@@ -461,6 +461,13 @@ class VC3ClientAPI(object):
         '''
           
         '''
+        # we want to base64 encode the private token since it will essentially
+        # just be an uploaded file from the cli or the web
+        if privtoken is not None:
+            p = encode(privtoken)
+        else:
+            p = privtoken
+
         ao = Allocation(name, 
                         state='new', 
                         owner=owner, 
@@ -471,7 +478,7 @@ class VC3ClientAPI(object):
                         url=url,
                         docurl=docurl,
                         pubtokendocurl=pubtokendocurl,
-                        privtoken=privtoken,
+                        privtoken=p,
                         )
         ao.storenew = True
         self.log.debug("Creating Allocation object: %s " % ao)
