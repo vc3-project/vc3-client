@@ -467,7 +467,6 @@ class VC3ClientCLI(object):
         parser_allocationcreate.add_argument('--privtoken', 
                                      action="store", 
                                      dest="privtoken",
-                                     help='private token, VOMS proxy, etc',
                                      required=False,
                                      default=None 
                                      )
