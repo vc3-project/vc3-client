@@ -572,7 +572,7 @@ class Nodeset(InfoEntity):
                      'docurl', 
                      ]
     validvalues = {
-        'app_type' : ['htcondor' , 'workqueue', 'spark', 'jupyter', 'generic' ],
+        'app_type' : ['htcondor' , 'workqueue', 'spark', 'jupyter+htcondor', 'jupyter+spark', 'generic' ],
         'app_role' : ['head-node' , 'worker-nodes' ],
         'app_killorder' : ['newest' , 'oldest'],
         }
