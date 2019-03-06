@@ -150,7 +150,7 @@ class VCTester(object):
             self('remote', 'uptime')
             self.wait_for_states(states = ['running'])
             self._execute_condor('/bin/uname', '-a')
-            self('stop')
+            #self('stop')
             self.wait_for_states(states = ['terminated'], cycle_len = 1, max_wait=1)
             return True
         except TimeoutState as e:
