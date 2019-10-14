@@ -285,7 +285,7 @@ class Resource(InfoEntity):
                  state,
                  owner,
                  accesstype,   # grid, batch, cloud
-                 accessmethod, # ssh, gsissh
+                 accessmethod, # ssh, gsissh, sshproxy
                  accessflavor, # condor-ce, slurm, sge, ec2, nova, gce
                  accesshost,   # hostname
                  accessport,   # port

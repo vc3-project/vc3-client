@@ -274,7 +274,7 @@ class VC3ClientCLI(object):
         parser_resourcecreate.add_argument('--accessmethod', 
                                      action="store", 
                                      dest="accessmethod",
-                                     help="ce|ssh|gsissh|local", 
+                                     help="ce|ssh|gsissh|sshproxy|local", 
                                      )
 
         parser_resourcecreate.add_argument('--accessflavor', 

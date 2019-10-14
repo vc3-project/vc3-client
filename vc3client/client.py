@@ -392,7 +392,7 @@ class VC3ClientAPI(object):
         :param str name: The unique VC3 name of this resource
         :param str owner:  The VC3 user name of the owner of this project
         :param str resourcetype,  # grid remote-batch local-batch cloud
-        :param str accessmethod,  # ssh, gsissh,  
+        :param str accessmethod,  # ssh, gsissh, sshproxy 
         :param str accessflavor,  # htcondor-ce, slurm, sge, ec2, nova, gce
         :param str accesshost,    # DNS hostname
         :param str accessport,    # 22 , 6918, 8773
