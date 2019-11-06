@@ -27,7 +27,7 @@ RUN_CHECK_CLIENT resource-create --owner lincolnb  --accesstype batch --accessme
 
 
 # Create resource NERSC Cori
-RUN_CHECK_CLIENT nodeinfo-create --owner lincolnb  --displayname="Node size for nersc-cori (Haswell partition)" --cores 32 --memory_mb 3775 --storage_mb 10000 --native_os "suse:v12" --features shifter nersc-cori-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner lincolnb  --displayname="Node size for nersc-cori (Haswell partition)" --cores 32 --memory_mb 3775 --storage_mb 35000 --native_os "suse:v12" --features shifter nersc-cori-nodesize
 
 RUN_CHECK_CLIENT resource-create  --owner lincolnb  --accesstype batch  --accessmethod sshproxy --accessflavor slurm   --accesshost cori04-224.nersc.gov  --accessport 22 --node nersc-cori-nodesize --description "Cori Supercomputer at NERSC" --displayname "Cori"  --url "https://www.nersc.gov/users/computational-systems/cori/"  --docurl "http://www.nersc.gov/users/computational-systems/cori/getting-started/" --pubtokendocurl "http://www.nersc.gov/users/connecting-to-nersc/connecting-with-ssh/#toc-anchor-2" --organization "National Energy Research Scientific Computing Center (NERSC)" nersc-cori --public
 
@@ -75,6 +75,6 @@ RUN_CHECK_CLIENT nodeinfo-create --owner btovar  --displayname="Node size for ps
 RUN_CHECK_CLIENT resource-create --owner khurtado --accesstype batch --accessmethod ssh --accessflavor slurm --accesshost bridges.psc.edu --accessport 22 --node psc-bridges-nodesize --description "Bridges Supercomputer at PSC" --displayname "Bridges" --url "https://www.psc.edu/bridges/" --docurl "https://www.psc.edu/bridges/user-guide/running-jobs" --pubtokendocurl "https://www.psc.edu/bridges/user-guide/connecting-to-bridges#keys" --organization "Pittsburgh Supercomputing Center" psc-bridges --public
 
 # Create resource Blue Waters
-RUN_CHECK_CLIENT nodeinfo-create --owner khurtado  --displayname="Node size for bluewaters-ncsa" --cores 1 --memory_mb 2000 --storage_mb 4000 --native_os "suse:v12" --features shifter bluewaters-ncsa-nodesize
+RUN_CHECK_CLIENT nodeinfo-create --owner khurtado  --displayname="Node size for bluewaters-ncsa" --cores 1 --memory_mb 2000 --storage_mb 35000 --native_os "suse:v12" --features shifter bluewaters-ncsa-nodesize
 
 RUN_CHECK_CLIENT resource-create --owner khurtado --accesstype batch --accessmethod gsissh --accessflavor pbs --accesshost h2ologin.ncsa.illinois.edu --accessport 22 --node bluewaters-ncsa-nodesize --description "Blue Waters petascale supercomputer" --displayname "Blue Waters" --url "https://bluewaters.ncsa.illinois.edu" --docurl "https://bluewaters.ncsa.illinois.edu/batch-jobs" --organization "Blue Waters NCSA" bluewaters-ncsa --public
