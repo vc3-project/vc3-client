@@ -373,6 +373,7 @@ class VC3ClientAPI(object):
                        accessport,  
                        nodeinfo,
                        scratchdir,
+                       sandboxdir,
                        gridresource, 
                        cloudspotprice,
                        cloudinstancetype,
@@ -396,6 +397,8 @@ class VC3ClientAPI(object):
         :param str accessflavor,  # htcondor-ce, slurm, sge, ec2, nova, gce
         :param str accesshost,    # DNS hostname
         :param str accessport,    # 22 , 6918, 8773
+        :param str scratchdir,    # vc3-remote-manager scratch directory (full path)
+        :param str sandboxdir,    # vc3-remote-manager sandbox job directory (full path)
         :param str accessgateway, # if relevant, gateway to hop through to get to back end. 
         :param gridresource,      # http://cldext02.usatlas.bnl.gov:8773/services/Cloud  | HTCondorCE hostname             
         :param Boolean mfa        # Does site need head-node factory?     
@@ -416,6 +419,7 @@ class VC3ClientAPI(object):
                       accessgateway = accessgateway,
                       nodeinfo   = nodeinfo,
                       scratchdir = scratchdir,
+                      sandboxdir = sandboxdir,
                       gridresource=gridresource, 
                       mfa=mfa,
                       public = public,

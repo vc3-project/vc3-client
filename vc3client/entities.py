@@ -263,6 +263,7 @@ class Resource(InfoEntity):
                      'accessgateway', 
                      'nodeinfo',
                      'scratchdir',
+                     'sandboxdir',
                      'gridresource',
                      'cloudspotprice',
                      'cloudinstancetype',
@@ -292,6 +293,7 @@ class Resource(InfoEntity):
                  gridresource, # http://cldext02.usatlas.bnl.gov:8773/services/Cloud , HTCondor CE hostname[:port]              
                  nodeinfo,     # name of the Nodeinfo describing the size of the nodes in this resource
                  scratchdir='/home/${USER}', # root dir for vc3-resource-manager to installs stuff.
+                 sandboxdir=None, # sandbox directory for bosco jobs when installing resource via vc3-resource-manager 
                  accessgateway = None, # if site has, e.g. SSH gateway which must be traversed.
                  cloudspotprice = None,
                  cloudinstancetype = None,
@@ -325,6 +327,7 @@ class Resource(InfoEntity):
         self.accessport = accessport
         self.nodeinfo = nodeinfo
         self.scratchdir = scratchdir
+        self.sandboxdir = sandboxdir
         self.accessgateway = accessgateway
         self.gridresource = gridresource
         self.cloudspotprice    = cloudspotprice

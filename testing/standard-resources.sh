@@ -29,7 +29,8 @@ RUN_CHECK_CLIENT resource-create --owner lincolnb  --accesstype batch --accessme
 # Create resource NERSC Cori
 RUN_CHECK_CLIENT nodeinfo-create --owner lincolnb  --displayname="Node size for nersc-cori (Haswell partition)" --cores 32 --memory_mb 3775 --storage_mb 35000 --native_os "suse:v12" --features shifter nersc-cori-nodesize
 
-RUN_CHECK_CLIENT resource-create  --owner lincolnb  --accesstype batch  --accessmethod sshproxy --accessflavor slurm   --accesshost cori04-224.nersc.gov  --accessport 22 --node nersc-cori-nodesize --description "Cori Supercomputer at NERSC" --displayname "Cori"  --url "https://www.nersc.gov/users/computational-systems/cori/"  --docurl "http://www.nersc.gov/users/computational-systems/cori/getting-started/" --pubtokendocurl "http://www.nersc.gov/users/connecting-to-nersc/connecting-with-ssh/#toc-anchor-2" --organization "National Energy Research Scientific Computing Center (NERSC)" nersc-cori --public
+RUN_CHECK_CLIENT resource-create  --owner lincolnb  --accesstype batch  --accessmethod sshproxy --accessflavor slurm   --accesshost cori04-224.nersc.gov  --accessport 22 --node nersc-cori-nodesize --description "Cori Supercomputer at NERSC" --displayname "Cori"  --url "https://www.nersc.gov/users/computational-systems/cori/"  --docurl "http://www.nersc.gov/users/computational-systems/cori/getting-started/" --pubtokendocurl
+"http://www.nersc.gov/users/connecting-to-nersc/connecting-with-ssh/#toc-anchor-2" --organization "National Energy Research Scientific Computing Center (NERSC)" --sandboxdir '$SCRATCH/.condor/bosco/sandbox' nersc-cori --public
 
 
 # Create resource uct2-gk

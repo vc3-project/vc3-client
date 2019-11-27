@@ -314,6 +314,13 @@ class VC3ClientCLI(object):
                                      help="root directory to which bosco/vc3-resource-manager writes data",
                                      default='/home/${USER}'
                                      )
+
+        parser_resourcecreate.add_argument('--sandboxdir', 
+                                     action="store", 
+                                     dest="sandboxdir",
+                                     help="sandbox directory to which bosco/vc3-resource-manager writes job data",
+                                     default=None
+                                     )
         
         parser_resourcecreate.add_argument('--gridresource', 
                                      action="store", 
@@ -1204,6 +1211,7 @@ class VC3ClientCLI(object):
                                          accessgateway = ns.accessgateway,
                                          nodeinfo   = ns.nodeinfo,
                                          scratchdir = ns.scratchdir,
+                                         sandboxdir = ns.sandboxdir,
                                          gridresource = ns.gridresource,
                                          cloudspotprice = ns.cloudspotprice,
                                          cloudinstancetype = ns.cloudinstancetype,
